@@ -1,0 +1,301 @@
+[gd_scene format=3 uid="uid://crhpv73nstpfq"]
+
+[ext_resource type="Script" uid="uid://dds8kw4xom0vp" path="res://main.gd" id="1_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://b5ac5g462r8sa" path="res://icon.svg" id="1_ig7tw"]
+
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "plant_holder", "enemy_holder")]
+script = ExtResource("1_0xm2m")
+global_turn_timer = NodePath("GlobalTurnTimer")
+plant_holder = NodePath("PlantHolder")
+enemy_holder = NodePath("EnemyHolder")
+
+[node name="GlobalTurnTimer" type="Timer" parent="." unique_id=1153019698]
+
+[node name="Grid" type="Node2D" parent="." unique_id=1127803762]
+position = Vector2(0, 32)
+
+[node name="Row1" type="Node2D" parent="Grid" unique_id=803980493]
+position = Vector2(0, 32)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row1" unique_id=327678686]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row1" unique_id=1488718017]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row1" unique_id=1396536000]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row1" unique_id=186095747]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row1" unique_id=1150731116]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row2" type="Node2D" parent="Grid" unique_id=766319916]
+position = Vector2(0, 96)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row2" unique_id=1660196332]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row2" unique_id=1068610085]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row2" unique_id=907022927]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row2" unique_id=2036360878]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row2" unique_id=84445644]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row3" type="Node2D" parent="Grid" unique_id=1330221713]
+position = Vector2(0, 160)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row3" unique_id=2075965007]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row3" unique_id=123776578]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row3" unique_id=1174163647]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row3" unique_id=420400736]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row3" unique_id=1811154085]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row4" type="Node2D" parent="Grid" unique_id=1875194963]
+position = Vector2(0, 224)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row4" unique_id=367377559]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row4" unique_id=665465724]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row4" unique_id=411037877]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row4" unique_id=2094447035]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row4" unique_id=1910516694]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row5" type="Node2D" parent="Grid" unique_id=223846595]
+position = Vector2(0, 288)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row5" unique_id=695080370]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row5" unique_id=663423253]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row5" unique_id=1709598938]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row5" unique_id=1785925168]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row5" unique_id=1207651440]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row6" type="Node2D" parent="Grid" unique_id=596558949]
+position = Vector2(0, 352)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row6" unique_id=404718934]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row6" unique_id=92196176]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row6" unique_id=1589401491]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row6" unique_id=1138132341]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row6" unique_id=506789999]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row7" type="Node2D" parent="Grid" unique_id=905339406]
+position = Vector2(0, 416)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row7" unique_id=1481164293]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row7" unique_id=369637386]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row7" unique_id=279019610]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row7" unique_id=974515955]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row7" unique_id=808088406]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row8" type="Node2D" parent="Grid" unique_id=1148607206]
+position = Vector2(0, 480)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row8" unique_id=2140069955]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row8" unique_id=1537356013]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row8" unique_id=1116238654]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row8" unique_id=1812488984]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row8" unique_id=1086959345]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row9" type="Node2D" parent="Grid" unique_id=1964844779]
+position = Vector2(0, 544)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row9" unique_id=2112917312]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row9" unique_id=112786745]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row9" unique_id=460445137]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row9" unique_id=1259083574]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row9" unique_id=645176528]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Row10" type="Node2D" parent="Grid" unique_id=632408479]
+position = Vector2(0, 608)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid/Row10" unique_id=1876623594]
+position = Vector2(232, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Grid/Row10" unique_id=1718961811]
+position = Vector2(296, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Grid/Row10" unique_id=1440592038]
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Grid/Row10" unique_id=383319849]
+position = Vector2(424, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Grid/Row10" unique_id=1000046391]
+position = Vector2(488, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ig7tw")
+
+[node name="PlantHolder" type="Node2D" parent="." unique_id=1094016593]
+
+[node name="EnemyHolder" type="Node2D" parent="." unique_id=566027863]
+
+[connection signal="timeout" from="GlobalTurnTimer" to="." method="_on_global_turn_timer_timeout"]

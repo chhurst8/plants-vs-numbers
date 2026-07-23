@@ -1,0 +1,8 @@
+[gd_resource type="Theme" format=3 uid="uid://cdpebhimedkdu"]
+
+[ext_resource type="FontFile" uid="uid://v6o1a0b172tc" path="res://Visuals/CashMarket-BoldRounded.ttf" id="1_0hcpo"]
+
+[resource]
+default_font = ExtResource("1_0hcpo")
+default_font_size = 20
+Label/colors/font_color = Color(0, 0, 0, 1)

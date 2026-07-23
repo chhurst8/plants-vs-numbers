@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://4u1k6jyc4q8p"]
+
+[ext_resource type="Script" uid="uid://rak3pu7h77do" path="res://enemy.gd" id="1_tt7e2"]
+[ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="2_s7bn3"]
+
+[node name="Enemy" type="Node2D" unique_id=888636595 node_paths=PackedStringArray("number_display")]
+script = ExtResource("1_tt7e2")
+number_display = NodePath("NumberDisplay")
+
+[node name="NumberDisplay" type="Label" parent="." unique_id=1130724807]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_s7bn3")
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
