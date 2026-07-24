@@ -16,6 +16,9 @@ var phys_position: Vector2
 var prev_phys_position: Vector2
 
 
+var projectile_proto: PackedScene = preload("res://Projectile.tscn")
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -28,52 +31,63 @@ func setup(starting_number: int, starting_position: Vector2i, _main: Main) -> vo
 	
 	number_display.text = str(current_number)
 	
-	phys_position = grid_to_phys(grid_position)
-	#prev_phys_position = grid_to_phys(prev_grid_position)
-	#phys_position_move_time = 0
+	phys_position = Main.grid_to_phys(grid_position)
+	prev_phys_position = Main.grid_to_phys(prev_grid_position)
+	phys_position_move_time = 0
+	
+	main.spawn_notif(NotifText.NotifTypes.ADD, starting_number, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	phys_position_move_time += delta
-	if (phys_position_move_time >= 1):
-		phys_position_move_time = 1
+	if (phys_position_move_time >= 0.35):
+		phys_position_move_time = 0.35
 	
-	position = phys_position
-	#position = lerp(prev_phys_position, phys_position, ease_in_out_quad(phys_position_move_time))
+	#position = phys_position
+	position = lerp(prev_phys_position, phys_position, Main.ease_out_quart(phys_position_move_time / 0.35))
+	
+	number_display.text = str(current_number)
 
 func do_turn() -> void:
-	#prev_grid_position = grid_position
-	#grid_position = grid_position + Vector2i(0, 1)
-	#phys_position = grid_to_phys(grid_position)
-	#prev_phys_position = grid_to_phys(prev_grid_position)
-	#phys_position_move_time = 0
-	pass
+	shoot()
 
-func ease_in_out_quad(t: float) -> float:
-	return ((t*t)/((t*t) + ((1-t)*(1-t))))
+func shoot():
+	var projectile: Projectile = projectile_proto.instantiate()
+	projectile.setup(current_number, grid_position, main)
+	main.projectile_holder.add_child(projectile)
 
-func grid_to_phys(_grid_pos: Vector2i) -> Vector2:
-	var _pos: Vector2 = Vector2.ZERO
+
+func change_position(new_pos: Vector2i):
+	prev_grid_position = grid_position
+	grid_position = new_pos
 	
-	_pos.x = (_grid_pos.x * 64) + 232
-	_pos.y = (_grid_pos.y * 64) + 32
+	phys_position = Main.grid_to_phys(grid_position)
+	prev_phys_position = Main.grid_to_phys(prev_grid_position)
 	
-	return _pos
-
+	phys_position_move_time = 0
 
 func take_damage(damage_to_take: int) -> void:
 	current_number -= damage_to_take
 	
+	main.spawn_notif(NotifText.NotifTypes.SUBTRACT, damage_to_take, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
+	
 	number_display.text = str(current_number)
 	
-	if (current_number == 0):
-		explode()
-	if (current_number < 0):
+	if (current_number <= 0):
 		die()
 
-func explode() -> void:
-	pass
-
 func die() -> void:
-	pass
+	#TODO: Maybe change later?
+	queue_free()
+
+func increment(amount: int) -> void:
+	current_number += amount
+	main.spawn_notif(NotifText.NotifTypes.ADD, amount, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
+
+func decrement(amount: int) -> void:
+	take_damage(amount)
+
+func divide_to(amount: int) -> void:
+	current_number = amount
+	main.spawn_notif(NotifText.NotifTypes.DIVIDE, 2, 0.65, (position + phys_position) / 2.0)

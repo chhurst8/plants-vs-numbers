@@ -23,6 +23,7 @@ func _ready() -> void:
 
 func setup(_starting_number: int, starting_position: Vector2i, _main: Main) -> void:
 	starting_number = _starting_number
+	current_number = starting_number
 	grid_position = starting_position
 	prev_grid_position = grid_position
 	main = _main
@@ -41,7 +42,7 @@ func _process(delta: float) -> void:
 		phys_position_move_time = 1
 	
 	
-	position = lerp(prev_phys_position, phys_position, ease_in_out_quad(phys_position_move_time))
+	position = lerp(prev_phys_position, phys_position, Main.ease_in_out_quad(phys_position_move_time))
 
 func do_turn() -> void:
 	prev_grid_position = grid_position
@@ -50,12 +51,11 @@ func do_turn() -> void:
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
 	phys_position_move_time = 0
 
-func ease_in_out_quad(t: float) -> float:
-	return ((t*t)/((t*t) + ((1-t)*(1-t))))
-
 
 func take_damage(damage_to_take: int) -> void:
 	current_number -= damage_to_take
+	
+	main.spawn_notif(NotifText.NotifTypes.SUBTRACT, damage_to_take, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
 	
 	number_display.text = str(current_number)
 	
@@ -65,7 +65,9 @@ func take_damage(damage_to_take: int) -> void:
 		die()
 
 func explode() -> void:
+	# TODO: queue free, give the player points, and spawn an explosion which damages other enemies in a 3x3 area
 	pass
 
 func die() -> void:
+	# TODO: queue free and also give the player points
 	pass

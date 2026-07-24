@@ -3,10 +3,12 @@
 [ext_resource type="Script" uid="uid://dds8kw4xom0vp" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://b5ac5g462r8sa" path="res://icon.svg" id="1_ig7tw"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "plant_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
 global_turn_timer = NodePath("GlobalTurnTimer")
 plant_holder = NodePath("PlantHolder")
+projectile_holder = NodePath("ProjectileHolder")
+notif_holder = NodePath("NotifHolder")
 enemy_holder = NodePath("EnemyHolder")
 
 [node name="GlobalTurnTimer" type="Timer" parent="." unique_id=1153019698]
@@ -295,6 +297,10 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_ig7tw")
 
 [node name="PlantHolder" type="Node2D" parent="." unique_id=1094016593]
+
+[node name="ProjectileHolder" type="Node2D" parent="." unique_id=2146645935]
+
+[node name="NotifHolder" type="Node2D" parent="." unique_id=26464698]
 
 [node name="EnemyHolder" type="Node2D" parent="." unique_id=566027863]
 
