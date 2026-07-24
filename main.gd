@@ -65,6 +65,9 @@ func _ready() -> void:
 	spawn_enemy(4, Vector2i(0, -2))
 	spawn_enemy(6, Vector2i(1, -3))
 	
+	spawn_enemy(25, Vector2i(3, -7))
+	spawn_enemy(3, Vector2i(2, -2))
+	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
 	
@@ -232,9 +235,10 @@ func spawn_notif(notif_type: NotifText.NotifTypes, notif_number: int, notif_life
 func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, exploding_enemy: Enemy) -> void:
 	for enemy: Enemy in enemy_holder.get_children():
 		if (enemy != exploding_enemy):
-			if (enemy.grid_position.x >= explosion_position.x - 1 and enemy.grid_position.y <= explosion_position.x + 1
+			if (enemy.grid_position.x >= explosion_position.x - 1 and enemy.grid_position.x <= explosion_position.x + 1
 			and enemy.grid_position.y >= explosion_position.y - 1 and enemy.grid_position.y <= explosion_position.y + 1):
 				enemy.take_damage(explosion_damage)
+				print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
 	
 	#TODO: create the visual explosion
 

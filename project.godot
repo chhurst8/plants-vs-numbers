@@ -13,6 +13,7 @@ config_version=5
 config/name="Plants Vs Numbers"
 run/main_scene="uid://crhpv73nstpfq"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+boot_splash/bg_color=Color(0.9340804, 0.9340805, 0.93408036, 1)
 config/icon="res://icon.svg"
 
 [display]
@@ -53,3 +54,4 @@ ScrollDown={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.79624325, 0.79624295, 0.796243, 1)
