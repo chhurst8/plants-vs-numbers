@@ -10,11 +10,14 @@ const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 64)
 
 var points: int = 0
 var current_wave: int = 0
+var enemies_remaining_in_wave = {}
+var current_turn: int = 0
 
 enum TurnOwners {
 	PLAYER, ENEMY
 }
 var turn_owner: TurnOwners
+var rng = RandomNumberGenerator.new()
 
 
 @export var plant_holder: Node2D
@@ -35,7 +38,7 @@ class Click:
 	
 	var origin_phys: Vector2
 	var origin_grid: Vector2i
-	
+
 	var release_phys: Vector2
 	var release_grid: Vector2i
 	
@@ -62,7 +65,7 @@ var current_increment_amount: int
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# testing
-	spawn_enemy(4, Vector2i(0, -2))
+	init_wave()
 	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
@@ -179,6 +182,11 @@ func _on_global_turn_timer_timeout() -> void:
 		do_player_turn()
 		turn_owner = TurnOwners.ENEMY
 	else:
+		current_turn += 1
+		if (enemies_remaining_in_wave.has(current_turn)):
+			var wave = enemies_remaining_in_wave[current_turn]
+			for enemy in wave:
+				spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2))
 		do_enemy_turn()
 		turn_owner = TurnOwners.PLAYER
 	
@@ -192,6 +200,30 @@ func do_enemy_turn() -> void:
 	for enemy: Enemy in enemy_holder.get_children():
 		enemy.do_turn()
 
+func init_wave() -> void:
+	rng.seed = current_wave
+	var boss = roundf((2 * pow(2, current_wave)) * rng.randf_range(0.9, 1.1));
+	var num_enemies = roundf(3 * (current_wave + 1) * rng.randf_range(0.6, 1.4))
+	print_debug(num_enemies)
+	var boss_placed = false
+	enemies_remaining_in_wave = {}
+	var line = 0
+	while num_enemies > 0:
+		line += 1
+		var enemies_in_line = roundf(min(1 / rng.randf(), 1) * num_enemies)
+		enemies_remaining_in_wave[line] = []
+		num_enemies -= enemies_in_line
+		var occupied_spots = []
+		for i in enemies_in_line:
+			var is_boss = !boss_placed && (rng.randf() > 0.5 || num_enemies == 0)
+			if is_boss:
+				boss_placed = true
+			var spot = rng.randi_range(0, 4 - 1)
+			while occupied_spots.has(spot):
+				spot = rng.randi_range(0, 4 - 1)
+			occupied_spots.append(spot)
+			enemies_remaining_in_wave[line].append({"position": spot, "number": boss})
+	print_debug(enemies_remaining_in_wave)
 
 func spawn_enemies() -> void:
 	
