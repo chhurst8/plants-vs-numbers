@@ -5,6 +5,7 @@ extends Node2D
 const GRID_TILE_SIZE: int = 64
 const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 64)
 
+@export var end_screen: Node2D
 
 @export var global_turn_timer: Timer
 
@@ -237,9 +238,6 @@ func init_wave() -> void:
 			enemies_remaining_in_wave[line].append({"position": spot, "number": boss})
 	print_debug(enemies_remaining_in_wave)
 
-func spawn_enemies() -> void:
-	
-	pass
 
 func spawn_enemy(starting_number: int, grid_position: Vector2i) -> void:
 	var enemy: Enemy = enemy_proto.instantiate()
@@ -278,6 +276,10 @@ func get_plant_at_tile(grid_point: Vector2i) -> Plant:
 			return plant
 	return null
 
+func lose_game() -> void:
+	end_screen.game_end()
+	get_tree().paused = true
+
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:
 	var closest_valid: Vector2i = get_closest_valid_tile(grid_point)
 	return (closest_valid.distance_to(grid_point) <= 2)
@@ -312,3 +314,27 @@ static func ease_in_out_quad(t: float) -> float:
 
 static func ease_out_quart(t: float) -> float:
 	return (1 - pow(1-t, 4))
+
+static func ease_out_sine(t: float) -> float:
+	return sin(PI*t / 2)
+
+static func ease_in_back(t: float) -> float:
+	var _c1 = 1.70158
+	var _c3 = _c1 + 1
+	return ((_c3*t*t*t) - (_c1*t*t))
+
+static func ease_out_bounce(t: float) -> float:
+	var _n1 = 7.5625
+	var _d1 = 2.75
+	
+	if (t < 1 / _d1):
+		return (_n1 * t * t)
+	elif (t < 2 / _d1):
+		var _x2 = t - (1.5 / _d1)
+		return (_n1 * _x2 * _x2 + 0.75)
+	elif (t < 2.5 / _d1):
+		var _x2 = t - (2.25 / _d1)
+		return (_n1 * _x2 * _x2 + 0.9375)
+	else:
+		var _x2 = t - (2.625 / _d1)
+		return (_n1 * _x2 * _x2 + 0.984375)

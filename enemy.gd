@@ -12,10 +12,15 @@ var current_number: int
 var grid_position: Vector2i = Vector2i.ZERO
 var prev_grid_position: Vector2i = Vector2i(0, -1)
 
-var phys_position_move_time: float = 0
 var phys_position: Vector2
 var prev_phys_position: Vector2
 
+enum EnemyAnimations {
+	MOVE,
+	ATTACK
+}
+var current_animation: EnemyAnimations
+var anim_time: float = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -32,24 +37,56 @@ func setup(_starting_number: int, starting_position: Vector2i, _main: Main) -> v
 	
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
-	phys_position_move_time = 0
+	anim_time = 0
+	
+	current_animation = EnemyAnimations.MOVE
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	phys_position_move_time += delta
-	if (phys_position_move_time >= 1):
-		phys_position_move_time = 1
+	anim_time += delta
+	if (anim_time >= 1):
+		anim_time = 1
+	
+	match current_animation:
+		EnemyAnimations.MOVE:
+			position = lerp(prev_phys_position, phys_position, Main.ease_in_out_quad(anim_time))
+			
+			if (grid_position.y >= 10):
+				if (anim_time >= 1):
+					print("zombie got to bottom. lose")
+					main.lose_game()
+		EnemyAnimations.ATTACK:
+			if (anim_time <= 0.1):
+				position = lerp(phys_position, phys_position + Vector2(0, Main.GRID_TILE_SIZE*0.45), Main.ease_in_back(anim_time / 0.1))
+			else:
+				position = lerp(phys_position + Vector2(0, Main.GRID_TILE_SIZE*0.45), phys_position, Main.ease_out_sine((anim_time - 0.1) / 0.9))
 	
 	
-	position = lerp(prev_phys_position, phys_position, Main.ease_in_out_quad(phys_position_move_time))
 
 func do_turn() -> void:
-	prev_grid_position = grid_position
-	grid_position = grid_position + Vector2i(0, 1)
-	phys_position = Main.grid_to_phys(grid_position)
-	prev_phys_position = Main.grid_to_phys(prev_grid_position)
-	phys_position_move_time = 0
+	var plant_in_front: Plant = main.get_plant_at_tile(grid_position + Vector2i(0, 1))
+	var plant_can_survive_attack: bool = false
+	if (plant_in_front != null):
+		if (plant_in_front.current_number > current_number):
+			plant_can_survive_attack = true
+		
+		plant_in_front.take_damage(current_number)
+	
+	if (plant_can_survive_attack):
+		prev_grid_position = grid_position
+		phys_position = Main.grid_to_phys(grid_position)
+		prev_phys_position = Main.grid_to_phys(prev_grid_position)
+		anim_time = 0
+		current_animation = EnemyAnimations.ATTACK
+	else:
+		prev_grid_position = grid_position
+		grid_position = grid_position + Vector2i(0, 1)
+		phys_position = Main.grid_to_phys(grid_position)
+		prev_phys_position = Main.grid_to_phys(prev_grid_position)
+		anim_time = 0
+		current_animation = EnemyAnimations.MOVE
+	
 
 
 func take_damage(damage_to_take: int) -> void:

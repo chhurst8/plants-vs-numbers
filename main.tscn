@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dds8kw4xom0vp" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://ctvgpes8uudt2" path="res://Visuals/bgtile.svg" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://d3tatvuptigri" path="res://end_screen.gd" id="3_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://cjwajnpbx4cs4" path="res://Visuals/endscreenbg.svg" id="3_h2yge"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("end_screen", "global_turn_timer", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
+end_screen = NodePath("EndScreen")
 global_turn_timer = NodePath("GlobalTurnTimer")
 plant_holder = NodePath("PlantHolder")
 projectile_holder = NodePath("ProjectileHolder")
@@ -14,10 +17,9 @@ enemy_holder = NodePath("EnemyHolder")
 [node name="GlobalTurnTimer" type="Timer" parent="." unique_id=1153019698]
 
 [node name="Grid" type="Node2D" parent="." unique_id=1127803762]
-position = Vector2(0, 32)
 
 [node name="Sprite2D" type="Sprite2D" parent="Grid" unique_id=327678686]
-position = Vector2(360, 320)
+position = Vector2(360, 352)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_h2yge")
 
@@ -28,5 +30,17 @@ texture = ExtResource("2_h2yge")
 [node name="NotifHolder" type="Node2D" parent="." unique_id=26464698]
 
 [node name="EnemyHolder" type="Node2D" parent="." unique_id=566027863]
+
+[node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background")]
+process_mode = 3
+script = ExtResource("3_1bvp3")
+background = NodePath("Background")
+
+[node name="Background" type="Sprite2D" parent="EndScreen" unique_id=1525804368]
+visible = false
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_h2yge")
+offset = Vector2(0, -720)
 
 [connection signal="timeout" from="GlobalTurnTimer" to="." method="_on_global_turn_timer_timeout"]
