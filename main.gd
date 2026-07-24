@@ -57,19 +57,33 @@ class Click:
 var current_click: Click
 
 var current_increment_amount: int
-
+var max_increment_amount: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# testing
 	spawn_enemy(4, Vector2i(0, -2))
+	spawn_enemy(6, Vector2i(1, -3))
 	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
 	
 	current_click = null
 	current_increment_amount = 1
+	max_increment_amount = 1
 
+
+func _input(event: InputEvent) -> void:
+	# We need this to handle the mouse scroll buttons because they get pressed and released instantenously
+	# and the chance that it happens while the frame is happening is very low
+	if (event.is_action_pressed("ScrollUp")):
+		current_increment_amount += 1
+		if (current_increment_amount >= max_increment_amount):
+			current_increment_amount = max_increment_amount
+	elif (event.is_action_pressed("ScrollDown")):
+		current_increment_amount -= 1
+		if (current_increment_amount <= 1):
+			current_increment_amount = 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -214,6 +228,15 @@ func spawn_notif(notif_type: NotifText.NotifTypes, notif_number: int, notif_life
 	var notif: NotifText = notif_proto.instantiate()
 	notif.setup(notif_type, notif_number, notif_lifespan, _pos)
 	notif_holder.add_child(notif)
+
+func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, exploding_enemy: Enemy) -> void:
+	for enemy: Enemy in enemy_holder.get_children():
+		if (enemy != exploding_enemy):
+			if (enemy.grid_position.x >= explosion_position.x - 1 and enemy.grid_position.y <= explosion_position.x + 1
+			and enemy.grid_position.y >= explosion_position.y - 1 and enemy.grid_position.y <= explosion_position.y + 1):
+				enemy.take_damage(explosion_damage)
+	
+	#TODO: create the visual explosion
 
 func get_enemies() -> Array[Node]:
 	return enemy_holder.get_children()
