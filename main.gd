@@ -53,6 +53,7 @@ var stat_total_score: int = 0
 var score: int = 0
 
 var produced_units: int = 0
+var max_units: int = 7
 var production_rate: int = 2
 var factory_upgrade_price: int = 100
 
@@ -321,7 +322,7 @@ func _process(delta: float) -> void:
 	#UPDATE HUD
 	hud_score_display.text = "Score\n" + str(score)
 
-	factory_display.text = str(produced_units)
+	factory_display.text = str(produced_units) + "/" + str(max_units)
 	factory_rate_display.text = "+" + str(production_rate)
 	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
 
@@ -395,6 +396,7 @@ func _on_global_turn_timer_timeout() -> void:
 		do_player_turn()
 
 		produced_units += production_rate
+		produced_units = min(produced_units, max_units)
 
 		turn_owner = TurnOwners.ENEMY
 	else:
@@ -627,6 +629,7 @@ func _on_upgrade_factory_button_pressed() -> void:
 		
 		# increase factory upgrade price
 		factory_upgrade_price = ceili(factory_upgrade_price * 1.25)
+		max_units = ceili(max_units * 1.25)
 
 
 
