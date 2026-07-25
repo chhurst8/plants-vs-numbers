@@ -33,7 +33,7 @@ func setup(_starting_number: int, starting_position: Vector2i, _main: Main) -> v
 	prev_grid_position = grid_position
 	main = _main
 	
-	number_display.text = str(current_number)
+	number_display.text = format_big_number(current_number)
 	
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
@@ -94,7 +94,7 @@ func take_damage(damage_to_take: int) -> void:
 	
 	main.spawn_notif(NotifText.NotifTypes.SUBTRACT, damage_to_take, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
 	
-	number_display.text = str(current_number)
+	number_display.text = format_big_number(current_number)
 	
 	if (current_number == 0):
 		explode()
@@ -113,3 +113,15 @@ func die() -> void:
 	# TODO: queue free and also give the player points
 	queue_free()
 	pass
+
+func format_big_number(current_number: int) -> String:
+	if current_number < 1000:
+		return str(current_number)
+	else:
+		var magnitude = magnitude(current_number)
+		var mantissa = current_number / (pow(10,magnitude))
+		return str("%.2f" % mantissa) + "e" + str(magnitude)
+
+
+func magnitude(number: int) -> int:
+	return max(floor((log(number))/(log(10))),0)
