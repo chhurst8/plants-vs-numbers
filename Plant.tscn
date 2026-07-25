@@ -2,10 +2,15 @@
 
 [ext_resource type="Script" uid="uid://dxlwm15iin6ul" path="res://plant.gd" id="1_pgwxn"]
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="1_w7rnh"]
+[ext_resource type="Texture2D" uid="uid://chr2fk2uqk672" path="res://Visuals/plant.svg" id="2_lx5bf"]
 
 [node name="Plant" type="Node2D" unique_id=2007644060 node_paths=PackedStringArray("number_display")]
 script = ExtResource("1_pgwxn")
 number_display = NodePath("NumberDisplay")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=199829132]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_lx5bf")
 
 [node name="NumberDisplay" type="Label" parent="." unique_id=1074760485]
 anchors_preset = 8
@@ -20,6 +25,7 @@ offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_w7rnh")
+theme_override_font_sizes/font_size = 30
 text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -5,12 +5,30 @@ extends Node2D
 const GRID_TILE_SIZE: int = 64
 const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 64)
 
+const COMBO_PURPLE: Color = Color("9700d8")
+const COMBO_GREEN: Color = Color("35ff50")
+const COMBO_RED: Color = Color("ff4b4b")
+const COMBO_BLUE: Color = Color("3959ff")
+
 
 @export var global_turn_timer: Timer
 
 @export var clock_thing: TextureProgressBar
 @export var closest_enemy_indicator: Label
 var closest_enemy_distance: int
+
+@export var combo_letter: Label
+@export var combo_bar: TextureProgressBar
+var combo_amount: int = 0
+var combo_anim_time: float = 0
+var any_enemies_killed_this_turn: bool = false
+var kill_drought: int = 0
+var prev_combo_bar_value: float = 0
+
+@export var hud_wave_indicator: Label
+var hud_wave_anim_time: float = 0
+
+@export var hud_score_display: Label
 
 
 @export var end_screen: EndScreen
@@ -20,6 +38,7 @@ var stat_strongest_enemy_killed: int
 var stat_explosions: int
 
 var score: int = 0
+
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
 var current_turn: int = 0
@@ -75,8 +94,6 @@ var max_increment_amount: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	init_wave()
-	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
 	
@@ -91,6 +108,22 @@ func _ready() -> void:
 	
 	closest_enemy_distance = 10
 	closest_enemy_indicator.text = str(closest_enemy_distance)
+	
+	combo_amount = 0
+	any_enemies_killed_this_turn = false
+	kill_drought = 0
+	combo_anim_time = 1
+	
+	combo_letter.hide()
+	combo_bar.hide()
+	
+	hud_wave_indicator.text = ""
+	hud_wave_anim_time = 2
+	
+	
+	current_wave = 0
+	
+	init_wave()
 
 
 func _input(event: InputEvent) -> void:
@@ -116,7 +149,7 @@ func _process(delta: float) -> void:
 	else:
 		var released: bool = false
 		
-		print(current_click)
+		#print(current_click)
 		current_click.hold_time += delta
 		if (current_click.button == Click.Buttons.LEFT):
 			if (! Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
@@ -181,7 +214,7 @@ func _process(delta: float) -> void:
 			else:
 				var should_do_action: bool = true
 				var action_tile: Vector2i
-				if (are_we_even_close_to_a_valid_tile(current_click.origin_grid)):
+				if (get_closest_valid_tile(current_click.origin_grid) == current_click.origin_grid):
 					action_tile = get_closest_valid_tile(current_click.origin_grid)
 				else:
 					# we were probably trying to click on some other UI button far away or whatever
@@ -207,6 +240,8 @@ func _process(delta: float) -> void:
 	
 	
 	#UPDATE HUD
+	hud_score_display.text = "Score\n" + str(score)
+	
 	if (turn_owner == TurnOwners.PLAYER):
 		clock_thing.value = lerp(0, 180, clampf(1 - global_turn_timer.time_left, 0, 1))
 	else:
@@ -226,8 +261,45 @@ func _process(delta: float) -> void:
 		tween_rot.tween_property(closest_enemy_indicator, "rotation_degrees", 360, 0.4).set_trans(Tween.TRANS_BACK)
 		
 		var tween_scale = get_tree().create_tween()
-		tween_scale.tween_property(closest_enemy_indicator, "scale", 1.2, 0.2)
-		tween_scale.tween_property(closest_enemy_indicator, "scale", 1.0, 0.2)
+		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.2, 1.2), 0.2)
+		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.0, 1.0), 0.2)
+	
+	if(combo_anim_time < 1):
+		combo_anim_time += delta
+		if (combo_anim_time <= 0.1):
+			var _letter_scale = lerpf(1.0, 1.1, combo_anim_time / 0.1)
+			combo_letter.scale = Vector2(_letter_scale, _letter_scale)
+		elif (combo_anim_time <= 0.2):
+			var _letter_scale = lerpf(1.1, 1.0, ease_out_cubic((combo_anim_time - 0.1) / 0.1))
+			combo_letter.scale = Vector2(_letter_scale, _letter_scale)
+		if (combo_anim_time <= 0.4):
+			var new_combo_bar_value: float = 0.0
+			if (combo_amount <= 3):
+				new_combo_bar_value = (combo_amount) * (100.0 / 3.0)
+			elif (combo_amount <= 6):
+				new_combo_bar_value = (combo_amount - 3) * (100.0 / 3.0)
+			elif (combo_amount <= 8):
+				new_combo_bar_value = (combo_amount - 6) * (100.0 / 2.0)
+			elif (combo_amount <= 10):
+				new_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
+			
+			combo_bar.value = lerpf(prev_combo_bar_value, new_combo_bar_value, ease_out_quart(combo_anim_time / 0.4))
+	
+	
+	hud_wave_indicator.text = "Wave " + str(current_wave)
+	if(hud_wave_anim_time < 2.5):
+		hud_wave_anim_time += delta
+		if (hud_wave_anim_time <= 0.8):
+			var _indicator_scale = lerpf(1.0, 1.25, ease_out_cubic(hud_wave_anim_time / 0.8))
+			hud_wave_indicator.scale = Vector2(_indicator_scale, _indicator_scale)
+		elif(hud_wave_anim_time >= 1.2 and hud_wave_anim_time <= 2.2):
+			var _indicator_scale = lerpf(1.25, 1.0, ease_in_quad((hud_wave_anim_time - 1.2) / 1.0))
+			hud_wave_indicator.scale = Vector2(_indicator_scale, _indicator_scale)
+		
+		if (hud_wave_anim_time >= 0.4 and hud_wave_anim_time <= 1.9):
+			hud_wave_indicator.rotation_degrees = sin(((hud_wave_anim_time-0.4)/1.5)*8*PI)*lerpf(7, 2, (hud_wave_anim_time-0.4)/1.5)
+		else:
+			hud_wave_indicator.rotation_degrees = 0
 
 
 func _on_global_turn_timer_timeout() -> void:
@@ -241,6 +313,34 @@ func _on_global_turn_timer_timeout() -> void:
 		do_player_turn()
 		turn_owner = TurnOwners.ENEMY
 	else:
+		# it is the enemy turn
+		# BUT first handle the combo thing
+		if (any_enemies_killed_this_turn):
+			kill_drought = 0
+		else:
+			kill_drought += 1
+			
+			var new_combo_amount: int = 0
+			if (kill_drought <= 2):
+				new_combo_amount = combo_amount - 1
+			elif (kill_drought <= 4):
+				new_combo_amount = combo_amount - 2
+			else:
+				new_combo_amount = combo_amount - 3
+			
+			update_combo_hud(new_combo_amount)
+		any_enemies_killed_this_turn = false
+		
+		if (combo_amount <= 3):
+			prev_combo_bar_value = (combo_amount) * (100.0 / 3.0)
+		elif (combo_amount <= 6):
+			prev_combo_bar_value = (combo_amount - 3) * (100.0 / 3.0)
+		elif (combo_amount <= 8):
+			prev_combo_bar_value = (combo_amount - 6) * (100.0 / 2.0)
+		elif (combo_amount <= 10):
+			prev_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
+		#prev_combo_bar_value = combo_bar.value
+		
 		current_turn += 1
 		if (enemies_remaining_in_wave.has(current_turn)):
 			var wave = enemies_remaining_in_wave[current_turn]
@@ -317,7 +417,13 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 				enemy.take_damage(explosion_damage)
 				print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
 	
+	increase_combo(1)
 	stat_explosions += 1
+	
+	# this will have to change based on the combo
+	var score_gained: int = roundi(exploding_enemy.starting_number * get_combo_multiplier())
+	score += score_gained
+	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
 	#TODO: create the visual explosion
 
 func get_enemies() -> Array[Node]:
@@ -334,8 +440,76 @@ func enemy_death(dead_enemy: Enemy) -> void:
 	if (enemy_number > stat_strongest_enemy_killed): stat_strongest_enemy_killed = enemy_number
 	stat_enemies_killed += 1
 	
-	# this will have to change based on the combo
-	score += enemy_number
+	
+	# gain score
+	var score_gained: int = roundi(enemy_number * get_combo_multiplier())
+	score += score_gained
+	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
+	
+	# update the combo counter
+	any_enemies_killed_this_turn = true
+	increase_combo(1)
+
+func increase_combo(amount: int) -> void:
+	var new_combo_amount = combo_amount + amount
+	update_combo_hud(new_combo_amount)
+
+func update_combo_hud(new_combo_amount: int) -> void:
+	#var old_combo_amount: int = combo_amount
+	combo_amount = new_combo_amount
+	if (combo_amount > 10): combo_amount = 10
+	if (combo_amount < 0): combo_amount = 0
+	
+	combo_anim_time = 0
+	
+	if (combo_amount == 0):
+		combo_letter.hide()
+		combo_bar.hide()
+	else:
+		combo_letter.show()
+		combo_bar.show()
+		
+		if (combo_amount <= 3):
+			combo_letter.text = "C"
+			combo_letter.add_theme_color_override("font_color", COMBO_BLUE)
+			combo_bar.tint_progress = COMBO_BLUE
+		elif (combo_amount <= 6):
+			combo_letter.text = "B"
+			combo_letter.add_theme_color_override("font_color", COMBO_RED)
+			combo_bar.tint_progress = COMBO_RED
+		elif (combo_amount <= 8):
+			combo_letter.text = "A"
+			combo_letter.add_theme_color_override("font_color", COMBO_GREEN)
+			combo_bar.tint_progress = COMBO_GREEN
+		elif (combo_amount <= 10):
+			combo_letter.text = "S"
+			combo_letter.add_theme_color_override("font_color", COMBO_PURPLE)
+			combo_bar.tint_progress = COMBO_PURPLE
+
+func get_combo_multiplier() -> float:
+	if (combo_amount <= 3):
+		# C = 1.5x
+		return (1.5)
+	elif (combo_amount <= 6):
+		# B = 2.0x
+		return (2.0)
+	elif (combo_amount <= 8):
+		# A = 3.0x
+		return (3.0)
+	elif (combo_amount <= 10):
+		# S = 5.0x
+		return (5.0)
+	else:
+		# No combo
+		return (1.0)
+
+
+
+func _on_upgrade_factory_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+
 
 
 func next_wave():
@@ -345,7 +519,7 @@ func next_wave():
 
 
 func lose_game() -> void:
-	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed)
+	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, current_wave)
 	get_tree().paused = true
 
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:
@@ -388,6 +562,12 @@ static func ease_out_sine(t: float) -> float:
 
 static func ease_out_cubic(t: float) -> float:
 	return (1 - (pow(1-t, 3)))
+
+static func ease_in_cubic(t: float) -> float:
+	return (t*t*t)
+
+static func ease_in_quad(t: float) -> float:
+	return(t*t)
 
 static func ease_in_back(t: float) -> float:
 	var _c1 = 1.70158
