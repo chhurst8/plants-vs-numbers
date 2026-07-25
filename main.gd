@@ -305,12 +305,7 @@ func _process(delta: float) -> void:
 
 
 func _on_global_turn_timer_timeout() -> void:
-	if enemy_holder.get_child_count() == 0 && current_turn > 1:
-		print_debug("next wave")
-		current_turn = 0
-		next_wave()
-		global_turn_timer.start()
-		return
+	
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
 		turn_owner = TurnOwners.ENEMY
@@ -343,13 +338,20 @@ func _on_global_turn_timer_timeout() -> void:
 			prev_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
 		#prev_combo_bar_value = combo_bar.value
 		
-		current_turn += 1
-		if (enemies_remaining_in_wave.has(current_turn)):
-			var wave = enemies_remaining_in_wave[current_turn]
-			for enemy in wave:
-				spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2))
-
-		do_enemy_turn()
+		if enemy_holder.get_child_count() == 0 && current_turn > 1:
+			print_debug("next wave")
+			current_turn = 0
+			next_wave()
+			#global_turn_timer.start()
+			#return
+		else:
+			current_turn += 1
+			if (enemies_remaining_in_wave.has(current_turn)):
+				var wave = enemies_remaining_in_wave[current_turn]
+				for enemy in wave:
+					spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2))
+			
+			do_enemy_turn()
 		turn_owner = TurnOwners.PLAYER
 	
 	global_turn_timer.start()
@@ -526,6 +528,7 @@ func _on_upgrade_factory_button_pressed() -> void:
 
 func next_wave():
 	current_wave += 1
+	hud_wave_anim_time = 0
 	print("next wave")
 	init_wave()
 
