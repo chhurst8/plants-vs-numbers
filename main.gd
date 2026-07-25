@@ -30,6 +30,7 @@ var hud_wave_anim_time: float = 0
 
 @export var hud_score_display: Label
 @export var factory_display: Label
+@export var increment_label: Label
 
 
 @export var end_screen: EndScreen
@@ -229,7 +230,7 @@ func _process(delta: float) -> void:
 				if (should_do_action):
 					# We are going to do a click action right now, let's check the context to see if there is already a plant there
 					var plant_at_tile: Plant = get_plant_at_tile(action_tile)
-					if (current_click.button == Click.Buttons.LEFT):
+					if (current_click.button == Click.Buttons.LEFT && current_increment_amount != 0):
 						if (plant_at_tile != null):
 							# increase the existing plant
 							plant_at_tile.increment(current_increment_amount)
@@ -250,6 +251,10 @@ func _process(delta: float) -> void:
 	hud_score_display.text = "Score\n" + str(score)
 
 	factory_display.text = "Available:\n" + str(produced_units)
+
+	current_increment_amount = min(current_increment_amount, produced_units)
+
+	increment_label.text = "+" + str(current_increment_amount)
 	
 	if (turn_owner == TurnOwners.PLAYER):
 		clock_thing.value = lerp(0, 180, clampf(1 - global_turn_timer.time_left, 0, 1))

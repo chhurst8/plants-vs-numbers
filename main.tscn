@@ -9,8 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://4b5caa7bo5vf" path="res://Visuals/clock_progress.svg" id="5_5vw27"]
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="5_lquwl"]
 [ext_resource type="Texture2D" uid="uid://c2c4jgs46roy1" path="res://Visuals/combobar_progress.svg" id="7_kek77"]
+[ext_resource type="Script" uid="uid://d1vv8kvnlso6p" path="res://increment.gd" id="10_4c57u"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "increment_label", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
 global_turn_timer = NodePath("GlobalTurnTimer")
 clock_thing = NodePath("HUD/ClockThing")
@@ -20,6 +21,7 @@ combo_bar = NodePath("HUD/ComboBar")
 hud_wave_indicator = NodePath("HUD/WaveIndicator")
 hud_score_display = NodePath("HUD/ScoreDisplay")
 factory_display = NodePath("HUD/Factory/Factory")
+increment_label = NodePath("Increment/Label")
 end_screen = NodePath("EndScreen")
 plant_holder = NodePath("PlantHolder")
 projectile_holder = NodePath("ProjectileHolder")
@@ -295,6 +297,22 @@ theme_override_font_sizes/font_size = 35
 text = "Strongest Enemy Killed: 1234567890"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Increment" type="Control" parent="." unique_id=1065630402]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("10_4c57u")
+
+[node name="Label" type="Label" parent="Increment" unique_id=1051518683]
+layout_mode = 0
+offset_top = -46.0
+offset_right = 40.0
+offset_bottom = 2.0
+theme = ExtResource("5_lquwl")
+theme_override_colors/font_color = Color(0.37413925, 0.37413928, 0.37413922, 1)
+text = "+1"
 
 [connection signal="timeout" from="GlobalTurnTimer" to="." method="_on_global_turn_timer_timeout"]
 [connection signal="pressed" from="HUD/UpgradeFactoryButton" to="." method="_on_upgrade_factory_button_pressed"]
