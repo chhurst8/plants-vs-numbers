@@ -41,6 +41,7 @@ var stat_explosions: int
 var score: int = 0
 
 var produced_units = 0
+var production_rate = 2
 
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
@@ -95,7 +96,7 @@ class Click:
 var current_click: Click
 
 var current_increment_amount: int
-var max_increment_amount: int
+#var max_increment_amount: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -104,7 +105,7 @@ func _ready() -> void:
 	
 	current_click = null
 	current_increment_amount = 1
-	max_increment_amount = 1
+	#max_increment_amount = 1
 	
 	score = 0
 	stat_enemies_killed = 0
@@ -136,12 +137,12 @@ func _input(event: InputEvent) -> void:
 	# and the chance that it happens while the frame is happening is very low
 	if (event.is_action_pressed("ScrollUp")):
 		current_increment_amount += 1
-		if (current_increment_amount >= max_increment_amount):
-			current_increment_amount = max_increment_amount
+		if (current_increment_amount >= produced_units):
+			current_increment_amount = produced_units
 	elif (event.is_action_pressed("ScrollDown")):
 		current_increment_amount -= 1
-		if (current_increment_amount <= 1):
-			current_increment_amount = 1
+		if (current_increment_amount <= 0):
+			current_increment_amount = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -235,10 +236,11 @@ func _process(delta: float) -> void:
 						else:
 							# spawn a new plant
 							spawn_plant(current_increment_amount, action_tile)
+						produced_units -= current_increment_amount
 					elif (current_click.button == Click.Buttons.RIGHT):
 						if (plant_at_tile != null):
 							# decrease the existing plant
-							plant_at_tile.decrement(current_increment_amount)
+							plant_at_tile.decrement(1)
 			
 			
 			current_click = null
@@ -314,6 +316,8 @@ func _on_global_turn_timer_timeout() -> void:
 	
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
+
+		produced_units += production_rate
 
 		turn_owner = TurnOwners.ENEMY
 	else:
