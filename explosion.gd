@@ -24,7 +24,6 @@ func _process(delta: float) -> void:
 	
 	if (anim_time >= 0.4):
 		var alpha: float = lerp(1, 0, Main.ease_in_quad((anim_time - 0.4) / 0.4))
-		print("alpha: " + str(alpha))
 		modulate = Color(1,1,1, alpha)
 	else:
 		modulate = Color(1,1,1,1)

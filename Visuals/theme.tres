@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://cdpebhimedkdu"]
 
-[ext_resource type="FontFile" uid="uid://v6o1a0b172tc" path="res://Visuals/CashMarket-BoldRounded.ttf" id="1_0hcpo"]
+[ext_resource type="FontFile" uid="uid://cbai8oiwt01gn" path="res://Visuals/Unageo-Bold.ttf" id="1_0hcpo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xd38r"]
 bg_color = Color(0.7294118, 0.7294118, 0.7294118, 1)

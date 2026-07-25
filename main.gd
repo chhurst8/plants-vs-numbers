@@ -30,7 +30,12 @@ var hud_wave_anim_time: float = 0
 
 @export var hud_score_display: Label
 @export var factory_display: Label
+@export var factory_rate_display: Label
+@export var factory_price_display: Label
 @export var increment_label: Label
+
+@export var ghost_plant: Node2D
+@export var ghost_plant_num: Label
 
 
 @export var end_screen: EndScreen
@@ -39,10 +44,12 @@ var stat_enemies_killed: int
 var stat_strongest_enemy_killed: int
 var stat_explosions: int
 
+var stat_total_score: int = 0
 var score: int = 0
 
-var produced_units = 0
-var production_rate = 2
+var produced_units: int = 0
+var production_rate: int = 2
+var factory_upgrade_price: int = 100
 
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
@@ -127,6 +134,14 @@ func _ready() -> void:
 	hud_wave_indicator.text = ""
 	hud_wave_anim_time = 2
 	
+	factory_display.text = ""
+	factory_rate_display.text = ""
+	factory_price_display.text = "Price\n50"
+	
+	produced_units = 0
+	production_rate = 2
+	factory_upgrade_price = 100
+	
 	
 	current_wave = 0
 	
@@ -178,6 +193,8 @@ func _process(delta: float) -> void:
 			
 			
 			if (drag):
+				ghost_plant.visible = false
+				
 				var should_do_action: bool = true
 				var action_tile_1: Vector2i
 				var action_tile_2: Vector2i
@@ -211,14 +228,22 @@ func _process(delta: float) -> void:
 								plant_at_tile_1.increment(plant_at_tile_2.current_number)
 								plant_at_tile_2.die()
 							else:
-								# there is no plant to combine with, so we split instead
-								var number_after_split = floori(plant_at_tile_1.current_number / 2.0)
-								var other_number_after_split = ceili(plant_at_tile_1.current_number / 2.0)
-								
-								plant_at_tile_1.change_position(action_tile_2)
-								plant_at_tile_1.divide_to(number_after_split)
-								spawn_plant(other_number_after_split, action_tile_1)
+								# there is no plant to combine with, so we try to split instead
+								if (plant_at_tile_1.current_number > 1):
+									# the plant is big enough to split, so do it
+									var number_after_split = floori(plant_at_tile_1.current_number / 2.0)
+									var other_number_after_split = ceili(plant_at_tile_1.current_number / 2.0)
+									
+									plant_at_tile_1.change_position(action_tile_2)
+									plant_at_tile_1.divide_to(number_after_split)
+									
+									spawn_plant(other_number_after_split, action_tile_1)
+								else:
+									# the plant is not big enough to split, so we just move it
+									plant_at_tile_1.change_position(action_tile_2)
 			else:
+				ghost_plant.visible = false
+				
 				var should_do_action: bool = true
 				var action_tile: Vector2i
 				if (get_closest_valid_tile(current_click.origin_grid) == current_click.origin_grid):
@@ -245,12 +270,44 @@ func _process(delta: float) -> void:
 			
 			
 			current_click = null
-	
+		else:
+			# still dragging possibly
+			ghost_plant.visible = false
+			
+			var drag: bool = false
+			if (current_click.origin_grid != current_click.release_grid):
+				# We probably dragged
+				if (current_click.hold_time <= 0.1):
+					# But if it was only for a tiny amount of time then it was probably meant to be a click then move the mouse elsewhere
+					drag = false
+				else: drag = true
+			
+			if (drag):
+				# check if we are dragging a plant
+				var action_tile_1: Vector2i
+				if (are_we_even_close_to_a_valid_tile(current_click.origin_grid)):
+					action_tile_1 = get_closest_valid_tile(current_click.origin_grid)
+					# We are going to do a click action right now, let's check the context to see if there are already plants there
+					var plant_at_tile_1: Plant = get_plant_at_tile(action_tile_1)
+					
+					if (plant_at_tile_1 != null):
+						
+						ghost_plant.visible = true
+						ghost_plant_num.text = str(plant_at_tile_1.current_number)
+						# get ghost plant offset
+						var ghost_plant_offset = Vector2(0,0)
+						var center_of_tile = grid_to_phys(current_click.origin_grid)
+						ghost_plant_offset = current_click.origin_phys - center_of_tile
+						#print(ghost_plant_offset)
+						ghost_plant.position = get_global_mouse_position() - ghost_plant_offset
+				
 	
 	#UPDATE HUD
 	hud_score_display.text = "Score\n" + str(score)
 
-	factory_display.text = "Available:\n" + str(produced_units)
+	factory_display.text = str(produced_units)
+	factory_rate_display.text = "+" + str(production_rate)
+	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
 
 	current_increment_amount = min(current_increment_amount, produced_units)
 
@@ -440,9 +497,6 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 	
 	stat_explosions += 1
 	
-	#var score_gained: int = roundi(exploding_enemy.starting_number * get_combo_multiplier())
-	#score += score_gained
-	#spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
 	
 	# create the visual explosion
 	var explosion: Explosion = explosion_proto.instantiate()
@@ -469,6 +523,7 @@ func enemy_death(dead_enemy: Enemy, is_exploding: bool = false) -> void:
 	if (is_exploding): score_gained = score_gained * 2
 	print("score gained: " + str(score_gained))
 	score += score_gained
+	stat_total_score += score_gained
 	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
 	
 	# update the combo counter
@@ -537,8 +592,14 @@ func get_combo_multiplier() -> float:
 
 
 func _on_upgrade_factory_button_pressed() -> void:
-	pass # Replace with function body.
-
+	print("upgrade factory")
+	if (score >= factory_upgrade_price):
+		score -= factory_upgrade_price
+		# increase production rate
+		production_rate = ceili(production_rate * 1.25)
+		
+		# increase factory upgrade price
+		factory_upgrade_price = ceili(factory_upgrade_price * 1.25)
 
 
 
@@ -551,7 +612,7 @@ func next_wave():
 
 
 func lose_game() -> void:
-	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, current_wave)
+	end_screen.game_end(stat_total_score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, current_wave)
 	get_tree().paused = true
 
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:

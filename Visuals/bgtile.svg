@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="0.67081229"
-     inkscape:cx="160.99884"
-     inkscape:cy="607.47247"
+     inkscape:zoom="1.8973437"
+     inkscape:cx="543.91832"
+     inkscape:cy="32.94079"
      inkscape:window-width="1707"
      inkscape:window-height="1007"
      inkscape:window-x="0"
@@ -33,18 +33,37 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
-     id="defs1" />
+     id="defs1">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect2"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#a1a1a1;stroke:#000000;stroke-width:1.32292;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="fill:#a1a1a1;fill-opacity:1;stroke:#000000;stroke-width:1.32292;stroke-dasharray:none;stroke-opacity:1"
        id="rect1"
        width="32.585415"
        height="32.543777"
        x="1.9843765"
-       y="1.9843765" />
+       y="1.9843801"
+       sodipodi:type="rect" />
     <rect
        style="fill:#bababa;stroke:#000000;stroke-width:1.32292;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
        id="rect1-3"
@@ -388,5 +407,14 @@
        height="32.543777"
        x="137.40941"
        y="306.78436" />
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:1.32293;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect2"
+       width="170.65623"
+       height="339.98956"
+       x="0.66146493"
+       y="0.66146499"
+       rx="2.6458333"
+       ry="2.6458333" />
   </g>
 </svg>

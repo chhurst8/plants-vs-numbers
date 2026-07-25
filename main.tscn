@@ -9,9 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://4b5caa7bo5vf" path="res://Visuals/clock_progress.svg" id="5_5vw27"]
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="5_lquwl"]
 [ext_resource type="Texture2D" uid="uid://c2c4jgs46roy1" path="res://Visuals/combobar_progress.svg" id="7_kek77"]
+[ext_resource type="Texture2D" uid="uid://b1e4x1d0trohr" path="res://Visuals/factory.svg" id="8_efxa6"]
 [ext_resource type="Script" uid="uid://d1vv8kvnlso6p" path="res://increment.gd" id="10_4c57u"]
+[ext_resource type="Texture2D" uid="uid://chr2fk2uqk672" path="res://Visuals/plant.svg" id="12_dg77c"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "increment_label", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "factory_price_display", "increment_label", "ghost_plant", "ghost_plant_num", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
 global_turn_timer = NodePath("GlobalTurnTimer")
 clock_thing = NodePath("HUD/ClockThing")
@@ -20,8 +22,12 @@ combo_letter = NodePath("HUD/ComboLetter")
 combo_bar = NodePath("HUD/ComboBar")
 hud_wave_indicator = NodePath("HUD/WaveIndicator")
 hud_score_display = NodePath("HUD/ScoreDisplay")
-factory_display = NodePath("HUD/Factory/Factory")
+factory_display = NodePath("HUD/Factory/FactoryAvailable")
+factory_rate_display = NodePath("HUD/Factory/FactoryRate")
+factory_price_display = NodePath("HUD/UpgradeFactoryPrice")
 increment_label = NodePath("Increment/Label")
+ghost_plant = NodePath("GhostPlant")
+ghost_plant_num = NodePath("GhostPlant/GhostPlantNum")
 end_screen = NodePath("EndScreen")
 plant_holder = NodePath("PlantHolder")
 projectile_holder = NodePath("ProjectileHolder")
@@ -156,40 +162,95 @@ value = 3.0
 texture_progress = ExtResource("7_kek77")
 tint_progress = Color(0.5921569, 0, 0.84705883, 1)
 
+[node name="Factory" type="Control" parent="HUD" unique_id=914594286]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -194.0
+offset_top = -258.0
+offset_right = -4.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(95, 100)
+
+[node name="FactoryAvailable" type="Label" parent="HUD/Factory" unique_id=193334420]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 66.0
+offset_right = 20.0
+offset_bottom = 102.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FactoryRate" type="Label" parent="HUD/Factory" unique_id=665144317]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 150.0
+offset_right = 20.0
+offset_bottom = 186.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 30
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="HUD/Factory" unique_id=354262938]
+position = Vector2(95, 125)
+texture = ExtResource("8_efxa6")
+
+[node name="UpgradeFactoryPrice" type="Label" parent="HUD" unique_id=752473255]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -194.0
+offset_top = -362.0
+offset_right = -4.0
+offset_bottom = -290.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(95, 36)
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 20
+text = "Price
+01234567890"
+horizontal_alignment = 1
+
 [node name="UpgradeFactoryButton" type="Button" parent="HUD" unique_id=1395239233]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = -149.0
-offset_top = 250.0
+offset_top = -300.0
 offset_right = -49.0
-offset_bottom = 310.0
+offset_bottom = -240.0
 grow_horizontal = 0
-pivot_offset = Vector2(183, 68)
+grow_vertical = 0
+pivot_offset = Vector2(50, 30)
 theme = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 20
 text = "Upgrade
 Factory"
-
-[node name="Factory" type="Control" parent="HUD" unique_id=914594286]
-layout_mode = 1
-anchors_preset = 0
-offset_left = 4.0
-offset_top = 588.0
-offset_right = 44.0
-offset_bottom = 627.0
-
-[node name="Factory" type="Label" parent="HUD/Factory" unique_id=193334420]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme = ExtResource("5_lquwl")
-theme_override_font_sizes/font_size = 30
-text = "Available:
-0"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "wave_reached_text", "clock_thing")]
 process_mode = 3
@@ -303,6 +364,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
 script = ExtResource("10_4c57u")
 
 [node name="Label" type="Label" parent="Increment" unique_id=1051518683]
@@ -313,6 +375,32 @@ offset_bottom = 2.0
 theme = ExtResource("5_lquwl")
 theme_override_colors/font_color = Color(0.37413925, 0.37413928, 0.37413922, 1)
 text = "+1"
+
+[node name="GhostPlant" type="Node2D" parent="." unique_id=1899977428]
+modulate = Color(1, 1, 1, 0.26666668)
+scale = Vector2(0.75, 0.75)
+
+[node name="Sprite2D" type="Sprite2D" parent="GhostPlant" unique_id=210060225]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("12_dg77c")
+
+[node name="GhostPlantNum" type="Label" parent="GhostPlant" unique_id=539810435]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 30
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="timeout" from="GlobalTurnTimer" to="." method="_on_global_turn_timer_timeout"]
 [connection signal="pressed" from="HUD/UpgradeFactoryButton" to="." method="_on_upgrade_factory_button_pressed"]
