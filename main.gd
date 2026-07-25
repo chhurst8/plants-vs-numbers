@@ -5,11 +5,21 @@ extends Node2D
 const GRID_TILE_SIZE: int = 64
 const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 64)
 
-@export var end_screen: Node2D
 
 @export var global_turn_timer: Timer
 
-var points: int = 0
+@export var clock_thing: TextureProgressBar
+@export var closest_enemy_indicator: Label
+var closest_enemy_distance: int
+
+
+@export var end_screen: EndScreen
+
+var stat_enemies_killed: int
+var stat_strongest_enemy_killed: int
+var stat_explosions: int
+
+var score: int = 0
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
 var current_turn: int = 0
@@ -73,6 +83,14 @@ func _ready() -> void:
 	current_click = null
 	current_increment_amount = 1
 	max_increment_amount = 1
+	
+	score = 0
+	stat_enemies_killed = 0
+	stat_strongest_enemy_killed = 0
+	stat_explosions = 0
+	
+	closest_enemy_distance = 10
+	closest_enemy_indicator.text = str(closest_enemy_distance)
 
 
 func _input(event: InputEvent) -> void:
@@ -188,6 +206,28 @@ func _process(delta: float) -> void:
 			current_click = null
 	
 	
+	#UPDATE HUD
+	if (turn_owner == TurnOwners.PLAYER):
+		clock_thing.value = lerp(0, 180, clampf(1 - global_turn_timer.time_left, 0, 1))
+	else:
+		clock_thing.value = lerp(180, 360, clampf(1 - global_turn_timer.time_left, 0, 1))
+	
+	var furthest_along_dist: int = -3
+	if (enemy_holder.get_child_count() > 0):
+		for enemy: Enemy in enemy_holder.get_children():
+			if (enemy.grid_position.y > furthest_along_dist): furthest_along_dist = enemy.grid_position.y
+	var prev_closest_enemy_distance = closest_enemy_distance
+	closest_enemy_distance = clampi(10 - furthest_along_dist, 0, 10)
+	if (closest_enemy_distance != prev_closest_enemy_distance):
+		# the closest enemy distance has changed
+		closest_enemy_indicator.text = str(closest_enemy_distance)
+		closest_enemy_indicator.rotation_degrees = 0
+		var tween_rot = get_tree().create_tween()
+		tween_rot.tween_property(closest_enemy_indicator, "rotation_degrees", 360, 0.4).set_trans(Tween.TRANS_BACK)
+		
+		var tween_scale = get_tree().create_tween()
+		tween_scale.tween_property(closest_enemy_indicator, "scale", 1.2, 0.2)
+		tween_scale.tween_property(closest_enemy_indicator, "scale", 1.0, 0.2)
 
 
 func _on_global_turn_timer_timeout() -> void:
@@ -265,6 +305,7 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 				enemy.take_damage(explosion_damage)
 				print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
 	
+	stat_explosions += 1
 	#TODO: create the visual explosion
 
 func get_enemies() -> Array[Node]:
@@ -276,8 +317,16 @@ func get_plant_at_tile(grid_point: Vector2i) -> Plant:
 			return plant
 	return null
 
+func enemy_death(dead_enemy: Enemy) -> void:
+	var enemy_number = dead_enemy.starting_number
+	if (enemy_number > stat_strongest_enemy_killed): stat_strongest_enemy_killed = enemy_number
+	stat_enemies_killed += 1
+	
+	# this will have to change based on the combo
+	score += enemy_number
+
 func lose_game() -> void:
-	end_screen.game_end()
+	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed)
 	get_tree().paused = true
 
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:
@@ -317,6 +366,9 @@ static func ease_out_quart(t: float) -> float:
 
 static func ease_out_sine(t: float) -> float:
 	return sin(PI*t / 2)
+
+static func ease_out_cubic(t: float) -> float:
+	return (1 - (pow(1-t, 3)))
 
 static func ease_in_back(t: float) -> float:
 	var _c1 = 1.70158

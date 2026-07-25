@@ -3,12 +3,18 @@
 [ext_resource type="Script" uid="uid://dds8kw4xom0vp" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://ctvgpes8uudt2" path="res://Visuals/bgtile.svg" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://d3tatvuptigri" path="res://end_screen.gd" id="3_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://kdvgge8pdr6u" path="res://Visuals/clock.svg" id="3_272bh"]
 [ext_resource type="Texture2D" uid="uid://cjwajnpbx4cs4" path="res://Visuals/endscreenbg.svg" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://5fp6iylhw3pi" path="res://Visuals/clock_top.svg" id="4_5vw27"]
+[ext_resource type="Texture2D" uid="uid://4b5caa7bo5vf" path="res://Visuals/clock_progress.svg" id="5_5vw27"]
+[ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="5_lquwl"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("end_screen", "global_turn_timer", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "end_screen", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
-end_screen = NodePath("EndScreen")
 global_turn_timer = NodePath("GlobalTurnTimer")
+clock_thing = NodePath("HUD/ClockThing")
+closest_enemy_indicator = NodePath("HUD/ClockThing/ClosestEnemyIndicator")
+end_screen = NodePath("EndScreen")
 plant_holder = NodePath("PlantHolder")
 projectile_holder = NodePath("ProjectileHolder")
 notif_holder = NodePath("NotifHolder")
@@ -31,16 +37,128 @@ texture = ExtResource("2_h2yge")
 
 [node name="EnemyHolder" type="Node2D" parent="." unique_id=566027863]
 
-[node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background")]
+[node name="HUD" type="Node2D" parent="." unique_id=1488285872]
+
+[node name="ClockThing" type="TextureProgressBar" parent="HUD" unique_id=978626141]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.25, 0.25)
+max_value = 360.0
+value = 360.0
+fill_mode = 4
+texture_under = ExtResource("3_272bh")
+texture_over = ExtResource("4_5vw27")
+texture_progress = ExtResource("5_5vw27")
+
+[node name="ClosestEnemyIndicator" type="Label" parent="HUD/ClockThing" unique_id=130477318]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -276.5
+offset_top = -144.0
+offset_right = 276.5
+offset_bottom = 144.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(275.5, 143)
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 240
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "clock_thing")]
 process_mode = 3
 script = ExtResource("3_1bvp3")
 background = NodePath("Background")
+score_text = NodePath("Background/Score")
+enemies_killed_text = NodePath("Background/EnemiesKilled")
+explosions_text = NodePath("Background/Explosions")
+strongest_enemy_killed_text = NodePath("Background/StrongestEnemyKilled")
+clock_thing = NodePath("../HUD/ClockThing")
 
 [node name="Background" type="Sprite2D" parent="EndScreen" unique_id=1525804368]
-visible = false
 position = Vector2(360, 0)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_h2yge")
 offset = Vector2(0, -720)
+
+[node name="Game Over" type="Label" parent="EndScreen/Background" unique_id=1500507626]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -591.5
+offset_top = -1410.0
+offset_right = -58.5
+offset_bottom = -1290.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 100
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score" type="Label" parent="EndScreen/Background" unique_id=2025282306]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -601.5
+offset_top = -1300.0
+offset_right = -48.5
+offset_bottom = -1180.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 50
+text = "Total Score: 123456789"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnemiesKilled" type="Label" parent="EndScreen/Background" unique_id=2038935887]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -601.5
+offset_top = -1200.0
+offset_right = -48.5
+offset_bottom = -1080.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 35
+text = "Enemies Killed: 1234567890"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Explosions" type="Label" parent="EndScreen/Background" unique_id=938825599]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -601.5
+offset_top = -1100.0
+offset_right = -48.5
+offset_bottom = -980.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 35
+text = "Explosions: 1234567890"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StrongestEnemyKilled" type="Label" parent="EndScreen/Background" unique_id=611557949]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -631.5
+offset_top = -1000.0
+offset_right = -18.5
+offset_bottom = -880.0
+grow_horizontal = 2
+theme = ExtResource("5_lquwl")
+theme_override_font_sizes/font_size = 35
+text = "Strongest Enemy Killed: 1234567890"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="timeout" from="GlobalTurnTimer" to="." method="_on_global_turn_timer_timeout"]
