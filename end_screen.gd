@@ -11,11 +11,13 @@ var anim_time: float = 0
 @export var enemies_killed_text: Label
 @export var explosions_text: Label
 @export var strongest_enemy_killed_text: Label
+@export var wave_reached_text: Label
 
 var score_str: String
 var enemies_killed_str: String
 var explosions_str: String
 var strongest_enemy_killed_str: String
+var wave_reached_str: String
 
 
 
@@ -29,8 +31,9 @@ func _ready() -> void:
 	enemies_killed_text.text = ""
 	explosions_text.text = ""
 	strongest_enemy_killed_text.text = ""
+	wave_reached_text.text = ""
 
-func game_end(_score: int, _enemies_killed: int, _explosions: int, _strongest_enemy_killed: int) -> void:
+func game_end(_score: int, _enemies_killed: int, _explosions: int, _strongest_enemy_killed: int, _wave_reached: int) -> void:
 	anim_time = 0
 	game_ended = true
 	
@@ -38,6 +41,7 @@ func game_end(_score: int, _enemies_killed: int, _explosions: int, _strongest_en
 	enemies_killed_str = "Enemies Killed: " + str(_enemies_killed)
 	explosions_str = "Explosions: " + str(_explosions)
 	strongest_enemy_killed_str = "Strongest Enemy Killed: " + str(_strongest_enemy_killed)
+	wave_reached_str = "Wave Reached: " + str(_wave_reached)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -58,14 +62,16 @@ func _process(delta: float) -> void:
 		
 		# DISPLAY STATS
 		if (anim_time > 2):
-			var score_anim = lerp(0, len(score_str), Main.ease_out_cubic(clampf(anim_time - 2, 0, 1)))
-			score_text.text = score_str.substr(0, score_anim)
+			display_stat(score_text, score_str, 2)
 			
-			var enemies_killed_anim = lerp(0, len(enemies_killed_str), Main.ease_out_cubic(clampf(anim_time - 3, 0, 1)))
-			enemies_killed_text.text = enemies_killed_str.substr(0, enemies_killed_anim)
+			display_stat(wave_reached_text, wave_reached_str, 3)
 			
-			var explosions_anim = lerp(0, len(explosions_str), Main.ease_out_cubic(clampf(anim_time - 3.5, 0, 1)))
-			explosions_text.text = explosions_str.substr(0, explosions_anim)
+			display_stat(enemies_killed_text, enemies_killed_str, 3.5)
 			
-			var strongest_enemy_killed_anim = lerp(0, len(strongest_enemy_killed_str), Main.ease_out_cubic(clampf(anim_time - 4, 0, 1)))
-			strongest_enemy_killed_text.text = strongest_enemy_killed_str.substr(0, strongest_enemy_killed_anim)
+			display_stat(explosions_text, explosions_str, 4)
+			
+			display_stat(strongest_enemy_killed_text, strongest_enemy_killed_str, 4.5)
+
+func display_stat(text_obj: Label, stat_string: String, writing_start_time: float) -> void:
+	var stat_anim = lerp(0, len(stat_string), Main.ease_out_cubic(clampf(anim_time - writing_start_time, 0, 1)))
+	text_obj.text = stat_string.substr(0, stat_anim)

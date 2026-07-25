@@ -2,7 +2,48 @@
 
 [ext_resource type="FontFile" uid="uid://v6o1a0b172tc" path="res://Visuals/CashMarket-BoldRounded.ttf" id="1_0hcpo"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xd38r"]
+bg_color = Color(0.7294118, 0.7294118, 0.7294118, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bvgkr"]
+bg_color = Color(0.7294118, 0.7294118, 0.7294118, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hcpo"]
+bg_color = Color(0.6313726, 0.6313726, 0.6313726, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y51d7"]
+bg_color = Color(0.49019608, 0.49019608, 0.49019608, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
 [resource]
 default_font = ExtResource("1_0hcpo")
 default_font_size = 40
+Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_focus_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0, 0, 0, 1)
+Button/styles/focus = SubResource("StyleBoxFlat_xd38r")
+Button/styles/hover = SubResource("StyleBoxFlat_bvgkr")
+Button/styles/normal = SubResource("StyleBoxFlat_0hcpo")
+Button/styles/pressed = SubResource("StyleBoxFlat_y51d7")
 Label/colors/font_color = Color(0, 0, 0, 1)

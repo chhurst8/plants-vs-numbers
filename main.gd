@@ -25,6 +25,11 @@ var any_enemies_killed_this_turn: bool = false
 var kill_drought: int = 0
 var prev_combo_bar_value: float = 0
 
+@export var hud_wave_indicator: Label
+var hud_wave_anim_time: float = 0
+
+@export var hud_score_display: Label
+
 
 @export var end_screen: EndScreen
 
@@ -89,8 +94,6 @@ var max_increment_amount: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	init_wave()
-	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
 	
@@ -113,6 +116,14 @@ func _ready() -> void:
 	
 	combo_letter.hide()
 	combo_bar.hide()
+	
+	hud_wave_indicator.text = ""
+	hud_wave_anim_time = 2
+	
+	
+	current_wave = 0
+	
+	init_wave()
 
 
 func _input(event: InputEvent) -> void:
@@ -138,7 +149,7 @@ func _process(delta: float) -> void:
 	else:
 		var released: bool = false
 		
-		print(current_click)
+		#print(current_click)
 		current_click.hold_time += delta
 		if (current_click.button == Click.Buttons.LEFT):
 			if (! Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
@@ -203,7 +214,7 @@ func _process(delta: float) -> void:
 			else:
 				var should_do_action: bool = true
 				var action_tile: Vector2i
-				if (are_we_even_close_to_a_valid_tile(current_click.origin_grid)):
+				if (get_closest_valid_tile(current_click.origin_grid) == current_click.origin_grid):
 					action_tile = get_closest_valid_tile(current_click.origin_grid)
 				else:
 					# we were probably trying to click on some other UI button far away or whatever
@@ -229,6 +240,8 @@ func _process(delta: float) -> void:
 	
 	
 	#UPDATE HUD
+	hud_score_display.text = "Score\n" + str(score)
+	
 	if (turn_owner == TurnOwners.PLAYER):
 		clock_thing.value = lerp(0, 180, clampf(1 - global_turn_timer.time_left, 0, 1))
 	else:
@@ -260,8 +273,6 @@ func _process(delta: float) -> void:
 			var _letter_scale = lerpf(1.1, 1.0, ease_out_cubic((combo_anim_time - 0.1) / 0.1))
 			combo_letter.scale = Vector2(_letter_scale, _letter_scale)
 		if (combo_anim_time <= 0.4):
-			#TODO: transition bar
-			
 			var new_combo_bar_value: float = 0.0
 			if (combo_amount <= 3):
 				new_combo_bar_value = (combo_amount) * (100.0 / 3.0)
@@ -273,6 +284,22 @@ func _process(delta: float) -> void:
 				new_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
 			
 			combo_bar.value = lerpf(prev_combo_bar_value, new_combo_bar_value, ease_out_quart(combo_anim_time / 0.4))
+	
+	
+	hud_wave_indicator.text = "Wave " + str(current_wave)
+	if(hud_wave_anim_time < 2.5):
+		hud_wave_anim_time += delta
+		if (hud_wave_anim_time <= 0.8):
+			var _indicator_scale = lerpf(1.0, 1.25, ease_out_cubic(hud_wave_anim_time / 0.8))
+			hud_wave_indicator.scale = Vector2(_indicator_scale, _indicator_scale)
+		elif(hud_wave_anim_time >= 1.2 and hud_wave_anim_time <= 2.2):
+			var _indicator_scale = lerpf(1.25, 1.0, ease_in_quad((hud_wave_anim_time - 1.2) / 1.0))
+			hud_wave_indicator.scale = Vector2(_indicator_scale, _indicator_scale)
+		
+		if (hud_wave_anim_time >= 0.4 and hud_wave_anim_time <= 1.9):
+			hud_wave_indicator.rotation_degrees = sin(((hud_wave_anim_time-0.4)/1.5)*8*PI)*lerpf(7, 2, (hud_wave_anim_time-0.4)/1.5)
+		else:
+			hud_wave_indicator.rotation_degrees = 0
 
 
 func _on_global_turn_timer_timeout() -> void:
@@ -327,7 +354,12 @@ func do_enemy_turn() -> void:
 		enemy.do_turn()
 
 func init_wave() -> void:
+	#TODO: merge wave generator with wave hud ui
+	hud_wave_anim_time = 0
+	
+	
 	rng.seed = current_wave
+	rng.seed = 0
 	var boss = roundf((2 * pow(2, current_wave)) * rng.randf_range(0.9, 1.1));
 	var num_enemies = roundf(3 * (current_wave + 1) * rng.randf_range(0.6, 1.4))
 	print_debug(num_enemies)
@@ -380,6 +412,11 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 	
 	increase_combo(1)
 	stat_explosions += 1
+	
+	# this will have to change based on the combo
+	var score_gained: int = roundi(exploding_enemy.starting_number * get_combo_multiplier())
+	score += score_gained
+	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
 	#TODO: create the visual explosion
 
 func get_enemies() -> Array[Node]:
@@ -397,20 +434,21 @@ func enemy_death(dead_enemy: Enemy) -> void:
 	stat_enemies_killed += 1
 	
 	
+	# gain score
+	var score_gained: int = roundi(enemy_number * get_combo_multiplier())
+	score += score_gained
+	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
+	
 	# update the combo counter
 	any_enemies_killed_this_turn = true
 	increase_combo(1)
-	
-	
-	# this will have to change based on the combo	
-	score += enemy_number
 
 func increase_combo(amount: int) -> void:
 	var new_combo_amount = combo_amount + amount
 	update_combo_hud(new_combo_amount)
 
 func update_combo_hud(new_combo_amount: int) -> void:
-	var old_combo_amount: int = combo_amount
+	#var old_combo_amount: int = combo_amount
 	combo_amount = new_combo_amount
 	if (combo_amount > 10): combo_amount = 10
 	if (combo_amount < 0): combo_amount = 0
@@ -441,8 +479,33 @@ func update_combo_hud(new_combo_amount: int) -> void:
 			combo_letter.add_theme_color_override("font_color", COMBO_PURPLE)
 			combo_bar.tint_progress = COMBO_PURPLE
 
+func get_combo_multiplier() -> float:
+	if (combo_amount <= 3):
+		# C = 1.5x
+		return (1.5)
+	elif (combo_amount <= 6):
+		# B = 2.0x
+		return (2.0)
+	elif (combo_amount <= 8):
+		# A = 3.0x
+		return (3.0)
+	elif (combo_amount <= 10):
+		# S = 5.0x
+		return (5.0)
+	else:
+		# No combo
+		return (1.0)
+
+
+
+func _on_upgrade_factory_button_pressed() -> void:
+	pass # Replace with function body.
+
+
+
+
 func lose_game() -> void:
-	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed)
+	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, current_wave)
 	get_tree().paused = true
 
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:
@@ -485,6 +548,12 @@ static func ease_out_sine(t: float) -> float:
 
 static func ease_out_cubic(t: float) -> float:
 	return (1 - (pow(1-t, 3)))
+
+static func ease_in_cubic(t: float) -> float:
+	return (t*t*t)
+
+static func ease_in_quad(t: float) -> float:
+	return(t*t)
 
 static func ease_in_back(t: float) -> float:
 	var _c1 = 1.70158
