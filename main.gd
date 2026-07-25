@@ -11,6 +11,8 @@ const COMBO_RED: Color = Color("ff4b4b")
 const COMBO_BLUE: Color = Color("3959ff")
 
 
+@export var screen_transition: ScreenTransition
+
 @export var global_turn_timer: Timer
 
 @export var clock_thing: TextureProgressBar
@@ -43,6 +45,9 @@ var hud_wave_anim_time: float = 0
 var stat_enemies_killed: int
 var stat_strongest_enemy_killed: int
 var stat_explosions: int
+var stat_best_combo: int = 0
+var stat_current_good_combo: int = 0
+var stat_biggest_plant: int = 0
 
 var stat_total_score: int = 0
 var score: int = 0
@@ -108,6 +113,8 @@ var current_increment_amount: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_tree().paused = false
+	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
 	
@@ -119,6 +126,9 @@ func _ready() -> void:
 	stat_enemies_killed = 0
 	stat_strongest_enemy_killed = 0
 	stat_explosions = 0
+	stat_best_combo = 0
+	stat_current_good_combo = 0
+	stat_biggest_plant = 0
 	
 	closest_enemy_distance = 10
 	closest_enemy_indicator.text = str(closest_enemy_distance)
@@ -141,6 +151,9 @@ func _ready() -> void:
 	produced_units = 0
 	production_rate = 2
 	factory_upgrade_price = 100
+	
+	increment_label.text = "  0"
+	ghost_plant.visible = false
 	
 	
 	current_wave = 0
@@ -227,6 +240,7 @@ func _process(delta: float) -> void:
 								plant_at_tile_1.change_position(action_tile_2)
 								plant_at_tile_1.increment(plant_at_tile_2.current_number)
 								plant_at_tile_2.die()
+								if (plant_at_tile_1.current_number > stat_biggest_plant): stat_biggest_plant = plant_at_tile_1.current_number
 							else:
 								# there is no plant to combine with, so we try to split instead
 								if (plant_at_tile_1.current_number > 1):
@@ -259,9 +273,11 @@ func _process(delta: float) -> void:
 						if (plant_at_tile != null):
 							# increase the existing plant
 							plant_at_tile.increment(current_increment_amount)
+							if (plant_at_tile.current_number > stat_biggest_plant): stat_biggest_plant = plant_at_tile.current_number
 						else:
 							# spawn a new plant
 							spawn_plant(current_increment_amount, action_tile)
+							if (current_increment_amount > stat_biggest_plant): stat_biggest_plant = current_increment_amount
 						produced_units -= current_increment_amount
 					elif (current_click.button == Click.Buttons.RIGHT):
 						if (plant_at_tile != null):
@@ -275,7 +291,7 @@ func _process(delta: float) -> void:
 			ghost_plant.visible = false
 			
 			var drag: bool = false
-			if (current_click.origin_grid != current_click.release_grid):
+			if (current_click.origin_grid != phys_to_grid(get_global_mouse_position())):
 				# We probably dragged
 				if (current_click.hold_time <= 0.1):
 					# But if it was only for a tiny amount of time then it was probably meant to be a click then move the mouse elsewhere
@@ -311,7 +327,7 @@ func _process(delta: float) -> void:
 
 	current_increment_amount = min(current_increment_amount, produced_units)
 
-	increment_label.text = "+" + str(current_increment_amount)
+	increment_label.text = "  " + str(current_increment_amount)
 	
 	if (turn_owner == TurnOwners.PLAYER):
 		clock_thing.value = lerp(0, 180, clampf(1 - global_turn_timer.time_left, 0, 1))
@@ -375,7 +391,6 @@ func _process(delta: float) -> void:
 
 
 func _on_global_turn_timer_timeout() -> void:
-	
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
 
@@ -548,6 +563,8 @@ func update_combo_hud(new_combo_amount: int) -> void:
 	if (combo_amount == 0):
 		combo_letter.hide()
 		combo_bar.hide()
+		
+		stat_current_good_combo = 0
 	else:
 		combo_letter.show()
 		combo_bar.show()
@@ -556,18 +573,28 @@ func update_combo_hud(new_combo_amount: int) -> void:
 			combo_letter.text = "C"
 			combo_letter.add_theme_color_override("font_color", COMBO_BLUE)
 			combo_bar.tint_progress = COMBO_BLUE
+			
+			stat_current_good_combo = 0
 		elif (combo_amount <= 6):
 			combo_letter.text = "B"
 			combo_letter.add_theme_color_override("font_color", COMBO_RED)
 			combo_bar.tint_progress = COMBO_RED
+			
+			stat_current_good_combo = 0
 		elif (combo_amount <= 8):
 			combo_letter.text = "A"
 			combo_letter.add_theme_color_override("font_color", COMBO_GREEN)
 			combo_bar.tint_progress = COMBO_GREEN
+			
+			stat_current_good_combo += 1
+			if (stat_current_good_combo > stat_best_combo): stat_best_combo = stat_current_good_combo
 		elif (combo_amount <= 10):
 			combo_letter.text = "S"
 			combo_letter.add_theme_color_override("font_color", COMBO_PURPLE)
 			combo_bar.tint_progress = COMBO_PURPLE
+			
+			stat_current_good_combo += 1
+			if (stat_current_good_combo > stat_best_combo): stat_best_combo = stat_current_good_combo
 
 func get_combo_multiplier() -> float:
 	if (combo_amount > 0):
@@ -604,6 +631,7 @@ func _on_upgrade_factory_button_pressed() -> void:
 
 
 
+
 func next_wave():
 	current_wave += 1
 	hud_wave_anim_time = 0
@@ -612,8 +640,21 @@ func next_wave():
 
 
 func lose_game() -> void:
-	end_screen.game_end(stat_total_score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, current_wave)
+	increment_label.hide()
+	ghost_plant.hide()
+	
+	end_screen.game_end(stat_total_score, current_wave, stat_best_combo, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, stat_biggest_plant)
 	get_tree().paused = true
+
+
+func _on_retry_button_pressed() -> void:
+	if (end_screen.anim_time > 1.4):
+		screen_transition.transition_to("main.tscn")
+
+func _on_home_menu_button_pressed() -> void:
+	if (end_screen.anim_time > 1.4):
+		screen_transition.transition_to("home.tscn")
+
 
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:
 	var closest_valid: Vector2i = get_closest_valid_tile(grid_point)

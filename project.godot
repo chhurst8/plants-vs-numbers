@@ -16,11 +16,16 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0.9340804, 0.9340805, 0.93408036, 1)
 config/icon="res://icon.svg"
 
+[autoload]
+
+Global="*uid://dyue548im37kg"
+
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=720
 window/size/resizable=false
+window/stretch/mode="viewport"
 
 [input]
 
