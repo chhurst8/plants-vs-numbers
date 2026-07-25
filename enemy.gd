@@ -102,7 +102,7 @@ func take_damage(damage_to_take: int) -> void:
 		die()
 
 func explode() -> void:
-	main.enemy_death(self)
+	main.enemy_death(self, true)
 	# TODO: queue free, give the player points, and spawn an explosion which damages other enemies in a 3x3 area
 	queue_free()
 	
