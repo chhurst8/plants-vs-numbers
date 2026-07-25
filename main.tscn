@@ -10,21 +10,7 @@
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="5_lquwl"]
 [ext_resource type="Texture2D" uid="uid://c2c4jgs46roy1" path="res://Visuals/combobar_progress.svg" id="7_kek77"]
 
-[sub_resource type="GDScript" id="GDScript_kek77"]
-script/source = "extends Control
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
-
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "end_screen", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
 global_turn_timer = NodePath("GlobalTurnTimer")
 clock_thing = NodePath("HUD/ClockThing")
@@ -37,6 +23,7 @@ factory_display = NodePath("HUD/Factory/Factory")
 end_screen = NodePath("EndScreen")
 plant_holder = NodePath("PlantHolder")
 projectile_holder = NodePath("ProjectileHolder")
+explosion_holder = NodePath("ExplosionHolder")
 notif_holder = NodePath("NotifHolder")
 enemy_holder = NodePath("EnemyHolder")
 
@@ -52,6 +39,8 @@ texture = ExtResource("2_h2yge")
 [node name="PlantHolder" type="Node2D" parent="." unique_id=1094016593]
 
 [node name="ProjectileHolder" type="Node2D" parent="." unique_id=2146645935]
+
+[node name="ExplosionHolder" type="Node2D" parent="." unique_id=793826760]
 
 [node name="NotifHolder" type="Node2D" parent="." unique_id=26464698]
 

@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dv1g105a6b3xo"]
+
+[ext_resource type="Script" uid="uid://cwfjm0y1lrit8" path="res://explosion.gd" id="1_n4djn"]
+[ext_resource type="Texture2D" uid="uid://bwhepyi8qnh63" path="res://Visuals/explosion.svg" id="2_6sfjf"]
+[ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="2_n4djn"]
+
+[node name="Explosion" type="Node2D" unique_id=621673357 node_paths=PackedStringArray("number_display")]
+script = ExtResource("1_n4djn")
+number_display = NodePath("NumberDisplay")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=263167507]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_6sfjf")
+
+[node name="NumberDisplay" type="Label" parent="." unique_id=2033817211]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_n4djn")
+theme_override_font_sizes/font_size = 90
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1

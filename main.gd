@@ -57,6 +57,8 @@ var rng = RandomNumberGenerator.new()
 var plant_proto: PackedScene = preload("res://Plant.tscn")
 
 @export var projectile_holder: Node2D
+@export var explosion_holder: Node2D
+var explosion_proto: PackedScene = preload("res://Explosion.tscn")
 
 @export var notif_holder: Node2D
 var notif_proto: PackedScene = preload("res://NotifText.tscn")
@@ -309,12 +311,7 @@ func _process(delta: float) -> void:
 
 
 func _on_global_turn_timer_timeout() -> void:
-	if enemy_holder.get_child_count() == 0 && current_turn > 1:
-		print_debug("next wave")
-		current_turn = 0
-		next_wave()
-		global_turn_timer.start()
-		return
+	
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
 
@@ -348,13 +345,19 @@ func _on_global_turn_timer_timeout() -> void:
 			prev_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
 		#prev_combo_bar_value = combo_bar.value
 		
-		current_turn += 1
-		if (enemies_remaining_in_wave.has(current_turn)):
-			var wave = enemies_remaining_in_wave[current_turn]
-			for enemy in wave:
-				spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2), enemy["boss"])
-
-		do_enemy_turn()
+		if enemy_holder.get_child_count() == 0 && current_turn > 1:
+			print_debug("next wave")
+			current_turn = 0
+			next_wave()
+			#global_turn_timer.start()
+			#return
+		else:
+			current_turn += 1
+			if (enemies_remaining_in_wave.has(current_turn)):
+				var wave = enemies_remaining_in_wave[current_turn]
+				for enemy in wave:
+					spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2), enemy["boss"])
+			do_enemy_turn()
 		turn_owner = TurnOwners.PLAYER
 	
 	global_turn_timer.start()
@@ -426,14 +429,16 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 				enemy.take_damage(explosion_damage)
 				print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
 	
-	increase_combo(1)
 	stat_explosions += 1
 	
-	# this will have to change based on the combo
-	var score_gained: int = roundi(exploding_enemy.starting_number * get_combo_multiplier())
-	score += score_gained
-	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
-	#TODO: create the visual explosion
+	#var score_gained: int = roundi(exploding_enemy.starting_number * get_combo_multiplier())
+	#score += score_gained
+	#spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
+	
+	# create the visual explosion
+	var explosion: Explosion = explosion_proto.instantiate()
+	explosion.setup(explosion_damage, grid_to_phys(explosion_position))
+	explosion_holder.add_child(explosion)
 
 func get_enemies() -> Array[Node]:
 	return enemy_holder.get_children()
@@ -444,7 +449,7 @@ func get_plant_at_tile(grid_point: Vector2i) -> Plant:
 			return plant
 	return null
 
-func enemy_death(dead_enemy: Enemy) -> void:
+func enemy_death(dead_enemy: Enemy, is_exploding: bool = false) -> void:
 	var enemy_number = dead_enemy.starting_number
 	if (enemy_number > stat_strongest_enemy_killed): stat_strongest_enemy_killed = enemy_number
 	stat_enemies_killed += 1
@@ -452,12 +457,17 @@ func enemy_death(dead_enemy: Enemy) -> void:
 	
 	# gain score
 	var score_gained: int = roundi(enemy_number * get_combo_multiplier())
+	if (is_exploding): score_gained = score_gained * 2
+	print("score gained: " + str(score_gained))
 	score += score_gained
 	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
 	
 	# update the combo counter
 	any_enemies_killed_this_turn = true
-	increase_combo(1)
+	if (is_exploding):
+		increase_combo(2)
+	else:
+		increase_combo(1)
 
 func increase_combo(amount: int) -> void:
 	var new_combo_amount = combo_amount + amount
@@ -496,18 +506,21 @@ func update_combo_hud(new_combo_amount: int) -> void:
 			combo_bar.tint_progress = COMBO_PURPLE
 
 func get_combo_multiplier() -> float:
-	if (combo_amount <= 3):
-		# C = 1.5x
-		return (1.5)
-	elif (combo_amount <= 6):
-		# B = 2.0x
-		return (2.0)
-	elif (combo_amount <= 8):
-		# A = 3.0x
-		return (3.0)
-	elif (combo_amount <= 10):
-		# S = 5.0x
-		return (5.0)
+	if (combo_amount > 0):
+		if (combo_amount <= 3):
+			# C = 1.5x
+			return (1.5)
+		elif (combo_amount <= 6):
+			# B = 2.0x
+			return (2.0)
+		elif (combo_amount <= 8):
+			# A = 3.0x
+			return (3.0)
+		elif (combo_amount <= 10):
+			# S = 5.0x
+			return (5.0)
+		else:
+			return (1.0)
 	else:
 		# No combo
 		return (1.0)
@@ -523,6 +536,7 @@ func _on_upgrade_factory_button_pressed() -> void:
 
 func next_wave():
 	current_wave += 1
+	hud_wave_anim_time = 0
 	print("next wave")
 	init_wave()
 
