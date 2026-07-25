@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cw7rmwd1bkf38"]
+
+[ext_resource type="Texture2D" uid="uid://dj68mokbhyp1u" path="res://Visuals/screen_transition.svg" id="1_1ey7h"]
+[ext_resource type="Script" uid="uid://rhwcqwn5gsii" path="res://home.gd" id="1_o1ld7"]
+[ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="2_2ayvv"]
+[ext_resource type="Script" uid="uid://duenb01vxqg0v" path="res://screen_transition.gd" id="2_o1ld7"]
+
+[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition")]
+script = ExtResource("1_o1ld7")
+screen_transition = NodePath("ScreenTransition")
+
+[node name="UI" type="Control" parent="." unique_id=1500900860]
+custom_minimum_size = Vector2(720, 720)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 720.0
+offset_bottom = 720.0
+
+[node name="PlayButton" type="Button" parent="UI" unique_id=293151205]
+custom_minimum_size = Vector2(240, 140)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -220.0
+offset_right = 120.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(120, 70)
+theme = ExtResource("2_2ayvv")
+theme_override_font_sizes/font_size = 100
+text = "Play"
+
+[node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522]
+process_mode = 3
+position = Vector2(360, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_1ey7h")
+offset = Vector2(0, -720)
+script = ExtResource("2_o1ld7")
+
+[connection signal="pressed" from="UI/PlayButton" to="." method="_on_play_button_pressed"]
