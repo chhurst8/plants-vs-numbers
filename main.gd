@@ -3,7 +3,7 @@ extends Node2D
 
 
 const GRID_TILE_SIZE: int = 64
-const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 64)
+const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 72)
 
 const COMBO_PURPLE: Color = Color("9700d8")
 const COMBO_GREEN: Color = Color("35ff50")
