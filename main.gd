@@ -231,6 +231,12 @@ func _process(delta: float) -> void:
 
 
 func _on_global_turn_timer_timeout() -> void:
+	if enemy_holder.get_child_count() == 0 && current_turn > 1:
+		print_debug("next wave")
+		current_turn = 0
+		next_wave()
+		global_turn_timer.start()
+		return
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
 		turn_owner = TurnOwners.ENEMY
@@ -240,6 +246,7 @@ func _on_global_turn_timer_timeout() -> void:
 			var wave = enemies_remaining_in_wave[current_turn]
 			for enemy in wave:
 				spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2))
+
 		do_enemy_turn()
 		turn_owner = TurnOwners.PLAYER
 	
@@ -254,19 +261,24 @@ func do_enemy_turn() -> void:
 		enemy.do_turn()
 
 func init_wave() -> void:
+	print("hi")
 	rng.seed = current_wave
-	var boss = roundf((2 * pow(2, current_wave)) * rng.randf_range(0.9, 1.1));
-	var num_enemies = roundf(3 * (current_wave + 1) * rng.randf_range(0.6, 1.4))
+	current_turn = 0
+	var boss = round((2 * pow(2, current_wave + 1)) * rng.randf_range(0.9, 1.1));
+	var num_enemies = round(3 * (current_wave + 1) * rng.randf_range(0.6, 1.4))
 	print_debug(num_enemies)
 	var boss_placed = false
 	enemies_remaining_in_wave = {}
 	var line = 0
+	print_debug("about to spawn enemies")
 	while num_enemies > 0:
+		print_debug(num_enemies)
 		line += 1
-		var enemies_in_line = roundf(min(1 / rng.randf(), 1) * num_enemies)
+		var enemies_in_line = min(round(min(pow(rng.randf(), 3), 1) * num_enemies), 4)
 		enemies_remaining_in_wave[line] = []
 		num_enemies -= enemies_in_line
 		var occupied_spots = []
+		print_debug(enemies_in_line)
 		for i in enemies_in_line:
 			var is_boss = !boss_placed && (rng.randf() > 0.5 || num_enemies == 0)
 			if is_boss:
@@ -324,6 +336,13 @@ func enemy_death(dead_enemy: Enemy) -> void:
 	
 	# this will have to change based on the combo
 	score += enemy_number
+
+
+func next_wave():
+	current_wave += 1
+	print("next wave")
+	init_wave()
+
 
 func lose_game() -> void:
 	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed)
