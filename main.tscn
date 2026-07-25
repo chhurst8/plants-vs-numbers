@@ -8,12 +8,15 @@
 [ext_resource type="Texture2D" uid="uid://5fp6iylhw3pi" path="res://Visuals/clock_top.svg" id="4_5vw27"]
 [ext_resource type="Texture2D" uid="uid://4b5caa7bo5vf" path="res://Visuals/clock_progress.svg" id="5_5vw27"]
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://c2c4jgs46roy1" path="res://Visuals/combobar_progress.svg" id="7_kek77"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "end_screen", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "end_screen", "plant_holder", "projectile_holder", "notif_holder", "enemy_holder")]
 script = ExtResource("1_0xm2m")
 global_turn_timer = NodePath("GlobalTurnTimer")
 clock_thing = NodePath("HUD/ClockThing")
 closest_enemy_indicator = NodePath("HUD/ClockThing/ClosestEnemyIndicator")
+combo_letter = NodePath("HUD/ComboLetter")
+combo_bar = NodePath("HUD/ComboBar")
 end_screen = NodePath("EndScreen")
 plant_holder = NodePath("PlantHolder")
 projectile_holder = NodePath("ProjectileHolder")
@@ -37,9 +40,18 @@ texture = ExtResource("2_h2yge")
 
 [node name="EnemyHolder" type="Node2D" parent="." unique_id=566027863]
 
-[node name="HUD" type="Node2D" parent="." unique_id=1488285872]
+[node name="HUD" type="Control" parent="." unique_id=36744116]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 720.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ClockThing" type="TextureProgressBar" parent="HUD" unique_id=978626141]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(0.25, 0.25)
@@ -69,6 +81,40 @@ theme_override_font_sizes/font_size = 240
 text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ComboLetter" type="Label" parent="HUD" unique_id=1445715616]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -135.0
+offset_top = 2.5
+offset_right = -65.0
+offset_bottom = 122.5
+grow_horizontal = 0
+pivot_offset = Vector2(35, 60.5)
+theme = ExtResource("5_lquwl")
+theme_override_colors/font_color = Color(0.5921569, 0, 0.84705883, 1)
+theme_override_font_sizes/font_size = 100
+text = "S"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ComboBar" type="TextureProgressBar" parent="HUD" unique_id=1261179406]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -149.0
+offset_top = 110.0
+offset_right = 245.0
+offset_bottom = 184.0
+grow_horizontal = 0
+scale = Vector2(0.25, 0.25)
+step = 0.01
+value = 3.0
+texture_progress = ExtResource("7_kek77")
+tint_progress = Color(0.5921569, 0, 0.84705883, 1)
 
 [node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "clock_thing")]
 process_mode = 3

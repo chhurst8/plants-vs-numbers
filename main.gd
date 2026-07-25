@@ -5,12 +5,25 @@ extends Node2D
 const GRID_TILE_SIZE: int = 64
 const GRID_PHYS_OFFSET: Vector2 = Vector2(232, 64)
 
+const COMBO_PURPLE: Color = Color("9700d8")
+const COMBO_GREEN: Color = Color("35ff50")
+const COMBO_RED: Color = Color("ff4b4b")
+const COMBO_BLUE: Color = Color("3959ff")
+
 
 @export var global_turn_timer: Timer
 
 @export var clock_thing: TextureProgressBar
 @export var closest_enemy_indicator: Label
 var closest_enemy_distance: int
+
+@export var combo_letter: Label
+@export var combo_bar: TextureProgressBar
+var combo_amount: int = 0
+var combo_anim_time: float = 0
+var any_enemies_killed_this_turn: bool = false
+var kill_drought: int = 0
+var prev_combo_bar_value: float = 0
 
 
 @export var end_screen: EndScreen
@@ -20,6 +33,7 @@ var stat_strongest_enemy_killed: int
 var stat_explosions: int
 
 var score: int = 0
+
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
 var current_turn: int = 0
@@ -91,6 +105,14 @@ func _ready() -> void:
 	
 	closest_enemy_distance = 10
 	closest_enemy_indicator.text = str(closest_enemy_distance)
+	
+	combo_amount = 0
+	any_enemies_killed_this_turn = false
+	kill_drought = 0
+	combo_anim_time = 1
+	
+	combo_letter.hide()
+	combo_bar.hide()
 
 
 func _input(event: InputEvent) -> void:
@@ -226,8 +248,31 @@ func _process(delta: float) -> void:
 		tween_rot.tween_property(closest_enemy_indicator, "rotation_degrees", 360, 0.4).set_trans(Tween.TRANS_BACK)
 		
 		var tween_scale = get_tree().create_tween()
-		tween_scale.tween_property(closest_enemy_indicator, "scale", 1.2, 0.2)
-		tween_scale.tween_property(closest_enemy_indicator, "scale", 1.0, 0.2)
+		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.2, 1.2), 0.2)
+		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.0, 1.0), 0.2)
+	
+	if(combo_anim_time < 1):
+		combo_anim_time += delta
+		if (combo_anim_time <= 0.1):
+			var _letter_scale = lerpf(1.0, 1.1, combo_anim_time / 0.1)
+			combo_letter.scale = Vector2(_letter_scale, _letter_scale)
+		elif (combo_anim_time <= 0.2):
+			var _letter_scale = lerpf(1.1, 1.0, ease_out_cubic((combo_anim_time - 0.1) / 0.1))
+			combo_letter.scale = Vector2(_letter_scale, _letter_scale)
+		if (combo_anim_time <= 0.4):
+			#TODO: transition bar
+			
+			var new_combo_bar_value: float = 0.0
+			if (combo_amount <= 3):
+				new_combo_bar_value = (combo_amount) * (100.0 / 3.0)
+			elif (combo_amount <= 6):
+				new_combo_bar_value = (combo_amount - 3) * (100.0 / 3.0)
+			elif (combo_amount <= 8):
+				new_combo_bar_value = (combo_amount - 6) * (100.0 / 2.0)
+			elif (combo_amount <= 10):
+				new_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
+			
+			combo_bar.value = lerpf(prev_combo_bar_value, new_combo_bar_value, ease_out_quart(combo_anim_time / 0.4))
 
 
 func _on_global_turn_timer_timeout() -> void:
@@ -235,6 +280,34 @@ func _on_global_turn_timer_timeout() -> void:
 		do_player_turn()
 		turn_owner = TurnOwners.ENEMY
 	else:
+		# it is the enemy turn
+		# BUT first handle the combo thing
+		if (any_enemies_killed_this_turn):
+			kill_drought = 0
+		else:
+			kill_drought += 1
+			
+			var new_combo_amount: int = 0
+			if (kill_drought <= 2):
+				new_combo_amount = combo_amount - 1
+			elif (kill_drought <= 4):
+				new_combo_amount = combo_amount - 2
+			else:
+				new_combo_amount = combo_amount - 3
+			
+			update_combo_hud(new_combo_amount)
+		any_enemies_killed_this_turn = false
+		
+		if (combo_amount <= 3):
+			prev_combo_bar_value = (combo_amount) * (100.0 / 3.0)
+		elif (combo_amount <= 6):
+			prev_combo_bar_value = (combo_amount - 3) * (100.0 / 3.0)
+		elif (combo_amount <= 8):
+			prev_combo_bar_value = (combo_amount - 6) * (100.0 / 2.0)
+		elif (combo_amount <= 10):
+			prev_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
+		#prev_combo_bar_value = combo_bar.value
+		
 		current_turn += 1
 		if (enemies_remaining_in_wave.has(current_turn)):
 			var wave = enemies_remaining_in_wave[current_turn]
@@ -305,6 +378,7 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 				enemy.take_damage(explosion_damage)
 				print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
 	
+	increase_combo(1)
 	stat_explosions += 1
 	#TODO: create the visual explosion
 
@@ -322,8 +396,50 @@ func enemy_death(dead_enemy: Enemy) -> void:
 	if (enemy_number > stat_strongest_enemy_killed): stat_strongest_enemy_killed = enemy_number
 	stat_enemies_killed += 1
 	
-	# this will have to change based on the combo
+	
+	# update the combo counter
+	any_enemies_killed_this_turn = true
+	increase_combo(1)
+	
+	
+	# this will have to change based on the combo	
 	score += enemy_number
+
+func increase_combo(amount: int) -> void:
+	var new_combo_amount = combo_amount + amount
+	update_combo_hud(new_combo_amount)
+
+func update_combo_hud(new_combo_amount: int) -> void:
+	var old_combo_amount: int = combo_amount
+	combo_amount = new_combo_amount
+	if (combo_amount > 10): combo_amount = 10
+	if (combo_amount < 0): combo_amount = 0
+	
+	combo_anim_time = 0
+	
+	if (combo_amount == 0):
+		combo_letter.hide()
+		combo_bar.hide()
+	else:
+		combo_letter.show()
+		combo_bar.show()
+		
+		if (combo_amount <= 3):
+			combo_letter.text = "C"
+			combo_letter.add_theme_color_override("font_color", COMBO_BLUE)
+			combo_bar.tint_progress = COMBO_BLUE
+		elif (combo_amount <= 6):
+			combo_letter.text = "B"
+			combo_letter.add_theme_color_override("font_color", COMBO_RED)
+			combo_bar.tint_progress = COMBO_RED
+		elif (combo_amount <= 8):
+			combo_letter.text = "A"
+			combo_letter.add_theme_color_override("font_color", COMBO_GREEN)
+			combo_bar.tint_progress = COMBO_GREEN
+		elif (combo_amount <= 10):
+			combo_letter.text = "S"
+			combo_letter.add_theme_color_override("font_color", COMBO_PURPLE)
+			combo_bar.tint_progress = COMBO_PURPLE
 
 func lose_game() -> void:
 	end_screen.game_end(score, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed)
