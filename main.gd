@@ -29,6 +29,7 @@ var prev_combo_bar_value: float = 0
 var hud_wave_anim_time: float = 0
 
 @export var hud_score_display: Label
+@export var factory_display: Label
 
 
 @export var end_screen: EndScreen
@@ -38,6 +39,8 @@ var stat_strongest_enemy_killed: int
 var stat_explosions: int
 
 var score: int = 0
+
+var produced_units = 0
 
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
@@ -241,11 +244,14 @@ func _process(delta: float) -> void:
 	
 	#UPDATE HUD
 	hud_score_display.text = "Score\n" + str(score)
+
+	factory_display.text = "Available:\n" + str(produced_units)
 	
 	if (turn_owner == TurnOwners.PLAYER):
 		clock_thing.value = lerp(0, 180, clampf(1 - global_turn_timer.time_left, 0, 1))
 	else:
 		clock_thing.value = lerp(180, 360, clampf(1 - global_turn_timer.time_left, 0, 1))
+
 	
 	var furthest_along_dist: int = -3
 	if (enemy_holder.get_child_count() > 0):
@@ -311,6 +317,7 @@ func _on_global_turn_timer_timeout() -> void:
 		return
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
+
 		turn_owner = TurnOwners.ENEMY
 	else:
 		# it is the enemy turn
@@ -345,7 +352,7 @@ func _on_global_turn_timer_timeout() -> void:
 		if (enemies_remaining_in_wave.has(current_turn)):
 			var wave = enemies_remaining_in_wave[current_turn]
 			for enemy in wave:
-				spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2))
+				spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2), enemy["boss"])
 
 		do_enemy_turn()
 		turn_owner = TurnOwners.PLAYER
@@ -364,7 +371,7 @@ func init_wave() -> void:
 	print("hi")
 	rng.seed = current_wave
 	current_turn = 0
-	var boss = round((2 * pow(2, current_wave + 1)) * rng.randf_range(0.9, 1.1));
+	var boss = round((2 * pow(1.5, current_wave + 1)) * rng.randf_range(0.9, 1.1));
 	var num_enemies = round(3 * (current_wave + 1) * rng.randf_range(0.6, 1.4))
 	print_debug(num_enemies)
 	var boss_placed = false
@@ -381,19 +388,21 @@ func init_wave() -> void:
 		print_debug(enemies_in_line)
 		for i in enemies_in_line:
 			var is_boss = !boss_placed && (rng.randf() > 0.5 || num_enemies == 0)
+			var number = boss if is_boss else round(rng.randf_range(0.2, 0.6) * boss)
 			if is_boss:
 				boss_placed = true
-			var spot = rng.randi_range(0, 4 - 1)
+			var spot = rng.randi_range(0, 5 - 1)
 			while occupied_spots.has(spot):
-				spot = rng.randi_range(0, 4 - 1)
+				spot = rng.randi_range(0, 5 - 1)
 			occupied_spots.append(spot)
-			enemies_remaining_in_wave[line].append({"position": spot, "number": boss})
+			enemies_remaining_in_wave[line].append({"boss": is_boss,"position": spot, "number": number})
 	print_debug(enemies_remaining_in_wave)
 
 
-func spawn_enemy(starting_number: int, grid_position: Vector2i) -> void:
+func spawn_enemy(starting_number: int, grid_position: Vector2i, is_boss: bool) -> void:
 	var enemy: Enemy = enemy_proto.instantiate()
 	enemy.setup(starting_number, grid_position, self)
+	enemy.get_node("NumberDisplay").add_theme_color_override("font_color", COMBO_BLUE)
 	enemy_holder.add_child(enemy)
 
 
