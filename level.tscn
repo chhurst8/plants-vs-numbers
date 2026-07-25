@@ -1,3 +1,4 @@
 [gd_scene format=3 uid="uid://c8tep08ok5o1q"]
 
 [node name="Node2D" type="Node2D" unique_id=612820647]
+position = Vector2(0, -1)
