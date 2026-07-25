@@ -439,7 +439,7 @@ func _on_global_turn_timer_timeout() -> void:
 			if (enemies_remaining_in_wave.has(current_turn)):
 				var wave = enemies_remaining_in_wave[current_turn]
 				for enemy in wave:
-					spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2), enemy["boss"])
+					spawn_enemy(enemy["number"], Vector2i(enemy["position"], -2), enemy["difficulty"])
 			do_enemy_turn()
 		turn_owner = TurnOwners.PLAYER
 	
@@ -474,21 +474,27 @@ func init_wave() -> void:
 		print_debug(enemies_in_line)
 		for i in enemies_in_line:
 			var is_boss = !boss_placed && (rng.randf() > 0.5 || num_enemies == 0)
-			var number = boss if is_boss else round(rng.randf_range(0.2, 0.6) * boss)
+			var difficulty = rng.randf_range(0.2, 0.6)
+			var number = boss if is_boss else round(difficulty * boss)
 			if is_boss:
 				boss_placed = true
 			var spot = rng.randi_range(0, 5 - 1)
 			while occupied_spots.has(spot):
 				spot = rng.randi_range(0, 5 - 1)
 			occupied_spots.append(spot)
-			enemies_remaining_in_wave[line].append({"boss": is_boss,"position": spot, "number": number})
+			var difficulty_index = 2 if is_boss else 1 if difficulty > 0.5 else 0 
+			enemies_remaining_in_wave[line].append({"difficulty": difficulty_index, "position": spot, "number": number})
 	print_debug(enemies_remaining_in_wave)
 
 
-func spawn_enemy(starting_number: int, grid_position: Vector2i, is_boss: bool) -> void:
+func spawn_enemy(starting_number: int, grid_position: Vector2i, difficulty: int) -> void:
 	var enemy: Enemy = enemy_proto.instantiate()
 	enemy.setup(starting_number, grid_position, self)
-	enemy.get_node("NumberDisplay").add_theme_color_override("font_color", COMBO_BLUE)
+	if difficulty == 1:
+		enemy.get_node("NumberDisplay").add_theme_color_override("font_color", Color.YELLOW)
+	elif difficulty == 2:
+		enemy.get_node("NumberDisplay").add_theme_color_override("font_color", Color.RED)
+
 	enemy_holder.add_child(enemy)
 
 
