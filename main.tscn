@@ -14,10 +14,19 @@
 [ext_resource type="Script" uid="uid://d1vv8kvnlso6p" path="res://increment.gd" id="10_4c57u"]
 [ext_resource type="Texture2D" uid="uid://chr2fk2uqk672" path="res://Visuals/plant.svg" id="12_dg77c"]
 [ext_resource type="Texture2D" uid="uid://4vasc6ppyvbi" path="res://Visuals/plusminus.svg" id="12_ycdy4"]
+[ext_resource type="AudioStream" uid="uid://d0qhkyddlhgin" path="res://Sounds/Effects/shoot_0.1.mp3" id="13_yaehf"]
+[ext_resource type="AudioStream" uid="uid://drc6j55uppf5n" path="res://Sounds/Effects/enemy_hit_0.1.mp3" id="14_074og"]
 [ext_resource type="Texture2D" uid="uid://dj68mokbhyp1u" path="res://Visuals/screen_transition.svg" id="14_w48qg"]
+[ext_resource type="AudioStream" uid="uid://ukgi15r2ceuu" path="res://Sounds/Effects/explosion_0.1.wav" id="15_82xsv"]
 [ext_resource type="Script" uid="uid://duenb01vxqg0v" path="res://screen_transition.gd" id="15_vivmo"]
+[ext_resource type="AudioStream" uid="uid://1p72twuv3uvc" path="res://Sounds/Effects/plant_crush_0.1.mp3" id="16_getpj"]
+[ext_resource type="AudioStream" uid="uid://ch3txmyny4brm" path="res://Sounds/Effects/increment_0.1.mp3" id="17_ryguw"]
+[ext_resource type="AudioStream" uid="uid://daxcxlqgecjf1" path="res://Sounds/Effects/decrement_0.1.mp3" id="18_d13ii"]
+[ext_resource type="AudioStream" uid="uid://bfvgm4yew6hvy" path="res://Sounds/Effects/combine_0.1.mp3" id="19_1u8w0"]
+[ext_resource type="AudioStream" uid="uid://dqvp2qf83105u" path="res://Sounds/Effects/split_0.1.mp3" id="20_0odxb"]
+[ext_resource type="AudioStream" uid="uid://cqgvmc31js81w" path="res://Sounds/Effects/wave_start_0.1.mp3" id="21_0odxb"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("screen_transition", "global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "factory_price_display", "increment_label", "ghost_plant", "ghost_plant_num", "pause_resume_sprite", "pause_overlay", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("screen_transition", "global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "factory_price_display", "increment_label", "ghost_plant", "ghost_plant_num", "pause_resume_sprite", "pause_overlay", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder", "sfx_players")]
 script = ExtResource("1_0xm2m")
 screen_transition = NodePath("ScreenTransition")
 global_turn_timer = NodePath("GlobalTurnTimer")
@@ -41,6 +50,7 @@ projectile_holder = NodePath("ProjectileHolder")
 explosion_holder = NodePath("ExplosionHolder")
 notif_holder = NodePath("NotifHolder")
 enemy_holder = NodePath("EnemyHolder")
+sfx_players = [NodePath("SFXHolder/ShootSFX"), NodePath("SFXHolder/EnemyHitSFX"), NodePath("SFXHolder/ExplosionSFX"), NodePath("SFXHolder/PlantCrushSFX"), NodePath("SFXHolder/IncrementSFX"), NodePath("SFXHolder/DecrementSFX"), NodePath("SFXHolder/CombineSFX"), NodePath("SFXHolder/SplitSFX"), null, null, NodePath("SFXHolder/WaveStartSFX")]
 
 [node name="GlobalTurnTimer" type="Timer" parent="." unique_id=1153019698]
 
@@ -318,7 +328,7 @@ modulate = Color(1, 1, 1, 0.26666668)
 scale = Vector2(0.75, 0.75)
 
 [node name="Sprite2D" type="Sprite2D" parent="GhostPlant" unique_id=210060225]
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.125, 0.125)
 texture = ExtResource("12_dg77c")
 
 [node name="GhostPlantNum" type="Label" parent="GhostPlant" unique_id=539810435]
@@ -340,6 +350,40 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SFXHolder" type="Node2D" parent="." unique_id=40000827]
+process_mode = 3
+
+[node name="ShootSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=1063560287]
+stream = ExtResource("13_yaehf")
+
+[node name="EnemyHitSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=812300485]
+stream = ExtResource("14_074og")
+max_polyphony = 5
+
+[node name="ExplosionSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=256000135]
+stream = ExtResource("15_82xsv")
+max_polyphony = 2
+
+[node name="PlantCrushSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=167017237]
+stream = ExtResource("16_getpj")
+
+[node name="IncrementSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=1591799378]
+stream = ExtResource("17_ryguw")
+max_polyphony = 3
+
+[node name="DecrementSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=813069617]
+stream = ExtResource("18_d13ii")
+max_polyphony = 3
+
+[node name="CombineSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=524900647]
+stream = ExtResource("19_1u8w0")
+max_polyphony = 3
+
+[node name="SplitSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=1957970313]
+stream = ExtResource("20_0odxb")
+max_polyphony = 3
+
+[node name="WaveStartSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=175392703]
+stream = ExtResource("21_0odxb")
 
 [node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "wave_reached_text", "best_combo_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "biggest_plant_text", "clock_thing")]
 process_mode = 3

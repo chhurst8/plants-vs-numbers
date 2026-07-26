@@ -64,5 +64,8 @@ func check_for_hit() -> void:
 		if (enemy.grid_position == grid_position):
 			# We are in the same place
 			enemy.take_damage(current_number)
+			
+			main.play_sfx(1)
+			
 			queue_free()
 			return

@@ -116,6 +116,16 @@ var current_click: Click
 var current_increment_amount: int
 #var max_increment_amount: int
 
+# 0 = shoot, 1 = enemy_hit, 2 = explosion, 3 = plant_crush
+# 4 = increment, 5 = decrement, 6 = combine, 7 = split
+# 8 = drag_on?, 9 = move_around?, 10 = wave_start
+@export var sfx_players: Array[AudioStreamPlayer]
+
+func play_sfx(sfx_id: int) -> void:
+	if (len(sfx_players) >= sfx_id - 1):
+		sfx_players[sfx_id].play()
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_tree().paused = false
@@ -247,6 +257,7 @@ func _process(delta: float) -> void:
 								plant_at_tile_1.increment(plant_at_tile_2.current_number)
 								plant_at_tile_2.die()
 								if (plant_at_tile_1.current_number > stat_biggest_plant): stat_biggest_plant = plant_at_tile_1.current_number
+								play_sfx(6)
 							else:
 								# there is no plant to combine with, so we try to split instead
 								if (plant_at_tile_1.current_number > 1):
@@ -258,6 +269,7 @@ func _process(delta: float) -> void:
 									plant_at_tile_1.divide_to(number_after_split)
 									
 									spawn_plant(other_number_after_split, action_tile_1)
+									play_sfx(7)
 								else:
 									# the plant is not big enough to split, so we just move it
 									plant_at_tile_1.change_position(action_tile_2)
@@ -280,6 +292,7 @@ func _process(delta: float) -> void:
 							# increase the existing plant
 							plant_at_tile.increment(current_increment_amount)
 							if (plant_at_tile.current_number > stat_biggest_plant): stat_biggest_plant = plant_at_tile.current_number
+							play_sfx(4)
 						else:
 							# spawn a new plant
 							spawn_plant(current_increment_amount, action_tile)
@@ -289,6 +302,7 @@ func _process(delta: float) -> void:
 						if (plant_at_tile != null):
 							# decrease the existing plant
 							plant_at_tile.decrement(1)
+							play_sfx(5)
 			
 			
 			current_click = null
@@ -455,8 +469,10 @@ func _on_global_turn_timer_timeout() -> void:
 	global_turn_timer.start()
 
 func do_player_turn() -> void:
-	for plant: Plant in plant_holder.get_children():
-		plant.do_turn()
+	if (plant_holder.get_child_count() > 0):
+		play_sfx(0)
+		for plant: Plant in plant_holder.get_children():
+			plant.do_turn()
 
 func do_enemy_turn() -> void:
 	for enemy: Enemy in enemy_holder.get_children():
@@ -534,6 +550,8 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 	var explosion: Explosion = explosion_proto.instantiate()
 	explosion.setup(explosion_damage, grid_to_phys(explosion_position))
 	explosion_holder.add_child(explosion)
+	
+	play_sfx(2)
 
 func get_enemies() -> Array[Node]:
 	return enemy_holder.get_children()
@@ -653,6 +671,7 @@ func _on_upgrade_factory_button_pressed() -> void:
 func next_wave():
 	current_wave += 1
 	hud_wave_anim_time = 0
+	play_sfx(10)
 	print("next wave")
 	init_wave()
 
