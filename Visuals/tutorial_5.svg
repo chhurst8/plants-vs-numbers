@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
-   sodipodi:docname="tutorial_2.svg"
+   sodipodi:docname="tutorial_5.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="0.67081229"
-     inkscape:cx="1068.8534"
-     inkscape:cy="560.51448"
+     inkscape:zoom="0.47433592"
+     inkscape:cx="303.58232"
+     inkscape:cy="938.1537"
      inkscape:window-width="1885"
      inkscape:window-height="1355"
      inkscape:window-x="0"
@@ -407,107 +407,56 @@
        ry="2.6458333" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:14.8167px;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:14.8167px;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:164.327;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        x="190.44814"
        y="27.724066"
        id="text2"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
          x="190.44814"
          y="27.724066"
-         id="tspan5">You can create defenses to</tspan><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
+         id="tspan1">Right click and drag to<tspan
+   y="27.724066"
+   id="tspan3"> </tspan></tspan><tspan
          x="190.44814"
-         y="46.244942"
-         id="tspan8"><tspan
-   style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy'"
-   id="tspan10">reduce</tspan> the enemy numbers</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:12.7px;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;white-space:pre;inline-size:90.3449;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="287.77429"
-       y="204.00362"
-       id="text2-7"
-       transform="rotate(9.7062949,638.06921,459.59921)"><tspan
-         x="287.77429"
-         y="204.00362"
-         id="tspan1">After<tspan
-   y="204.00362"
-   id="tspan2"> </tspan></tspan><tspan
-         x="287.77429"
-         y="219.87862"
-         id="tspan4">eliminating all<tspan
-   y="219.87862"
-   id="tspan7"> </tspan></tspan><tspan
-         x="287.77429"
-         y="235.75362"
-         id="tspan9">enemies you<tspan
-   y="235.75362"
-   id="tspan11"> </tspan></tspan><tspan
-         x="287.77429"
-         y="251.62862"
-         id="tspan12">will advance to<tspan
-   y="251.62862"
-   id="tspan13"> </tspan></tspan><tspan
-         x="287.77429"
-         y="267.50362"
-         id="tspan14">the next wave!</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:14.8167px;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#3959ff;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="65.080086"
-       y="332.00668"
-       id="text2-0"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#3959ff;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
-         x="65.080086"
-         y="332.00668"
-         id="tspan8-4">*Left click*</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:14.8167px;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#3959ff;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="213.2155"
-       y="307.50201"
-       id="text2-0-1"><tspan
-         sodipodi:role="line"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#3959ff;fill-opacity:1;stroke:none;stroke-width:0.529167;stroke-dasharray:none;stroke-opacity:1"
-         x="213.2155"
-         y="307.50201"
-         id="tspan8-4-7">*Auto shoots*</tspan></text>
+         y="46.244939"
+         id="tspan4">split them in halves or<tspan
+   y="46.244939"
+   id="tspan6"> </tspan></tspan><tspan
+         x="190.44814"
+         y="64.765813"
+         id="tspan7">to recombine them</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:29.7951px;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy';writing-mode:lr-tb;direction:ltr;fill:#ff4b4b;fill-opacity:1;stroke:none;stroke-width:1.06411;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="147.89888"
-       y="210.05623"
+       x="147.7355"
+       y="209.71986"
        id="text6"><tspan
          sodipodi:role="line"
-         id="tspan6"
          style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#ff4b4b;fill-opacity:1;stroke-width:1.06411"
-         x="147.89888"
-         y="210.05623">4</tspan></text>
+         x="147.7355"
+         y="209.71986"
+         id="tspan2">4</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:29.7955px;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy';writing-mode:lr-tb;direction:ltr;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:1.06413;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="216.66899"
-       y="142.35281"
+       x="214.83223"
+       y="142.01645"
        id="text6-1"><tspan
          sodipodi:role="line"
          id="tspan6-0"
          style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#ffff00;fill-opacity:1;stroke-width:1.06413"
-         x="216.66899"
-         y="142.35281">3</tspan></text>
+         x="214.83223"
+         y="142.01645">3</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:29.7954px;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy';writing-mode:lr-tb;direction:ltr;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06412;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="115.20454"
-       y="176.38332"
+       x="115.5313"
+       y="175.32578"
        id="text6-1-4"><tspan
          sodipodi:role="line"
          id="tspan6-0-9"
          style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#000000;fill-opacity:1;stroke-width:1.06412"
-         x="115.20454"
-         y="176.38332">2</tspan></text>
+         x="115.5313"
+         y="175.32578">2</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:22.598px;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy';writing-mode:lr-tb;direction:ltr;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06412;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
@@ -515,67 +464,35 @@
        y="343.15109"
        id="text6-1-4-8"><tspan
          sodipodi:role="line"
-         id="tspan6-0-9-4"
          style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#000000;fill-opacity:1;stroke-width:1.06412"
          x="150.89255"
-         y="343.15109">2</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:15.8123px;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy';writing-mode:lr-tb;direction:ltr;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06412;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       x="152.61954"
-       y="272.99863"
-       id="text6-1-4-8-1"><tspan
-         sodipodi:role="line"
-         id="tspan6-0-9-4-7"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#000000;fill-opacity:1;stroke-width:1.06412"
-         x="152.61954"
-         y="272.99863">2</tspan></text>
+         y="343.15109"
+         id="tspan5">1</tspan></text>
     <path
        id="path1"
        style="fill:none;stroke:#000000;stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
        d="m 163.55565,323.11122 6.9119,11.98367 -6.9119,11.98367 h -13.82381 l -6.91191,-11.98367 6.91191,-11.98367"
        sodipodi:nodetypes="cccccc" />
-    <g
-       id="g17"
-       transform="matrix(0.934576,0,0,-0.99977568,42.078793,462.94707)"
-       style="stroke-width:1.03454">
-      <path
-         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.36859;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-         d="m 116.49915,190.25674 0,-17.55242"
-         id="path17"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.36859;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-         d="m 128.67073,189.61109 0,-19.7216"
-         id="path17-7"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.36859;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-         d="m 120.91458,187.6044 0,-13.27619"
-         id="path17-7-7"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.36859;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-         d="m 124.90979,186.60006 0,-11.43877"
-         id="path17-7-7-6"
-         sodipodi:nodetypes="cc" />
-    </g>
     <text
        xml:space="preserve"
-       style="font-size:14.8167px;font-family:CocogooseProTrial;-inkscape-font-specification:CocogooseProTrial;writing-mode:lr-tb;direction:ltr;white-space:pre;inline-size:80.9707;fill:#000000;stroke-width:0.264583"
-       x="296.1904"
-       y="334.67841"
-       id="text3"
-       transform="translate(-6.7051791,-0.3944223)"><tspan
-         x="296.1904"
-         y="334.67841"
-         id="tspan16"><tspan
-           style="font-family:Unageo;-inkscape-font-specification:Unageo;fill:#3959ff"
-           id="tspan15">Right click </tspan></tspan><tspan
-         x="296.1904"
-         y="353.54369"
-         id="tspan18"><tspan
-           style="font-family:Unageo;-inkscape-font-specification:Unageo;fill:#3959ff"
-           id="tspan17">to decrease</tspan></tspan></text>
+       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:22.598px;font-family:Unageo;-inkscape-font-specification:'Unageo Heavy';writing-mode:lr-tb;direction:ltr;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.06412;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       x="218.4955"
+       y="343.83722"
+       id="text6-1-4-8-3"><tspan
+         sodipodi:role="line"
+         id="tspan6-0-9-4-5"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-family:Unageo;-inkscape-font-specification:'Unageo Ultra-Bold';fill:#000000;fill-opacity:1;stroke-width:1.06412"
+         x="218.4955"
+         y="343.83722">1</tspan></text>
+    <path
+       id="path1-6"
+       style="fill:none;stroke:#000000;stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       d="m 231.15861,323.79732 6.9119,11.98367 -6.9119,11.98367 H 217.3348 l -6.91191,-11.98367 6.91191,-11.98367"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       style="fill:#3959ff;fill-opacity:1;stroke-width:0.264583"
+       d="m 171.7399,348.70555 c 11.51498,3.80762 41.0714,0.3582 43.9393,-2.01996 l -4.93027,-1.57769 9.56473,-4.63445 5.52191,8.67728 -4.73306,-1.47909 c 0.65671,7.00699 -34.28434,15.39429 -49.36261,1.03391 z"
+       id="path2"
+       sodipodi:nodetypes="ccccccc" />
   </g>
 </svg>
