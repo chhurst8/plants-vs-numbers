@@ -46,6 +46,7 @@ var hud_wave_anim_time: float = 0
 @export var pause_overlay: ColorRect
 
 
+var game_over: bool = false
 @export var end_screen: EndScreen
 
 var stat_enemies_killed: int
@@ -137,6 +138,8 @@ func _ready() -> void:
 		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
 	else:
 		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
+	
+	game_over = false
 	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
@@ -725,6 +728,7 @@ func lose_game() -> void:
 	increment_label.hide()
 	ghost_plant.hide()
 	
+	game_over = true
 	end_screen.game_end(stat_total_score, current_wave, stat_best_combo, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, stat_biggest_plant)
 	get_tree().paused = true
 
@@ -741,14 +745,15 @@ func _on_home_menu_button_pressed() -> void:
 func _on_pause_resume_pressed() -> void:
 	var _paused = get_tree().paused
 	
-	if (_paused):
-		pause_overlay.visible = false
-		pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
-	else:
-		pause_overlay.visible = true
-		pause_resume_sprite.texture = preload("res://Visuals/resume.svg")
+	if (!game_over):
+		if (_paused):
+			pause_overlay.visible = false
+			pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
+		else:
+			pause_overlay.visible = true
+			pause_resume_sprite.texture = preload("res://Visuals/resume.svg")
 	
-	get_tree().paused = !_paused
+		get_tree().paused = !_paused
 
 
 func _on_toggle_mute_pressed() -> void:
