@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://r60c8fy8epka" path="res://Visuals/mute.svg" id="5_86xni"]
 [ext_resource type="Script" uid="uid://nr7y7cc6kq6h" path="res://music.gd" id="7_vqw7c"]
 [ext_resource type="AudioStream" uid="uid://ynqr0voo3ba6" path="res://Sounds/Music/music_0.1.mp3" id="8_qq0qw"]
+[ext_resource type="AudioStream" uid="uid://dtf7qpqh5m47i" path="res://Sounds/Effects/bounce_0.1.mp3" id="11_d26pf"]
+[ext_resource type="AudioStream" uid="uid://d1wy2s7m78dbq" path="res://Sounds/Effects/curtains_0.1.mp3" id="12_wh0ls"]
 
 [node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition", "music", "toggle_mute_sprite", "volume_slider", "volume_slider_timer", "tutorial", "tutorial_sprite")]
 script = ExtResource("1_o1ld7")
@@ -144,18 +146,33 @@ theme = ExtResource("2_2ayvv")
 theme_override_font_sizes/font_size = 50
 text = "Back"
 
-[node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522]
+[node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522 node_paths=PackedStringArray("bounce_sfx", "woosh_sfx", "delayer_bounce")]
 process_mode = 3
 position = Vector2(360, 0)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1ey7h")
 offset = Vector2(0, -720)
 script = ExtResource("2_o1ld7")
+bounce_sfx = NodePath("BounceSFX")
+woosh_sfx = NodePath("WooshSFX")
+delayer_bounce = NodePath("DelayerB")
+
+[node name="BounceSFX" type="AudioStreamPlayer" parent="ScreenTransition" unique_id=1617814529]
+stream = ExtResource("11_d26pf")
+volume_db = -10.0
+
+[node name="WooshSFX" type="AudioStreamPlayer" parent="ScreenTransition" unique_id=1515774172]
+stream = ExtResource("12_wh0ls")
+volume_db = -10.0
+
+[node name="DelayerB" type="Timer" parent="ScreenTransition" unique_id=1151634557]
+wait_time = 0.2
+one_shot = true
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1881406002]
 process_mode = 3
 stream = ExtResource("8_qq0qw")
-volume_db = -10.0
+volume_db = -15.0
 script = ExtResource("7_vqw7c")
 
 [node name="Timer" type="Timer" parent="Music" unique_id=297636995]
@@ -165,6 +182,8 @@ autostart = true
 ignore_time_scale = true
 
 [node name="MenuMusic" type="AudioStreamPlayer" parent="Music" unique_id=707428393]
+stream = ExtResource("8_qq0qw")
+volume_db = -15.0
 
 [connection signal="pressed" from="UI/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="UI/ToggleMute" to="." method="_on_toggle_mute_pressed"]
@@ -172,4 +191,5 @@ ignore_time_scale = true
 [connection signal="timeout" from="UI/VolumeSliderTimer" to="." method="_on_volume_slider_timer_timeout"]
 [connection signal="pressed" from="UI/Tutorial/ContinueButton" to="." method="advance_tutorial"]
 [connection signal="pressed" from="UI/Tutorial/BackButton" to="." method="regress_tutorial"]
+[connection signal="timeout" from="ScreenTransition/DelayerB" to="ScreenTransition" method="_on_delayer_b_timeout"]
 [connection signal="timeout" from="Music/Timer" to="Music" method="_on_timer_timeout"]

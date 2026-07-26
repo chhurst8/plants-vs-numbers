@@ -730,6 +730,7 @@ func lose_game() -> void:
 	increment_label.hide()
 	ghost_plant.hide()
 	
+	play_sfx(11)
 	game_over = true
 	end_screen.game_end(stat_total_score, current_wave, stat_best_combo, stat_enemies_killed, stat_explosions, stat_strongest_enemy_killed, stat_biggest_plant)
 	get_tree().paused = true

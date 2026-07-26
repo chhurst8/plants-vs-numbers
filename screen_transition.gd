@@ -11,6 +11,10 @@ var going: bool = false
 var went: bool = false
 
 
+@export var bounce_sfx: AudioStreamPlayer
+@export var woosh_sfx: AudioStreamPlayer
+@export var delayer_bounce: Timer
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	moving_up = true
@@ -21,6 +25,8 @@ func _ready() -> void:
 	next_scene = ""
 	going = false
 	went = false
+	
+	woosh_sfx.play()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -50,7 +56,6 @@ func _process(delta: float) -> void:
 					else: Global.set_music(true)
 					Global.goto_scene(next_scene)
 					went = true
-			
 
 func transition_to(path: String) -> void:
 	if (!going):
@@ -61,3 +66,8 @@ func transition_to(path: String) -> void:
 func move_down() -> void:
 	moving_up = false
 	anim_time = 0
+	delayer_bounce.start()
+
+
+func _on_delayer_b_timeout() -> void:
+	bounce_sfx.play()
