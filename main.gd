@@ -60,7 +60,7 @@ var stat_total_score: int = 0
 var score: int = 0
 
 var produced_units: float = 0
-var max_units: int = 7
+var max_units: float = 7
 var production_rate: int = 2
 var factory_upgrade_price: int = 100
 
@@ -175,6 +175,7 @@ func _ready() -> void:
 	factory_price_display.text = "Price\n50"
 	
 	produced_units = 4
+	max_units = 4
 	production_rate = 0
 	factory_upgrade_price = 100
 	
@@ -359,7 +360,7 @@ func _process(delta: float) -> void:
 	hud_score_display.text = "Score\n" + str(score)
 
 	#produced_units = ceili(produced_units)
-	factory_display.text = format_big_number(floori(produced_units)) + "\n" + format_big_number(max_units)
+	factory_display.text = format_big_number(floori(produced_units)) + "\n" + format_big_number(floori(max_units))
 	factory_rate_display.text = "+" + format_big_number(production_rate)
 	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
 
@@ -717,6 +718,7 @@ func next_wave():
 	current_wave += 1
 	hud_wave_anim_time = 0
 	produced_units += 0.5
+	max_units += 0.5
 	if (produced_units >= 1 and current_increment_amount == 0):
 		current_increment_amount = 1
 	play_sfx(10)
