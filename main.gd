@@ -58,7 +58,7 @@ var stat_biggest_plant: int = 0
 var stat_total_score: int = 0
 var score: int = 0
 
-var produced_units: int = 0
+var produced_units: float = 0
 var max_units: int = 7
 var production_rate: int = 2
 var factory_upgrade_price: int = 100
@@ -355,12 +355,12 @@ func _process(delta: float) -> void:
 	#UPDATE HUD
 	hud_score_display.text = "Score\n" + str(score)
 
-	produced_units = ceili(produced_units)
-	factory_display.text = format_big_number(produced_units) + "\n" + format_big_number(max_units)
+	#produced_units = ceili(produced_units)
+	factory_display.text = format_big_number(floori(produced_units)) + "\n" + format_big_number(max_units)
 	factory_rate_display.text = "+" + format_big_number(production_rate)
 	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
 
-	current_increment_amount = min(current_increment_amount, produced_units)
+	current_increment_amount = min(current_increment_amount, floori(produced_units))
 
 	increment_label.text = "  " + str(current_increment_amount)
 	
@@ -473,6 +473,7 @@ func _on_global_turn_timer_timeout() -> void:
 			#global_turn_timer.start()
 			#return
 		else:
+			print("spawning enemies")
 			current_turn += 1
 			if (enemies_remaining_in_wave.has(current_turn)):
 				var wave = enemies_remaining_in_wave[current_turn]
@@ -494,31 +495,46 @@ func do_enemy_turn() -> void:
 		enemy.do_turn()
 
 func init_wave() -> void:
-	produced_units += ceili(0.1 * log(current_wave + 1))
-	if (produced_units > 0 and current_increment_amount == 0):
-		current_increment_amount = 1
-	print("hi")
 	rng.seed = current_wave
 	current_turn = 0
-	var boss = round((3.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.9, 1.1)) # round((2 * pow(1.5, 2)) * rng.randf_range(0.9, 1.1));
+	var boss = round(0.333333 * pow(current_wave, 2) + 3 * (current_wave) + 0.666667) #round((3.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.9, 1.1)) # round((2 * pow(1.5, 2)) * rng.randf_range(0.9, 1.1));
+	var boss_factors = factors(boss)
+	while len(boss_factors) < 4:
+		boss += 1
+		boss_factors = factors(boss)
+
+	print("boss of wave %s: %s" % [str(current_wave), str(boss)] )
 	var num_enemies = round((1.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.8, 1.2)) # round(3 * (2) * rng.randf_range(0.6, 1.4))
-	print_debug(num_enemies)
+	print("#enemies of wave %s: %s" % [str(current_wave), str(num_enemies)] )
 	var boss_placed = false
 	enemies_remaining_in_wave = {}
 	var line = 0
-	print_debug("about to spawn enemies")
 	while num_enemies > 0:
-		print_debug(num_enemies)
 		line += 1
-		var enemies_in_line = min(round(min(pow(rng.randf(), 3), 1) * num_enemies), 4)
+		var enemies_in_line = min(round(min(pow(rng.randf(), 3), 1) * num_enemies), 5)
+		#if line == 1:
+		enemies_in_line = max(1, enemies_in_line)
 		enemies_remaining_in_wave[line] = []
 		num_enemies -= enemies_in_line
 		var occupied_spots = []
-		print_debug(enemies_in_line)
 		for i in enemies_in_line:
-			var is_boss = !boss_placed && (rng.randf() > 0.5 || num_enemies == 0)
+
+			var is_boss = !boss_placed && (rng.randf() > 0.2 || num_enemies == 0)
 			var difficulty = rng.randf_range(0.2, 0.6)
-			var number = boss if is_boss else round(difficulty * boss)
+			var number = 0
+			var meta_inf = {}
+			if is_boss:
+				number = boss
+			elif difficulty > 0.5:
+				number = ceili(difficulty * boss)
+			else:
+				var factor = boss_factors[rng.randi_range(0, len(boss_factors) - 2)]
+				var boss_multiple = boss / factor
+				meta_inf["boss_multiple"] = boss_multiple
+				meta_inf["difficulty"] = difficulty
+				meta_inf["factor"] = factor
+				number = ceili(boss_multiple * difficulty) * factor
+			# var number = boss if is_boss else round(difficulty * boss)
 			if is_boss:
 				boss_placed = true
 			var spot = rng.randi_range(0, 5 - 1)
@@ -526,8 +542,16 @@ func init_wave() -> void:
 				spot = rng.randi_range(0, 5 - 1)
 			occupied_spots.append(spot)
 			var difficulty_index = 2 if is_boss else 1 if difficulty > 0.5 else 0 
-			enemies_remaining_in_wave[line].append({"difficulty": difficulty_index, "position": spot, "number": number})
-	print_debug(enemies_remaining_in_wave)
+			enemies_remaining_in_wave[line].append({"difficulty": difficulty_index, "position": spot, "number": number, "meta": meta_inf})
+	print("enemies of wave %s: %s" % [str(current_wave), str(enemies_remaining_in_wave)] )
+
+func factors(number: int) -> Array[int]:
+	var factors: Array[int] = []
+	for i in number:
+		if number % (i+1) == 0:
+			factors.append(i + 1)
+	return factors
+
 
 
 func spawn_enemy(starting_number: int, grid_position: Vector2i, difficulty: int) -> void:
@@ -689,6 +713,9 @@ func _on_upgrade_factory_button_pressed() -> void:
 func next_wave():
 	current_wave += 1
 	hud_wave_anim_time = 0
+	produced_units += 0.5
+	if (produced_units >= 1 and current_increment_amount == 0):
+		current_increment_amount = 1
 	play_sfx(10)
 	print("next wave")
 	init_wave()
