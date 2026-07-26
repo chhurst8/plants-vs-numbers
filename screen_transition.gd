@@ -46,6 +46,8 @@ func _process(delta: float) -> void:
 				visible = true
 			else:
 				if (!went):
+					if (next_scene == "main.tscn"): Global.set_music(false)
+					else: Global.set_music(true)
 					Global.goto_scene(next_scene)
 					went = true
 			
