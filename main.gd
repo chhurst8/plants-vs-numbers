@@ -495,6 +495,8 @@ func do_enemy_turn() -> void:
 
 func init_wave() -> void:
 	produced_units += ceili(0.1 * log(current_wave + 1))
+	if (produced_units > 0 and current_increment_amount == 0):
+		current_increment_amount = 1
 	print("hi")
 	rng.seed = current_wave
 	current_turn = 0
