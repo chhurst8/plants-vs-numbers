@@ -6,10 +6,16 @@
 [ext_resource type="Script" uid="uid://duenb01vxqg0v" path="res://screen_transition.gd" id="2_o1ld7"]
 [ext_resource type="Texture2D" uid="uid://cuwgayys5yuvr" path="res://Visuals/difficulty.svg" id="2_w1mvj"]
 [ext_resource type="Script" uid="uid://hdo1lnunpesj" path="res://wobble.gd" id="3_lxycn"]
+[ext_resource type="Texture2D" uid="uid://r60c8fy8epka" path="res://Visuals/mute.svg" id="5_86xni"]
+[ext_resource type="Script" uid="uid://nr7y7cc6kq6h" path="res://music.gd" id="7_vqw7c"]
 
-[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition")]
+[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition", "music", "toggle_mute_sprite", "volume_slider", "volume_slider_timer")]
 script = ExtResource("1_o1ld7")
 screen_transition = NodePath("ScreenTransition")
+music = NodePath("Music")
+toggle_mute_sprite = NodePath("UI/ToggleMute/ToggleMuteSprite")
+volume_slider = NodePath("UI/VolumeSlider")
+volume_slider_timer = NodePath("UI/VolumeSliderTimer")
 
 [node name="UI" type="Control" parent="." unique_id=1500900860]
 custom_minimum_size = Vector2(720, 720)
@@ -43,6 +49,44 @@ theme = ExtResource("2_2ayvv")
 theme_override_font_sizes/font_size = 100
 text = "Play!"
 
+[node name="ToggleMute" type="Button" parent="UI" unique_id=1783047976]
+process_mode = 3
+self_modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+offset_right = 90.0
+grow_vertical = 0
+pivot_offset = Vector2(45, 45)
+
+[node name="ToggleMuteSprite" type="Sprite2D" parent="UI/ToggleMute" unique_id=1652212509]
+position = Vector2(45, 45)
+scale = Vector2(0.161, 0.161)
+texture = ExtResource("5_86xni")
+offset = Vector2(1.8881836, 1.1181641)
+
+[node name="VolumeSlider" type="HSlider" parent="UI" unique_id=235014225]
+custom_minimum_size = Vector2(128, 32)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = -60.0
+offset_right = 228.0
+offset_bottom = -28.0
+grow_vertical = 0
+pivot_offset = Vector2(178, 20)
+theme = ExtResource("2_2ayvv")
+min_value = -50.0
+max_value = 10.0
+
+[node name="VolumeSliderTimer" type="Timer" parent="UI" unique_id=570203385]
+wait_time = 0.2
+
 [node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522]
 process_mode = 3
 position = Vector2(360, 0)
@@ -51,4 +95,20 @@ texture = ExtResource("1_1ey7h")
 offset = Vector2(0, -720)
 script = ExtResource("2_o1ld7")
 
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1881406002]
+process_mode = 3
+script = ExtResource("7_vqw7c")
+
+[node name="Timer" type="Timer" parent="Music" unique_id=297636995]
+wait_time = 0.5
+one_shot = true
+autostart = true
+ignore_time_scale = true
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="Music" unique_id=707428393]
+
 [connection signal="pressed" from="UI/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="UI/ToggleMute" to="." method="_on_toggle_mute_pressed"]
+[connection signal="value_changed" from="UI/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="timeout" from="UI/VolumeSliderTimer" to="." method="_on_volume_slider_timer_timeout"]
+[connection signal="timeout" from="Music/Timer" to="Music" method="_on_timer_timeout"]

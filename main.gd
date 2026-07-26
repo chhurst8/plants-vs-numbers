@@ -40,6 +40,8 @@ var hud_wave_anim_time: float = 0
 @export var ghost_plant_num: Label
 
 
+
+@export var toggle_mute_sprite: Sprite2D
 @export var pause_resume_sprite: Sprite2D
 @export var pause_overlay: ColorRect
 
@@ -118,7 +120,7 @@ var current_increment_amount: int
 
 # 0 = shoot, 1 = enemy_hit, 2 = explosion, 3 = plant_crush
 # 4 = increment, 5 = decrement, 6 = combine, 7 = split
-# 8 = drag_on?, 9 = move_around?, 10 = wave_start
+# 8 = plant_grow, 9 = move_around, 10 = wave_start
 @export var sfx_players: Array[AudioStreamPlayer]
 
 func play_sfx(sfx_id: int) -> void:
@@ -130,6 +132,11 @@ func play_sfx(sfx_id: int) -> void:
 func _ready() -> void:
 	get_tree().paused = false
 	pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
+	
+	if (Global.muted):
+		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
+	else:
+		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
 	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
@@ -180,14 +187,15 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	# We need this to handle the mouse scroll buttons because they get pressed and released instantenously
 	# and the chance that it happens while the frame is happening is very low
-	if (event.is_action_pressed("ScrollUp")):
-		current_increment_amount += 1
+	#if (event.is_action_pressed("ScrollUp")):
+	#	current_increment_amount += 1
 #		if (current_increment_amount >= produced_units):
 #			current_increment_amount = produced_units
-	elif (event.is_action_pressed("ScrollDown")):
-		current_increment_amount -= 1
-		if (current_increment_amount <= 0):
-			current_increment_amount = 0
+	#elif (event.is_action_pressed("ScrollDown")):
+	#	current_increment_amount -= 1
+	#	if (current_increment_amount <= 0):
+	#		current_increment_amount = 0
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -242,12 +250,14 @@ func _process(delta: float) -> void:
 						if (plant_at_tile_1 != null):
 							# there is a plant to move
 							if (plant_at_tile_2 != null):
-								# there is a plant to swap with
+								# there is a plant to swap with, so we do
 								plant_at_tile_1.change_position(action_tile_2)
 								plant_at_tile_2.change_position(action_tile_1)
+								play_sfx(9)
 							else:
-								# there is no plant to swap with
+								# there is no plant to swap with, so we just move
 								plant_at_tile_1.change_position(action_tile_2)
+								play_sfx(9)
 					elif (current_click.button == Click.Buttons.RIGHT):
 						if (plant_at_tile_1 != null):
 							# there is a plant to combine / split
@@ -273,6 +283,7 @@ func _process(delta: float) -> void:
 								else:
 									# the plant is not big enough to split, so we just move it
 									plant_at_tile_1.change_position(action_tile_2)
+									play_sfx(9)
 			else:
 				ghost_plant.visible = false
 				
@@ -297,12 +308,15 @@ func _process(delta: float) -> void:
 							# spawn a new plant
 							spawn_plant(current_increment_amount, action_tile)
 							if (current_increment_amount > stat_biggest_plant): stat_biggest_plant = current_increment_amount
+							play_sfx(8)
 						produced_units -= current_increment_amount
 					elif (current_click.button == Click.Buttons.RIGHT):
 						if (plant_at_tile != null):
 							# decrease the existing plant
 							plant_at_tile.decrement(1)
 							produced_units += 1
+							if (produced_units > 0 and current_increment_amount == 0):
+								current_increment_amount = 1
 							play_sfx(5)
 			
 			
@@ -366,10 +380,10 @@ func _process(delta: float) -> void:
 		# the closest enemy distance has changed
 		closest_enemy_indicator.text = str(closest_enemy_distance)
 		closest_enemy_indicator.rotation_degrees = 0
-		var tween_rot = get_tree().create_tween()
+		var tween_rot = closest_enemy_indicator.create_tween()
 		tween_rot.tween_property(closest_enemy_indicator, "rotation_degrees", 360, 0.4).set_trans(Tween.TRANS_BACK)
 		
-		var tween_scale = get_tree().create_tween()
+		var tween_scale = closest_enemy_indicator.create_tween()
 		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.2, 1.2), 0.2)
 		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.0, 1.0), 0.2)
 	
@@ -700,6 +714,8 @@ func next_wave():
 	current_wave += 1
 	hud_wave_anim_time = 0
 	produced_units += 0.5
+	if (produced_units >= 1 and current_increment_amount == 0):
+		current_increment_amount = 1
 	play_sfx(10)
 	print("next wave")
 	init_wave()
@@ -734,6 +750,13 @@ func _on_pause_resume_pressed() -> void:
 	
 	get_tree().paused = !_paused
 
+
+func _on_toggle_mute_pressed() -> void:
+	Global.toggle_mute()
+	if (Global.muted):
+		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
+	else:
+		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
 
 
 static func format_big_number(current_number: int) -> String:
