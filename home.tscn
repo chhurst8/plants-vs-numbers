@@ -10,8 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://dkheodvqljk2d" path="res://Visuals/tutorial_2.svg" id="3_x0ehs"]
 [ext_resource type="Texture2D" uid="uid://cuhq7i4orkkyu" path="res://Visuals/tutorial_3.svg" id="4_x0ehs"]
 [ext_resource type="Texture2D" uid="uid://r60c8fy8epka" path="res://Visuals/mute.svg" id="5_86xni"]
+[ext_resource type="Texture2D" uid="uid://ch6xn4bf1ffou" path="res://Visuals/tutorial_5.svg" id="6_sa43c"]
 [ext_resource type="Script" uid="uid://nr7y7cc6kq6h" path="res://music.gd" id="7_vqw7c"]
 [ext_resource type="AudioStream" uid="uid://ynqr0voo3ba6" path="res://Sounds/Music/music_0.1.mp3" id="8_qq0qw"]
+[ext_resource type="Texture2D" uid="uid://bcct5hd8vrf74" path="res://Visuals/tutorial_4.svg" id="9_wh0ls"]
 [ext_resource type="AudioStream" uid="uid://dtf7qpqh5m47i" path="res://Sounds/Effects/bounce_0.1.mp3" id="11_d26pf"]
 [ext_resource type="AudioStream" uid="uid://d1wy2s7m78dbq" path="res://Sounds/Effects/curtains_0.1.mp3" id="12_wh0ls"]
 
@@ -24,7 +26,7 @@ volume_slider = NodePath("UI/VolumeSlider")
 volume_slider_timer = NodePath("UI/VolumeSliderTimer")
 tutorial = NodePath("UI/Tutorial")
 tutorial_sprite = NodePath("UI/Tutorial/TutorialSprite")
-tutorial_slides = Array[Texture2D]([ExtResource("2_tdh31"), ExtResource("3_x0ehs"), ExtResource("4_x0ehs"), null])
+tutorial_slides = Array[Texture2D]([ExtResource("2_tdh31"), ExtResource("3_x0ehs"), ExtResource("4_x0ehs"), ExtResource("9_wh0ls"), ExtResource("6_sa43c"), ExtResource("6_sa43c")])
 
 [node name="UI" type="Control" parent="." unique_id=1500900860]
 custom_minimum_size = Vector2(720, 720)
@@ -97,7 +99,6 @@ max_value = 20.0
 wait_time = 0.2
 
 [node name="Tutorial" type="Control" parent="UI" unique_id=542928897]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,45 +106,42 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TutorialSprite" type="Sprite2D" parent="UI/Tutorial" unique_id=783839276]
+[node name="TutorialBG" type="Sprite2D" parent="UI/Tutorial" unique_id=386233728]
 position = Vector2(360, 360)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("1_1ey7h")
-script = ExtResource("3_lxycn")
+
+[node name="TutorialSprite" type="Sprite2D" parent="UI/Tutorial" unique_id=783839276]
+position = Vector2(360, 360)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_sa43c")
 
 [node name="ContinueButton" type="Button" parent="UI/Tutorial" unique_id=16624579]
-custom_minimum_size = Vector2(240, 80)
+custom_minimum_size = Vector2(80, 50)
 layout_mode = 1
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -260.0
-offset_top = -100.0
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = -90.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 60.0
 grow_horizontal = 0
-grow_vertical = 0
 pivot_offset = Vector2(120, 70)
 theme = ExtResource("2_2ayvv")
-theme_override_font_sizes/font_size = 50
-text = "Continue"
+theme_override_font_sizes/font_size = 30
+text = "Next"
 
 [node name="BackButton" type="Button" parent="UI/Tutorial" unique_id=1987944103]
-custom_minimum_size = Vector2(150, 80)
+custom_minimum_size = Vector2(80, 50)
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -100.0
-offset_right = 170.0
-offset_bottom = -20.0
-grow_vertical = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 90.0
+offset_bottom = 60.0
 pivot_offset = Vector2(120, 70)
 theme = ExtResource("2_2ayvv")
-theme_override_font_sizes/font_size = 50
+theme_override_font_sizes/font_size = 30
 text = "Back"
 
 [node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522 node_paths=PackedStringArray("bounce_sfx", "woosh_sfx", "delayer_bounce")]

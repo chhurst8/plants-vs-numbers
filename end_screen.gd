@@ -49,7 +49,7 @@ func game_end(_score: int, _wave_reached: int, _best_combo: int, _enemies_killed
 	enemies_killed_str = "Enemies Killed: " + str(_enemies_killed)
 	explosions_str = "Explosions: " + str(_explosions)
 	strongest_enemy_killed_str = "Strongest Enemy Killed: " + str(_strongest_enemy_killed)
-	biggest_plant_str = "Biggest Plant: " + str(_biggest_plant)
+	biggest_plant_str = "Biggest Tower: " + str(_biggest_plant)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

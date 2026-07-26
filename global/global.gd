@@ -46,6 +46,17 @@ func set_music(menu: bool) -> void:
 			else:
 				child.start_game_music()
 
+func pause_music() -> void:
+	var children: Array[Node] = get_tree().root.get_children()
+	for child in children:
+		if(child.has_method("is_main_music")):
+			child.pause_music()
+
+func resume_music() -> void:
+	var children: Array[Node] = get_tree().root.get_children()
+	for child in children:
+		if(child.has_method("is_main_music")):
+			child.resume_music()
 
 func goto_scene(path):
 	# This function will usually be called from a signal callback,

@@ -437,7 +437,7 @@ volume_db = -20.0
 
 [node name="LoseSFX" type="AudioStreamPlayer" parent="SFXHolder" unique_id=1865237508]
 stream = ExtResource("25_seu75")
-volume_db = 2.0
+volume_db = -4.0
 
 [node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "wave_reached_text", "best_combo_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "biggest_plant_text", "clock_thing")]
 process_mode = 3
@@ -574,7 +574,7 @@ offset_bottom = -580.0
 grow_horizontal = 2
 theme = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 35
-text = "Biggest Plant: 1234567890"
+text = "Biggest Tower: 1234567890"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -585,9 +585,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -395.0
-offset_top = -1630.0
+offset_top = -1530.0
 offset_right = -255.0
-offset_bottom = -1590.0
+offset_bottom = -1490.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(2, 2)
@@ -597,6 +597,7 @@ theme_override_font_sizes/font_size = 20
 text = "Retry"
 
 [node name="HomeMenuButton" type="Button" parent="EndScreen/Background" unique_id=1633458152]
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -616,6 +617,7 @@ text = "Home Menu"
 
 [node name="ScreenTransition" type="Sprite2D" parent="." unique_id=2052863689 node_paths=PackedStringArray("bounce_sfx", "woosh_sfx", "delayer_bounce")]
 process_mode = 3
+visible = false
 position = Vector2(360, 0)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("14_w48qg")

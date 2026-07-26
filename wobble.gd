@@ -8,5 +8,5 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	rotation_degrees = sin(Time.get_unix_time_from_system() * 1.5) * 2
+	rotation_degrees = sin(Time.get_unix_time_from_system() * 1.5) * 1.5
 	pass

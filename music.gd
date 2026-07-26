@@ -28,6 +28,12 @@ func start_menu_music() -> void:
 	volume_db = -80
 	stop()
 
+func pause_music() -> void:
+	stream_paused = true
+
+func resume_music() -> void:
+	stream_paused = false
+
 func lose_game_get_quieter() -> void:
 	var fade_tween = create_tween()
 	fade_tween.tween_property(self, "volume_db", -20, 2.0)

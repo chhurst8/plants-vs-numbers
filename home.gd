@@ -34,7 +34,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	tutorial_progress = clamp(tutorial_progress, 0, 5)
+	tutorial_progress = clamp(tutorial_progress, 0, 6)
 	if (tutorial_progress == 0):
 		tutorial.hide()
 	else:
@@ -46,17 +46,15 @@ func _on_play_button_pressed() -> void:
 	if (music.get_parent() == self):
 		music.reparent(get_tree().root)
 	
-	
-	screen_transition.transition_to("main.tscn")
-	#if (Global.need_tutorial):
-	#	advance_tutorial()
-	#else:
-	#	screen_transition.transition_to("main.tscn")
+	if (Global.need_tutorial):
+		advance_tutorial()
+	else:
+		screen_transition.transition_to("main.tscn")
 
 func advance_tutorial() -> void:
 	tutorial.show()
 	tutorial_progress += 1
-	if (tutorial_progress == 5):
+	if (tutorial_progress == 6):
 		Global.need_tutorial = false
 		screen_transition.transition_to("main.tscn")
 

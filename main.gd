@@ -752,9 +752,11 @@ func _on_pause_resume_pressed() -> void:
 		if (_paused):
 			pause_overlay.visible = false
 			pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
+			Global.resume_music()
 		else:
 			pause_overlay.visible = true
 			pause_resume_sprite.texture = preload("res://Visuals/resume.svg")
+			Global.pause_music()
 	
 		get_tree().paused = !_paused
 
