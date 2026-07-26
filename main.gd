@@ -160,6 +160,8 @@ func _ready() -> void:
 	current_wave = 0
 
 	
+	spawn_enemy(1234567890, Vector2i(0, 3), 1)
+	
 	init_wave()
 
 
@@ -396,9 +398,14 @@ func _on_global_turn_timer_timeout() -> void:
 	if (turn_owner == TurnOwners.PLAYER):
 		do_player_turn()
 
+		var prev_produced: int = produced_units
+
 		produced_units += production_rate
 		produced_units = min(produced_units, max_units)
-
+		
+		if (produced_units > 0 and prev_produced == 0 and current_increment_amount == 0):
+			current_increment_amount = 1
+		
 		turn_owner = TurnOwners.ENEMY
 	else:
 		# it is the enemy turn
