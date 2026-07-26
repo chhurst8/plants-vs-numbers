@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="94.045202"
-     inkscape:cy="34.471456"
+     inkscape:zoom="7.9999999"
+     inkscape:cx="42.25"
+     inkscape:cy="41.1875"
      inkscape:window-width="1707"
      inkscape:window-height="1007"
      inkscape:window-x="0"
@@ -41,38 +41,19 @@
     <text
        xml:space="preserve"
        style="font-weight:bold;font-size:15.8356px;font-family:Unageo;-inkscape-font-specification:'Unageo Bold';writing-mode:lr-tb;direction:ltr;fill:#000000;stroke:#000000;stroke-width:1.32292;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
-       x="-0.68619239"
-       y="8.9451418"
+       x="-0.68618762"
+       y="11.880515"
        id="text1"
        transform="scale(1.0024849,0.99752125)"><tspan
          sodipodi:role="line"
          style="stroke-width:1.32292"
-         x="-0.68619239"
-         y="8.9451418"
+         x="-0.68618762"
+         y="11.880515"
          id="tspan2">+</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-weight:bold;font-size:15.8356px;font-family:Unageo;-inkscape-font-specification:'Unageo Bold';writing-mode:lr-tb;direction:ltr;fill:#000000;stroke:#000000;stroke-width:1.32292;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
-       x="0.69150412"
-       y="17.245262"
-       id="text1-3"
-       transform="scale(1.0024849,0.99752125)"><tspan
-         sodipodi:role="line"
-         style="stroke-width:1.32292"
-         x="0.69150412"
-         y="17.245262"
-         id="tspan2-5">-</tspan></text>
     <path
-       d="M 3.177694,0.66312304 V 3.1493122 H 0.6598336 V 5.2712826 H 3.177694 V 7.789143 H 5.2838288 V 5.2712826 H 7.7858536 V 3.1493122 H 5.2838288 V 0.66312304 Z"
+       d="M 3.185595,3.5895769 V 6.0696035 H 0.661478 V 8.186314 h 2.524117 v 2.511619 H 5.2969634 V 8.186314 h 2.508242 V 6.0696035 H 5.2969634 V 3.5895769 Z"
        id="text3"
-       style="font-weight:bold;font-size:15.8356px;font-family:Unageo;-inkscape-font-specification:'Unageo Bold';stroke:#ffffff;stroke-width:1.32292;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;fill:#ffffff;fill-opacity:1;stroke-opacity:1"
-       transform="scale(1.0024849,0.99752125)"
+       style="font-weight:bold;font-size:15.8356px;font-family:Unageo;-inkscape-font-specification:'Unageo Bold';fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1.32292;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:markers fill stroke"
        aria-label="+" />
-    <path
-       d="m 1.5307909,13.587239 h 5.384104 v -2.121971 h -5.384104 z"
-       id="text4"
-       style="font-weight:bold;font-size:15.8356px;font-family:Unageo;-inkscape-font-specification:'Unageo Bold';stroke:#ffffff;stroke-width:1.32292;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;fill:#ffffff;fill-opacity:1;stroke-opacity:1"
-       transform="scale(1.0024849,0.99752125)"
-       aria-label="-" />
   </g>
 </svg>

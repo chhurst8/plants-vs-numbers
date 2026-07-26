@@ -5,6 +5,8 @@ var current_scene = null
 
 var muted: bool = false
 
+var unmuted_volume: float = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -14,11 +16,19 @@ func _ready():
 	current_scene = get_tree().current_scene
 	
 	muted = false
+	
+	unmuted_volume = 0
+	
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), unmuted_volume)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func set_master_volume(new_volume: float) -> void:
+	unmuted_volume = new_volume
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), unmuted_volume)
 
 func toggle_mute():
 	muted = !muted

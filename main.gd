@@ -133,6 +133,11 @@ func _ready() -> void:
 	get_tree().paused = false
 	pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
 	
+	if (Global.muted):
+		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
+	else:
+		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
+	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
 	
@@ -310,6 +315,8 @@ func _process(delta: float) -> void:
 							# decrease the existing plant
 							plant_at_tile.decrement(1)
 							produced_units += 1
+							if (produced_units > 0 and current_increment_amount == 0):
+								current_increment_amount = 1
 							play_sfx(5)
 			
 			

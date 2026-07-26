@@ -34,6 +34,31 @@ border_width_right = 5
 border_width_bottom = 5
 border_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7q8kb"]
+bg_color = Color(0.49019608, 0.49019608, 0.49019608, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gytwt"]
+bg_color = Color(0.49019608, 0.49019608, 0.49019608, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ns8xp"]
+content_margin_left = 0.0
+content_margin_top = 3.0
+content_margin_right = 0.0
+content_margin_bottom = 3.0
+bg_color = Color(0.7294118, 0.7294118, 0.7294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [resource]
 default_font = ExtResource("1_0hcpo")
 default_font_size = 40
@@ -46,4 +71,7 @@ Button/styles/focus = SubResource("StyleBoxFlat_xd38r")
 Button/styles/hover = SubResource("StyleBoxFlat_bvgkr")
 Button/styles/normal = SubResource("StyleBoxFlat_0hcpo")
 Button/styles/pressed = SubResource("StyleBoxFlat_y51d7")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_7q8kb")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_gytwt")
+HSlider/styles/slider = SubResource("StyleBoxFlat_ns8xp")
 Label/colors/font_color = Color(0, 0, 0, 1)

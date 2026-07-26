@@ -4,9 +4,22 @@ extends Node2D
 
 @export var music: Node
 
+
+@export var toggle_mute_sprite: Sprite2D
+@export var volume_slider: HSlider
+@export var volume_slider_timer: Timer
+
+var buffered_volume_change: float
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	if (Global.muted):
+		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
+	else:
+		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
+	
+	buffered_volume_change = Global.unmuted_volume
+	volume_slider.value = Global.unmuted_volume
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,3 +32,22 @@ func _on_play_button_pressed() -> void:
 		music.reparent(get_tree().root)
 	
 	screen_transition.transition_to("main.tscn")
+
+
+func _on_toggle_mute_pressed() -> void:
+	Global.toggle_mute()
+	if (Global.muted):
+		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
+	else:
+		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
+
+
+func _on_volume_slider_value_changed(value: float) -> void:
+	if(volume_slider_timer.time_left <= 0):
+		Global.set_master_volume(value)
+	else:
+		buffered_volume_change = value
+		volume_slider_timer.start()
+
+func _on_volume_slider_timer_timeout() -> void:
+	Global.set_master_volume(buffered_volume_change)
