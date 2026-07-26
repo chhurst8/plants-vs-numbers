@@ -166,8 +166,8 @@ func _ready() -> void:
 	factory_rate_display.text = ""
 	factory_price_display.text = "Price\n50"
 	
-	produced_units = 0
-	production_rate = 2
+	produced_units = 4
+	production_rate = 0
 	factory_upgrade_price = 100
 	
 	increment_label.text = "  0"
@@ -184,8 +184,8 @@ func _input(event: InputEvent) -> void:
 	# and the chance that it happens while the frame is happening is very low
 	if (event.is_action_pressed("ScrollUp")):
 		current_increment_amount += 1
-		if (current_increment_amount >= produced_units):
-			current_increment_amount = produced_units
+#		if (current_increment_amount >= produced_units):
+#			current_increment_amount = produced_units
 	elif (event.is_action_pressed("ScrollDown")):
 		current_increment_amount -= 1
 		if (current_increment_amount <= 0):
@@ -304,6 +304,7 @@ func _process(delta: float) -> void:
 						if (plant_at_tile != null):
 							# decrease the existing plant
 							plant_at_tile.decrement(1)
+							produced_units += 1
 							play_sfx(5)
 			
 			
@@ -342,6 +343,7 @@ func _process(delta: float) -> void:
 	#UPDATE HUD
 	hud_score_display.text = "Score\n" + str(score)
 
+	produced_units = ceili(produced_units)
 	factory_display.text = format_big_number(produced_units) + "\n" + format_big_number(max_units)
 	factory_rate_display.text = "+" + format_big_number(production_rate)
 	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
@@ -417,8 +419,7 @@ func _on_global_turn_timer_timeout() -> void:
 
 		var prev_produced: int = produced_units
 
-		produced_units += production_rate
-		produced_units = min(produced_units, max_units)
+		# produced_units += production_rate
 		
 		if (produced_units > 0 and prev_produced == 0 and current_increment_amount == 0):
 			current_increment_amount = 1
@@ -481,11 +482,12 @@ func do_enemy_turn() -> void:
 		enemy.do_turn()
 
 func init_wave() -> void:
+	produced_units += ceili(0.1 * log(current_wave + 1))
 	print("hi")
 	rng.seed = current_wave
 	current_turn = 0
-	var boss = round((2 * pow(1.5, current_wave + 1)) * rng.randf_range(0.9, 1.1));
-	var num_enemies = round(3 * (current_wave + 1) * rng.randf_range(0.6, 1.4))
+	var boss = round((3.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.9, 1.1)) # round((2 * pow(1.5, 2)) * rng.randf_range(0.9, 1.1));
+	var num_enemies = round((1.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.8, 1.2)) # round(3 * (2) * rng.randf_range(0.6, 1.4))
 	print_debug(num_enemies)
 	var boss_placed = false
 	enemies_remaining_in_wave = {}
