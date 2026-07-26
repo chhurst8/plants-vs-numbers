@@ -40,6 +40,8 @@ var hud_wave_anim_time: float = 0
 @export var ghost_plant_num: Label
 
 
+
+@export var toggle_mute_sprite: Sprite2D
 @export var pause_resume_sprite: Sprite2D
 @export var pause_overlay: ColorRect
 
@@ -364,10 +366,10 @@ func _process(delta: float) -> void:
 		# the closest enemy distance has changed
 		closest_enemy_indicator.text = str(closest_enemy_distance)
 		closest_enemy_indicator.rotation_degrees = 0
-		var tween_rot = get_tree().create_tween()
+		var tween_rot = closest_enemy_indicator.create_tween()
 		tween_rot.tween_property(closest_enemy_indicator, "rotation_degrees", 360, 0.4).set_trans(Tween.TRANS_BACK)
 		
-		var tween_scale = get_tree().create_tween()
+		var tween_scale = closest_enemy_indicator.create_tween()
 		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.2, 1.2), 0.2)
 		tween_scale.tween_property(closest_enemy_indicator, "scale", Vector2(1.0, 1.0), 0.2)
 	
@@ -705,6 +707,13 @@ func _on_pause_resume_pressed() -> void:
 	
 	get_tree().paused = !_paused
 
+
+func _on_toggle_mute_pressed() -> void:
+	Global.toggle_mute()
+	if (Global.muted):
+		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
+	else:
+		toggle_mute_sprite.texture = preload("res://Visuals/mute.svg")
 
 
 static func format_big_number(current_number: int) -> String:

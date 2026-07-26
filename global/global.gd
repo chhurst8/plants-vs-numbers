@@ -3,6 +3,8 @@ extends Node
 
 var current_scene = null
 
+var muted: bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -10,12 +12,26 @@ func _ready():
 	var root = get_tree().root
 	# Using a negative index counts from the end, so this gets the last child node of `root`.
 	current_scene = get_tree().current_scene
+	
+	muted = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 
+func toggle_mute():
+	muted = !muted
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), muted)
+
+func set_music(menu: bool) -> void:
+	var children: Array[Node] = get_tree().root.get_children()
+	for child in children:
+		if(child.has_method("is_main_music")):
+			if (menu):
+				child.start_menu_music()
+			else:
+				child.start_game_music()
 
 
 func goto_scene(path):

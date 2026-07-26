@@ -6,10 +6,12 @@
 [ext_resource type="Script" uid="uid://duenb01vxqg0v" path="res://screen_transition.gd" id="2_o1ld7"]
 [ext_resource type="Texture2D" uid="uid://cuwgayys5yuvr" path="res://Visuals/difficulty.svg" id="2_w1mvj"]
 [ext_resource type="Script" uid="uid://hdo1lnunpesj" path="res://wobble.gd" id="3_lxycn"]
+[ext_resource type="Script" uid="uid://nr7y7cc6kq6h" path="res://music.gd" id="7_vqw7c"]
 
-[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition")]
+[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition", "music")]
 script = ExtResource("1_o1ld7")
 screen_transition = NodePath("ScreenTransition")
+music = NodePath("Music")
 
 [node name="UI" type="Control" parent="." unique_id=1500900860]
 custom_minimum_size = Vector2(720, 720)
@@ -51,4 +53,17 @@ texture = ExtResource("1_1ey7h")
 offset = Vector2(0, -720)
 script = ExtResource("2_o1ld7")
 
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1881406002]
+process_mode = 3
+script = ExtResource("7_vqw7c")
+
+[node name="Timer" type="Timer" parent="Music" unique_id=297636995]
+wait_time = 0.5
+one_shot = true
+autostart = true
+ignore_time_scale = true
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="Music" unique_id=707428393]
+
 [connection signal="pressed" from="UI/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="timeout" from="Music/Timer" to="Music" method="_on_timer_timeout"]
