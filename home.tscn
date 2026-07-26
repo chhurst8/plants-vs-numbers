@@ -8,14 +8,17 @@
 [ext_resource type="Script" uid="uid://hdo1lnunpesj" path="res://wobble.gd" id="3_lxycn"]
 [ext_resource type="Texture2D" uid="uid://r60c8fy8epka" path="res://Visuals/mute.svg" id="5_86xni"]
 [ext_resource type="Script" uid="uid://nr7y7cc6kq6h" path="res://music.gd" id="7_vqw7c"]
+[ext_resource type="AudioStream" uid="uid://ynqr0voo3ba6" path="res://Sounds/Music/music_0.1.mp3" id="8_qq0qw"]
 
-[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition", "music", "toggle_mute_sprite", "volume_slider", "volume_slider_timer")]
+[node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition", "music", "toggle_mute_sprite", "volume_slider", "volume_slider_timer", "tutorial", "tutorial_sprite")]
 script = ExtResource("1_o1ld7")
 screen_transition = NodePath("ScreenTransition")
 music = NodePath("Music")
 toggle_mute_sprite = NodePath("UI/ToggleMute/ToggleMuteSprite")
 volume_slider = NodePath("UI/VolumeSlider")
 volume_slider_timer = NodePath("UI/VolumeSliderTimer")
+tutorial = NodePath("UI/Tutorial")
+tutorial_sprite = NodePath("UI/Tutorial/TutorialSprite")
 
 [node name="UI" type="Control" parent="." unique_id=1500900860]
 custom_minimum_size = Vector2(720, 720)
@@ -81,11 +84,61 @@ offset_bottom = -28.0
 grow_vertical = 0
 pivot_offset = Vector2(178, 20)
 theme = ExtResource("2_2ayvv")
-min_value = -50.0
-max_value = 10.0
+min_value = -30.0
+max_value = 20.0
 
 [node name="VolumeSliderTimer" type="Timer" parent="UI" unique_id=570203385]
 wait_time = 0.2
+
+[node name="Tutorial" type="Control" parent="UI" unique_id=542928897]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TutorialSprite" type="Sprite2D" parent="UI/Tutorial" unique_id=783839276]
+position = Vector2(360, 360)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_1ey7h")
+script = ExtResource("3_lxycn")
+
+[node name="ContinueButton" type="Button" parent="UI/Tutorial" unique_id=16624579]
+custom_minimum_size = Vector2(240, 80)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -100.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(120, 70)
+theme = ExtResource("2_2ayvv")
+theme_override_font_sizes/font_size = 50
+text = "Continue"
+
+[node name="BackButton" type="Button" parent="UI/Tutorial" unique_id=1987944103]
+custom_minimum_size = Vector2(150, 80)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -100.0
+offset_right = 170.0
+offset_bottom = -20.0
+grow_vertical = 0
+pivot_offset = Vector2(120, 70)
+theme = ExtResource("2_2ayvv")
+theme_override_font_sizes/font_size = 50
+text = "Back"
 
 [node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522]
 process_mode = 3
@@ -97,6 +150,8 @@ script = ExtResource("2_o1ld7")
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1881406002]
 process_mode = 3
+stream = ExtResource("8_qq0qw")
+volume_db = -10.0
 script = ExtResource("7_vqw7c")
 
 [node name="Timer" type="Timer" parent="Music" unique_id=297636995]
@@ -111,4 +166,6 @@ ignore_time_scale = true
 [connection signal="pressed" from="UI/ToggleMute" to="." method="_on_toggle_mute_pressed"]
 [connection signal="value_changed" from="UI/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
 [connection signal="timeout" from="UI/VolumeSliderTimer" to="." method="_on_volume_slider_timer_timeout"]
+[connection signal="pressed" from="UI/Tutorial/ContinueButton" to="." method="advance_tutorial"]
+[connection signal="pressed" from="UI/Tutorial/BackButton" to="." method="regress_tutorial"]
 [connection signal="timeout" from="Music/Timer" to="Music" method="_on_timer_timeout"]

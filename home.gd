@@ -11,6 +11,13 @@ extends Node2D
 
 var buffered_volume_change: float
 
+@export var tutorial: Control
+@export var tutorial_sprite: Sprite2D
+var tutorial_progress: int = 0
+
+@export var tutorial_slides: Array[Texture2D]
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if (Global.muted):
@@ -20,19 +27,43 @@ func _ready() -> void:
 	
 	buffered_volume_change = Global.unmuted_volume
 	volume_slider.value = Global.unmuted_volume
+	
+	tutorial_progress = 0
+	tutorial.hide()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	tutorial_progress = clamp(tutorial_progress, 0, 5)
+	if (tutorial_progress == 0):
+		tutorial.hide()
+	else:
+		tutorial.show()
+		tutorial_sprite.texture = tutorial_slides[tutorial_progress - 1]
 
 
 func _on_play_button_pressed() -> void:
 	if (music.get_parent() == self):
 		music.reparent(get_tree().root)
 	
+	
 	screen_transition.transition_to("main.tscn")
+	#if (Global.need_tutorial):
+	#	advance_tutorial()
+	#else:
+	#	screen_transition.transition_to("main.tscn")
 
+func advance_tutorial() -> void:
+	tutorial.show()
+	tutorial_progress += 1
+	if (tutorial_progress == 5):
+		Global.need_tutorial = false
+		screen_transition.transition_to("main.tscn")
+
+func regress_tutorial() -> void:
+	tutorial_progress -= 1
+	if (tutorial_progress == 0):
+		tutorial.hide()
 
 func _on_toggle_mute_pressed() -> void:
 	Global.toggle_mute()
