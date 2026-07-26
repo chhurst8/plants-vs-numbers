@@ -5,6 +5,7 @@
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="2_2ayvv"]
 [ext_resource type="Script" uid="uid://duenb01vxqg0v" path="res://screen_transition.gd" id="2_o1ld7"]
 [ext_resource type="Texture2D" uid="uid://cuwgayys5yuvr" path="res://Visuals/difficulty.svg" id="2_w1mvj"]
+[ext_resource type="Script" uid="uid://hdo1lnunpesj" path="res://wobble.gd" id="3_lxycn"]
 
 [node name="Home" type="Node2D" unique_id=232046503 node_paths=PackedStringArray("screen_transition")]
 script = ExtResource("1_o1ld7")
@@ -31,6 +32,7 @@ grow_horizontal = 2
 pivot_offset = Vector2(318.189, 225)
 texture = ExtResource("2_w1mvj")
 expand_mode = 3
+script = ExtResource("3_lxycn")
 
 [node name="PlayButton" type="Button" parent="UI" unique_id=293151205]
 custom_minimum_size = Vector2(300, 140)
