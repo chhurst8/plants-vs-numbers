@@ -159,7 +159,6 @@ func _ready() -> void:
 	
 	current_wave = 0
 
-	spawn_enemy(23500, Vector2i(0, 3), 2)
 	
 	init_wave()
 
