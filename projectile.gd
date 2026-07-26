@@ -2,6 +2,7 @@ class_name Projectile
 extends Node2D
 
 const TILES_PER_SEC: float = 12
+const FONT_SIZES = [28, 24, 20, 18, 16, 12]
 
 var main: Main
 
@@ -28,7 +29,8 @@ func setup(starting_number: int, starting_position: Vector2i, _main: Main) -> vo
 	prev_grid_position = grid_position
 	main = _main
 	
-	number_display.text = str(current_number)
+	number_display.text = Main.format_big_number(current_number)
+	number_display.add_theme_font_size_override("font_size", FONT_SIZES[clampi(len(number_display.text)-1, 0, 5)])
 	
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
@@ -37,7 +39,8 @@ func setup(starting_number: int, starting_position: Vector2i, _main: Main) -> vo
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	number_display.text = str(current_number)
+	number_display.text = Main.format_big_number(current_number)
+	number_display.add_theme_font_size_override("font_size", FONT_SIZES[clampi(len(number_display.text)-1, 0, 5)])
 	
 	position_move_time += delta
 	if (position_move_time >= 1 / TILES_PER_SEC):

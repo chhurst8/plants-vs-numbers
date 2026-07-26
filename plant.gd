@@ -1,6 +1,8 @@
 class_name Plant
 extends Node2D
 
+const FONT_SIZES = [36, 32, 26, 24, 20, 14]
+
 var main: Main
 
 var current_number: int
@@ -29,7 +31,8 @@ func setup(starting_number: int, starting_position: Vector2i, _main: Main) -> vo
 	prev_grid_position = grid_position
 	main = _main
 	
-	number_display.text = str(current_number)
+	number_display.text = Main.format_big_number(current_number)
+	number_display.add_theme_font_size_override("font_size", FONT_SIZES[clampi(len(number_display.text)-1, 0, 5)])
 	
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
@@ -47,7 +50,8 @@ func _process(delta: float) -> void:
 	#position = phys_position
 	position = lerp(prev_phys_position, phys_position, Main.ease_out_quart(phys_position_move_time / 0.35))
 	
-	number_display.text = str(current_number)
+	number_display.text = Main.format_big_number(current_number)
+	number_display.add_theme_font_size_override("font_size", FONT_SIZES[clampi(len(number_display.text)-1, 0, 5)])
 
 func do_turn() -> void:
 	shoot()
@@ -72,7 +76,8 @@ func take_damage(damage_to_take: int) -> void:
 	
 	main.spawn_notif(NotifText.NotifTypes.SUBTRACT, damage_to_take, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
 	
-	number_display.text = str(current_number)
+	number_display.text = Main.format_big_number(current_number)
+	number_display.add_theme_font_size_override("font_size", FONT_SIZES[clampi(len(number_display.text)-1, 0, 5)])
 	
 	if (current_number <= 0):
 		die()

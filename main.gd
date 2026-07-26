@@ -40,6 +40,9 @@ var hud_wave_anim_time: float = 0
 @export var ghost_plant_num: Label
 
 
+@export var pause_resume_sprite: Sprite2D
+
+
 @export var end_screen: EndScreen
 
 var stat_enemies_killed: int
@@ -115,6 +118,7 @@ var current_increment_amount: int
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_tree().paused = false
+	pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
 	
 	global_turn_timer.start()
 	turn_owner = TurnOwners.PLAYER
@@ -158,10 +162,6 @@ func _ready() -> void:
 	
 	
 	current_wave = 0
-
-	spawn_enemy(23500, Vector2i(0, 3), 2)
-	
-	spawn_enemy(1234567890, Vector2i(0, 3), 1)
 	
 	init_wave()
 
@@ -312,7 +312,6 @@ func _process(delta: float) -> void:
 					var plant_at_tile_1: Plant = get_plant_at_tile(action_tile_1)
 					
 					if (plant_at_tile_1 != null):
-						
 						ghost_plant.visible = true
 						ghost_plant_num.text = str(plant_at_tile_1.current_number)
 						# get ghost plant offset
@@ -326,8 +325,8 @@ func _process(delta: float) -> void:
 	#UPDATE HUD
 	hud_score_display.text = "Score\n" + str(score)
 
-	factory_display.text = str(produced_units) + "/" + str(max_units)
-	factory_rate_display.text = "+" + str(production_rate)
+	factory_display.text = format_big_number(produced_units) + "\n" + format_big_number(max_units)
+	factory_rate_display.text = "+" + format_big_number(production_rate)
 	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
 
 	current_increment_amount = min(current_increment_amount, produced_units)
@@ -672,6 +671,33 @@ func _on_retry_button_pressed() -> void:
 func _on_home_menu_button_pressed() -> void:
 	if (end_screen.anim_time > 1.4):
 		screen_transition.transition_to("home.tscn")
+
+
+func _on_pause_resume_pressed() -> void:
+	var _paused = get_tree().paused
+	
+	if (_paused):
+		pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
+	else:
+		pause_resume_sprite.texture = preload("res://Visuals/resume.svg")
+	
+	get_tree().paused = !_paused
+
+
+
+static func format_big_number(current_number: int) -> String:
+	if current_number < 1000:
+		return str(current_number)
+	else:
+		var magnitude = magnitude(current_number)
+		var mantissa = current_number / (pow(10,magnitude))
+		if (magnitude >= 10):
+			return str("%.1f" % mantissa) + "e" + str(magnitude)
+		else:
+			return str("%.2f" % mantissa) + "e" + str(magnitude)
+
+static func magnitude(number: int) -> int:
+	return max(floor((log(number))/(log(10))),0)
 
 
 static func are_we_even_close_to_a_valid_tile(grid_point: Vector2i) -> bool:

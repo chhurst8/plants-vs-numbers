@@ -3,12 +3,12 @@
 
 <svg
    width="128"
-   height="208"
-   viewBox="0 0 33.866665 55.033332"
+   height="128"
+   viewBox="0 0 33.866665 33.866666"
    version="1.1"
    id="svg1"
    inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
-   sodipodi:docname="factory.svg"
+   sodipodi:docname="resume.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="px"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="55.507883"
-     inkscape:cy="75.395261"
+     inkscape:zoom="4"
+     inkscape:cx="30"
+     inkscape:cy="53.125"
      inkscape:window-width="1707"
      inkscape:window-height="1007"
      inkscape:window-x="0"
@@ -39,18 +39,9 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       id="path1"
-       style="fill:none;stroke:#000000;stroke-width:1.32291662;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       d="m 23.845237,4.9496795 6.911906,11.9836675 -6.911906,11.98367 H 10.021429 L 3.1095243,16.933347 10.021429,4.9496795 Z"
-       sodipodi:nodetypes="ccccccc" />
-    <path
-       id="path1-3"
-       style="fill:none;stroke:#000000;stroke-width:1.32291662;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
-       d="M 30.757143,26.116225 23.845237,50.083561 H 10.021429 L 3.1095246,26.116225"
+       style="fill:#000000;stroke:#000000;stroke-width:7.9375;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;paint-order:markers fill stroke"
+       d="M 23.845237,16.933348 10.021429,4.9496795 V 28.917017 Z"
+       id="path2"
        sodipodi:nodetypes="cccc" />
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.32292;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:markers fill stroke"
-       d="M 6.4823178,16.933348 H 27.384349"
-       id="path2" />
   </g>
 </svg>

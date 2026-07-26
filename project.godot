@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Plants Vs Numbers"
-run/main_scene="uid://crhpv73nstpfq"
+run/main_scene="uid://cw7rmwd1bkf38"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0.9340804, 0.9340805, 0.93408036, 1)
 config/icon="res://icon.svg"
