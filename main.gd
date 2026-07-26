@@ -120,7 +120,7 @@ var current_increment_amount: int
 
 # 0 = shoot, 1 = enemy_hit, 2 = explosion, 3 = plant_crush
 # 4 = increment, 5 = decrement, 6 = combine, 7 = split
-# 8 = drag_on?, 9 = move_around?, 10 = wave_start
+# 8 = plant_grow, 9 = move_around, 10 = wave_start
 @export var sfx_players: Array[AudioStreamPlayer]
 
 func play_sfx(sfx_id: int) -> void:
@@ -182,14 +182,15 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	# We need this to handle the mouse scroll buttons because they get pressed and released instantenously
 	# and the chance that it happens while the frame is happening is very low
-	if (event.is_action_pressed("ScrollUp")):
-		current_increment_amount += 1
+	#if (event.is_action_pressed("ScrollUp")):
+	#	current_increment_amount += 1
 #		if (current_increment_amount >= produced_units):
 #			current_increment_amount = produced_units
-	elif (event.is_action_pressed("ScrollDown")):
-		current_increment_amount -= 1
-		if (current_increment_amount <= 0):
-			current_increment_amount = 0
+	#elif (event.is_action_pressed("ScrollDown")):
+	#	current_increment_amount -= 1
+	#	if (current_increment_amount <= 0):
+	#		current_increment_amount = 0
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -244,12 +245,14 @@ func _process(delta: float) -> void:
 						if (plant_at_tile_1 != null):
 							# there is a plant to move
 							if (plant_at_tile_2 != null):
-								# there is a plant to swap with
+								# there is a plant to swap with, so we do
 								plant_at_tile_1.change_position(action_tile_2)
 								plant_at_tile_2.change_position(action_tile_1)
+								play_sfx(9)
 							else:
-								# there is no plant to swap with
+								# there is no plant to swap with, so we just move
 								plant_at_tile_1.change_position(action_tile_2)
+								play_sfx(9)
 					elif (current_click.button == Click.Buttons.RIGHT):
 						if (plant_at_tile_1 != null):
 							# there is a plant to combine / split
@@ -275,6 +278,7 @@ func _process(delta: float) -> void:
 								else:
 									# the plant is not big enough to split, so we just move it
 									plant_at_tile_1.change_position(action_tile_2)
+									play_sfx(9)
 			else:
 				ghost_plant.visible = false
 				
@@ -299,6 +303,7 @@ func _process(delta: float) -> void:
 							# spawn a new plant
 							spawn_plant(current_increment_amount, action_tile)
 							if (current_increment_amount > stat_biggest_plant): stat_biggest_plant = current_increment_amount
+							play_sfx(8)
 						produced_units -= current_increment_amount
 					elif (current_click.button == Click.Buttons.RIGHT):
 						if (plant_at_tile != null):
