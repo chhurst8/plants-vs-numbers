@@ -339,6 +339,8 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="SFXHolder" type="Node2D" parent="." unique_id=40000827]
+
 [node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "wave_reached_text", "best_combo_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "biggest_plant_text", "clock_thing")]
 process_mode = 3
 script = ExtResource("3_1bvp3")

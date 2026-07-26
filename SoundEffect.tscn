@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d22vbl4nvea51"]
+
+[ext_resource type="Script" uid="uid://drhvp7nrrt142" path="res://sound_effect.gd" id="1_fij8b"]
+
+[node name="SoundEffect" type="AudioStreamPlayer" unique_id=1797507647]
+script = ExtResource("1_fij8b")
