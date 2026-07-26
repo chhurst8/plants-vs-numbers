@@ -41,6 +41,7 @@ var hud_wave_anim_time: float = 0
 
 
 @export var pause_resume_sprite: Sprite2D
+@export var pause_overlay: ColorRect
 
 
 @export var end_screen: EndScreen
@@ -677,8 +678,10 @@ func _on_pause_resume_pressed() -> void:
 	var _paused = get_tree().paused
 	
 	if (_paused):
+		pause_overlay.visible = false
 		pause_resume_sprite.texture = preload("res://Visuals/pause.svg")
 	else:
+		pause_overlay.visible = true
 		pause_resume_sprite.texture = preload("res://Visuals/resume.svg")
 	
 	get_tree().paused = !_paused
