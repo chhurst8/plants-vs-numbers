@@ -1,6 +1,8 @@
 class_name Explosion
 extends Node2D
 
+const FONT_SIZES = [100, 90, 70, 60, 50, 44]
+
 var anim_time: float = 0
 @export var number_display: Label
 
@@ -9,7 +11,8 @@ func _ready() -> void:
 	anim_time = 0
 
 func setup(damage_amount: int, pos: Vector2) -> void:
-	number_display.text = str(damage_amount)
+	number_display.text = Main.format_big_number(damage_amount)
+	number_display.add_theme_font_size_override("font_size", FONT_SIZES[clampi(len(number_display.text)-1, 0, 5)])
 	position = pos
 	anim_time = 0
 	scale = Vector2(0.85, 0.85)

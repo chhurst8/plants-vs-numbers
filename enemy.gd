@@ -72,11 +72,14 @@ func _process(delta: float) -> void:
 func do_turn() -> void:
 	var plant_in_front: Plant = main.get_plant_at_tile(grid_position + Vector2i(0, 1))
 	var plant_can_survive_attack: bool = false
+	
+	var attacked: bool = false
 	if (plant_in_front != null):
 		if (plant_in_front.current_number > current_number):
 			plant_can_survive_attack = true
 		
 		plant_in_front.take_damage(current_number)
+		attacked = true
 	
 	if (plant_can_survive_attack):
 		prev_grid_position = grid_position
@@ -91,6 +94,9 @@ func do_turn() -> void:
 		prev_phys_position = Main.grid_to_phys(prev_grid_position)
 		anim_time = 0
 		current_animation = EnemyAnimations.MOVE
+		
+		if (attacked):
+			main.play_sfx(3)
 	
 
 
