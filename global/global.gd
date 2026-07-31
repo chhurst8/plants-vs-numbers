@@ -10,6 +10,9 @@ var unmuted_volume: float = 0
 var music_already_exists: bool = false
 var need_tutorial: bool = true
 
+var highest_score: int = 0
+var highest_wave: int = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -20,15 +23,39 @@ func _ready():
 	
 	muted = false
 	music_already_exists = false
-	
 	unmuted_volume = 0
-	
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), unmuted_volume)
+	
+	highest_score = 0
+	highest_wave = 0
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func save_scores(_highest_score: int, _highest_wave: int):
+	highest_score = _highest_score
+	highest_wave = _highest_wave
+	
+	var save_file = FileAccess.open("user://scores.json", FileAccess.WRITE)
+	var save_dict: Dictionary = {"highest_score": highest_score, "highest_wave": highest_wave}
+	var save_string = JSON.stringify(save_dict)
+	save_file.store_string(save_string)
+	save_file.close()
+
+func load_scores():
+	if not FileAccess.file_exists("user://scores.json"):
+		return # Error! We don't have a save to load.
+	var save_file = FileAccess.open("user://scores.json", FileAccess.READ)
+	
+	var save_dict: Dictionary = JSON.parse_string(save_file.get_as_text())
+	
+	if (save_dict.has("highest_score")):
+		highest_score = save_dict["highest_score"]
+	if (save_dict.has("highest_wave")):
+		highest_wave = save_dict["highest_wave"]
+
 
 func set_master_volume(new_volume: float) -> void:
 	unmuted_volume = new_volume

@@ -17,6 +17,7 @@ var tutorial_progress: int = 0
 
 @export var tutorial_slides: Array[Texture2D]
 
+@export var records: Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -32,6 +33,9 @@ func _ready() -> void:
 	
 	tutorial_progress = 0
 	tutorial.hide()
+	
+	
+	Global.load_scores()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,6 +46,8 @@ func _process(delta: float) -> void:
 	else:
 		tutorial.show()
 		tutorial_sprite.texture = tutorial_slides[tutorial_progress - 1]
+	
+	records.text = "Highest Score: " + str(Global.highest_score) + "\nHighest Wave: " + str(Global.highest_wave)
 
 
 func _on_play_button_pressed() -> void:

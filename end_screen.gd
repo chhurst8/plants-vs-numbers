@@ -45,7 +45,7 @@ func game_end(_score: int, _wave_reached: int, _best_combo: int, _enemies_killed
 	anim_time = 0
 	game_ended = true
 	
-	score_str = "Total Score: " + str(_score)
+	score_str = "Score: " + str(_score)
 	wave_reached_str = "Wave Reached: " + str(_wave_reached)
 	best_combo_str = "Best Combo: " + str(_best_combo)
 	enemies_killed_str = "Enemies Killed: " + str(_enemies_killed)
@@ -54,6 +54,8 @@ func game_end(_score: int, _wave_reached: int, _best_combo: int, _enemies_killed
 	biggest_plant_str = "Biggest Tower: " + str(_biggest_plant)
 	
 	bounce_sfx.play()
+	
+	Global.save_scores(_score, _wave_reached)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
