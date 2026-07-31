@@ -494,7 +494,8 @@ func do_enemy_turn() -> void:
 		enemy.do_turn()
 
 func init_wave() -> void:
-	rng.seed = current_wave
+	#rng.seed = current_wave
+	rng.randomize()
 	current_turn = 0
 	var boss = round(0.333333 * pow(current_wave, 2) + 3 * (current_wave) + 0.666667) #round((3.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.9, 1.1)) # round((2 * pow(1.5, 2)) * rng.randf_range(0.9, 1.1));
 	var boss_factors = factors(boss)
