@@ -20,6 +20,9 @@ func start_game_music() -> void:
 	$MenuMusic.volume_db = -80
 	$MenuMusic.stop()
 	
+	$Delayer.start()
+
+func _on_delayer_timeout() -> void:
 	volume_db = 0
 	play()
 

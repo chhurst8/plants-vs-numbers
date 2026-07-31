@@ -100,6 +100,26 @@ max_value = 20.0
 [node name="VolumeSliderTimer" type="Timer" parent="UI" unique_id=570203385]
 wait_time = 0.2
 
+[node name="Records" type="Label" parent="UI" unique_id=1375135369]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -410.0
+offset_top = -80.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_2ayvv")
+theme_override_font_sizes/font_size = 24
+text = "Highest Score: 1234567890
+Highest Wave: 1234567890"
+horizontal_alignment = 2
+vertical_alignment = 2
+
 [node name="Tutorial" type="Control" parent="UI" unique_id=542928897]
 visible = false
 layout_mode = 1
@@ -147,26 +167,6 @@ theme = ExtResource("2_2ayvv")
 theme_override_font_sizes/font_size = 30
 text = "Back"
 
-[node name="Records" type="Label" parent="UI" unique_id=1375135369]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -410.0
-offset_top = -80.0
-offset_right = -10.0
-offset_bottom = -10.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = ExtResource("2_2ayvv")
-theme_override_font_sizes/font_size = 24
-text = "Highest Score: 1234567890
-Highest Wave: 1234567890"
-horizontal_alignment = 2
-vertical_alignment = 2
-
 [node name="ScreenTransition" type="Sprite2D" parent="." unique_id=1175321522 node_paths=PackedStringArray("bounce_sfx", "woosh_sfx")]
 process_mode = 3
 position = Vector2(360, 720)
@@ -201,6 +201,12 @@ ignore_time_scale = true
 stream = ExtResource("8_qq0qw")
 volume_db = -15.0
 
+[node name="Delayer" type="Timer" parent="Music" unique_id=389822752]
+process_mode = 3
+wait_time = 0.1
+one_shot = true
+ignore_time_scale = true
+
 [connection signal="pressed" from="UI/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="UI/ToggleMute" to="." method="_on_toggle_mute_pressed"]
 [connection signal="value_changed" from="UI/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
@@ -208,3 +214,4 @@ volume_db = -15.0
 [connection signal="pressed" from="UI/Tutorial/ContinueButton" to="." method="advance_tutorial"]
 [connection signal="pressed" from="UI/Tutorial/BackButton" to="." method="regress_tutorial"]
 [connection signal="timeout" from="Music/Timer" to="Music" method="_on_timer_timeout"]
+[connection signal="timeout" from="Music/Delayer" to="Music" method="_on_delayer_timeout"]

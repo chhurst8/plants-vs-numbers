@@ -247,19 +247,7 @@ func _process(delta: float) -> void:
 					var plant_at_tile_2: Plant = get_plant_at_tile(action_tile_2)
 					if (current_click.button == Click.Buttons.LEFT):
 						if (plant_at_tile_1 != null):
-							# there is a plant to move
-							if (plant_at_tile_2 != null):
-								# there is a plant to swap with, so we do
-								plant_at_tile_1.change_position(action_tile_2)
-								plant_at_tile_2.change_position(action_tile_1)
-								play_sfx(9)
-							else:
-								# there is no plant to swap with, so we just move
-								plant_at_tile_1.change_position(action_tile_2)
-								play_sfx(9)
-					elif (current_click.button == Click.Buttons.RIGHT):
-						if (plant_at_tile_1 != null):
-							# there is a plant to combine / split
+							# there is a plant to combine / move
 							if (plant_at_tile_2 != null):
 								# there is a plant to combine with
 								plant_at_tile_1.change_position(action_tile_2)
@@ -267,6 +255,18 @@ func _process(delta: float) -> void:
 								plant_at_tile_2.die()
 								if (plant_at_tile_1.current_number > stat_biggest_plant): stat_biggest_plant = plant_at_tile_1.current_number
 								play_sfx(6)
+							else:
+								# there is no plant to combine with, so we just move
+								plant_at_tile_1.change_position(action_tile_2)
+								play_sfx(9)
+					elif (current_click.button == Click.Buttons.RIGHT):
+						if (plant_at_tile_1 != null):
+							# there is a plant to swap / split
+							if (plant_at_tile_2 != null):
+								# there is a plant to swap with, so we do
+								plant_at_tile_1.change_position(action_tile_2)
+								plant_at_tile_2.change_position(action_tile_1)
+								play_sfx(9)
 							else:
 								# there is no plant to combine with, so we try to split instead
 								if (plant_at_tile_1.current_number > 1):
@@ -283,7 +283,10 @@ func _process(delta: float) -> void:
 									# the plant is not big enough to split, so we just move it
 									plant_at_tile_1.change_position(action_tile_2)
 									play_sfx(9)
+				
+				
 			else:
+				# not drag
 				var should_do_action: bool = true
 				var action_tile: Vector2i
 				if (get_closest_valid_tile(current_click.origin_grid) == current_click.origin_grid):
