@@ -7,7 +7,7 @@ var muted: bool = false
 
 var unmuted_volume: float = 0
 
-
+var music_already_exists: bool = false
 var need_tutorial: bool = true
 
 # Called when the node enters the scene tree for the first time.
@@ -19,6 +19,7 @@ func _ready():
 	current_scene = get_tree().current_scene
 	
 	muted = false
+	music_already_exists = false
 	
 	unmuted_volume = 0
 	

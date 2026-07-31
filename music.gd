@@ -3,9 +3,11 @@ extends AudioStreamPlayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	reparent(get_tree().root)
-	
-	start_menu_music()
+	if (Global.music_already_exists):
+		queue_free()
+	else:
+		reparent(get_tree().root)
+		start_menu_music()
 
 func _on_timer_timeout() -> void:
 	reparent(get_tree().root)

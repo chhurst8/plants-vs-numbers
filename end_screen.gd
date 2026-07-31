@@ -27,6 +27,8 @@ var biggest_plant_str: String
 
 @export var clock_thing: TextureProgressBar
 
+@export var bounce_sfx: AudioStreamPlayer
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	game_ended = false
@@ -50,6 +52,8 @@ func game_end(_score: int, _wave_reached: int, _best_combo: int, _enemies_killed
 	explosions_str = "Explosions: " + str(_explosions)
 	strongest_enemy_killed_str = "Strongest Enemy Killed: " + str(_strongest_enemy_killed)
 	biggest_plant_str = "Biggest Tower: " + str(_biggest_plant)
+	
+	bounce_sfx.play()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

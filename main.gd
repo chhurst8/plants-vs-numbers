@@ -33,7 +33,6 @@ var hud_wave_anim_time: float = 0
 @export var hud_score_display: Label
 @export var factory_display: Label
 @export var factory_rate_display: Label
-@export var factory_price_display: Label
 @export var increment_label: Label
 
 @export var ghost_plant: Node2D
@@ -62,7 +61,6 @@ var score: int = 0
 var produced_units: float = 0
 var max_units: float = 7
 var production_rate: int = 2
-var factory_upgrade_price: int = 100
 
 var current_wave: int = 0
 var enemies_remaining_in_wave = {}
@@ -172,12 +170,10 @@ func _ready() -> void:
 	
 	factory_display.text = ""
 	factory_rate_display.text = ""
-	factory_price_display.text = "Price\n50"
 	
 	produced_units = 4
 	max_units = 4
 	production_rate = 0
-	factory_upgrade_price = 100
 	
 	increment_label.text = "  0"
 	ghost_plant.visible = false
@@ -204,6 +200,7 @@ func _input(event: InputEvent) -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# PLAYER INPUT
+	ghost_plant.visible = false
 	if (current_click == null):
 		if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
 			current_click = Click.new(Click.Buttons.LEFT, get_global_mouse_position())
@@ -234,8 +231,6 @@ func _process(delta: float) -> void:
 			
 			
 			if (drag):
-				ghost_plant.visible = false
-				
 				var should_do_action: bool = true
 				var action_tile_1: Vector2i
 				var action_tile_2: Vector2i
@@ -289,8 +284,6 @@ func _process(delta: float) -> void:
 									plant_at_tile_1.change_position(action_tile_2)
 									play_sfx(9)
 			else:
-				ghost_plant.visible = false
-				
 				var should_do_action: bool = true
 				var action_tile: Vector2i
 				if (get_closest_valid_tile(current_click.origin_grid) == current_click.origin_grid):
@@ -362,7 +355,6 @@ func _process(delta: float) -> void:
 	#produced_units = ceili(produced_units)
 	factory_display.text = format_big_number(floori(produced_units)) + "\n" + format_big_number(floori(max_units))
 	factory_rate_display.text = "+" + format_big_number(production_rate)
-	factory_price_display.text = "Price\n" + str(factory_upgrade_price)
 
 	current_increment_amount = min(current_increment_amount, floori(produced_units))
 
@@ -699,18 +691,17 @@ func get_combo_multiplier() -> float:
 
 
 
-func _on_upgrade_factory_button_pressed() -> void:
-	print("upgrade factory")
-	if (score >= factory_upgrade_price):
-		score -= factory_upgrade_price
-		# increase production rate
-		production_rate = ceili(production_rate * 1.25)
-		
-		# increase factory upgrade price
-		factory_upgrade_price = ceili(factory_upgrade_price * 1.25)
-		max_units = ceili(max_units * 1.25)
-
-
+func _on_recall_button_pressed() -> void:
+	print("recall")
+	
+	var units_to_recall: int = 0
+	# kill all plants
+	for plant: Plant in plant_holder.get_children():
+		units_to_recall += plant.current_number
+		plant.die()
+	
+	# give back the units
+	produced_units += units_to_recall
 
 
 

@@ -29,10 +29,10 @@
 [ext_resource type="AudioStream" uid="uid://djdv5ahrb30ar" path="res://Sounds/Effects/move_around_0.1.mp3" id="23_kq58d"]
 [ext_resource type="AudioStream" uid="uid://bb2w6iy33ua88" path="res://Sounds/Effects/wave_start_0.3.mp3" id="24_seu75"]
 [ext_resource type="AudioStream" uid="uid://bbk8oe47wisjo" path="res://Sounds/Effects/lose_0.1.wav" id="25_seu75"]
-[ext_resource type="AudioStream" uid="uid://dtf7qpqh5m47i" path="res://Sounds/Effects/bounce_0.1.mp3" id="29_kq58d"]
+[ext_resource type="AudioStream" uid="uid://bt2ad65qbvc7e" path="res://Sounds/Effects/bounce_0.2.mp3" id="30_htxhm"]
 [ext_resource type="AudioStream" uid="uid://d1wy2s7m78dbq" path="res://Sounds/Effects/curtains_0.1.mp3" id="30_seu75"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("screen_transition", "global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "factory_price_display", "increment_label", "ghost_plant", "ghost_plant_num", "toggle_mute_sprite", "pause_resume_sprite", "pause_overlay", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder", "sfx_players")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("screen_transition", "global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "increment_label", "ghost_plant", "ghost_plant_num", "toggle_mute_sprite", "pause_resume_sprite", "pause_overlay", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder", "sfx_players")]
 script = ExtResource("1_0xm2m")
 screen_transition = NodePath("ScreenTransition")
 global_turn_timer = NodePath("GlobalTurnTimer")
@@ -44,7 +44,6 @@ hud_wave_indicator = NodePath("HUD/WaveIndicator")
 hud_score_display = NodePath("HUD/ScoreDisplay")
 factory_display = NodePath("HUD/Factory/FactoryAvailable")
 factory_rate_display = NodePath("HUD/Factory/FactoryRate")
-factory_price_display = NodePath("HUD/UpgradeFactoryPrice")
 increment_label = NodePath("Increment/Label")
 ghost_plant = NodePath("GhostPlant")
 ghost_plant_num = NodePath("GhostPlant/GhostPlantNum")
@@ -239,27 +238,7 @@ position = Vector2(95, 125)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("8_efxa6")
 
-[node name="UpgradeFactoryPrice" type="Label" parent="HUD" unique_id=752473255]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -194.0
-offset_top = -354.0
-offset_right = -4.0
-offset_bottom = -282.0
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(95, 36)
-theme = ExtResource("5_lquwl")
-theme_override_font_sizes/font_size = 20
-text = "Price
-01234567890"
-horizontal_alignment = 1
-
-[node name="UpgradeFactoryButton" type="Button" parent="HUD" unique_id=1395239233]
+[node name="RecallButton" type="Button" parent="HUD" unique_id=1395239233]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -275,8 +254,8 @@ grow_vertical = 0
 pivot_offset = Vector2(50, 30)
 theme = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 20
-text = "Upgrade
-Factory"
+text = "Recall
+Units"
 
 [node name="Pause" type="ColorRect" parent="HUD" unique_id=399100461]
 visible = false
@@ -439,7 +418,7 @@ volume_db = -20.0
 stream = ExtResource("25_seu75")
 volume_db = -4.0
 
-[node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "wave_reached_text", "best_combo_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "biggest_plant_text", "clock_thing")]
+[node name="EndScreen" type="Node2D" parent="." unique_id=1306574003 node_paths=PackedStringArray("background", "score_text", "wave_reached_text", "best_combo_text", "enemies_killed_text", "explosions_text", "strongest_enemy_killed_text", "biggest_plant_text", "clock_thing", "bounce_sfx")]
 process_mode = 3
 script = ExtResource("3_1bvp3")
 background = NodePath("Background")
@@ -451,6 +430,7 @@ explosions_text = NodePath("Background/Explosions")
 strongest_enemy_killed_text = NodePath("Background/StrongestEnemyKilled")
 biggest_plant_text = NodePath("Background/BiggestPlant")
 clock_thing = NodePath("../HUD/ClockThing")
+bounce_sfx = NodePath("BounceSFX")
 
 [node name="Background" type="Sprite2D" parent="EndScreen" unique_id=1525804368]
 position = Vector2(360, 0)
@@ -585,9 +565,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -395.0
-offset_top = -1530.0
+offset_top = -1640.0
 offset_right = -255.0
-offset_bottom = -1490.0
+offset_bottom = -1600.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(2, 2)
@@ -597,7 +577,6 @@ theme_override_font_sizes/font_size = 20
 text = "Retry"
 
 [node name="HomeMenuButton" type="Button" parent="EndScreen/Background" unique_id=1633458152]
-visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -615,33 +594,30 @@ theme = ExtResource("5_lquwl")
 theme_override_font_sizes/font_size = 20
 text = "Home Menu"
 
-[node name="ScreenTransition" type="Sprite2D" parent="." unique_id=2052863689 node_paths=PackedStringArray("bounce_sfx", "woosh_sfx", "delayer_bounce")]
+[node name="BounceSFX" type="AudioStreamPlayer" parent="EndScreen" unique_id=1868987611]
+stream = ExtResource("30_htxhm")
+volume_db = -10.0
+
+[node name="ScreenTransition" type="Sprite2D" parent="." unique_id=2052863689 node_paths=PackedStringArray("bounce_sfx", "woosh_sfx")]
 process_mode = 3
-visible = false
-position = Vector2(360, 0)
+position = Vector2(360, 720)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("14_w48qg")
 offset = Vector2(0, -720)
 script = ExtResource("15_vivmo")
 bounce_sfx = NodePath("BounceSFX")
 woosh_sfx = NodePath("WooshSFX")
-delayer_bounce = NodePath("DelayerB")
 
 [node name="BounceSFX" type="AudioStreamPlayer" parent="ScreenTransition" unique_id=689054435]
-stream = ExtResource("29_kq58d")
+stream = ExtResource("30_htxhm")
 volume_db = -10.0
 
 [node name="WooshSFX" type="AudioStreamPlayer" parent="ScreenTransition" unique_id=187978424]
 stream = ExtResource("30_seu75")
 volume_db = -10.0
 
-[node name="DelayerB" type="Timer" parent="ScreenTransition" unique_id=787475195]
-wait_time = 0.2
-one_shot = true
-ignore_time_scale = true
-
 [connection signal="timeout" from="GlobalTurnTimer" to="." method="_on_global_turn_timer_timeout"]
-[connection signal="pressed" from="HUD/UpgradeFactoryButton" to="." method="_on_upgrade_factory_button_pressed"]
+[connection signal="pressed" from="HUD/RecallButton" to="." method="_on_recall_button_pressed"]
 [connection signal="pressed" from="HUD/PauseResume" to="." method="_on_pause_resume_pressed"]
 [connection signal="pressed" from="HUD/ToggleMute" to="." method="_on_toggle_mute_pressed"]
 [connection signal="pressed" from="EndScreen/Background/RetryButton" to="." method="_on_retry_button_pressed"]

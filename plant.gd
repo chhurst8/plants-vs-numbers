@@ -83,7 +83,6 @@ func take_damage(damage_to_take: int) -> void:
 		die()
 
 func die() -> void:
-	#TODO: Maybe change later?
 	queue_free()
 
 func increment(amount: int) -> void:

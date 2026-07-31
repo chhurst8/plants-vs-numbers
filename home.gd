@@ -20,6 +20,8 @@ var tutorial_progress: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if (get_tree().paused):
+		get_tree().paused = false
 	if (Global.muted):
 		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
 	else:
@@ -43,8 +45,10 @@ func _process(delta: float) -> void:
 
 
 func _on_play_button_pressed() -> void:
-	if (music.get_parent() == self):
-		music.reparent(get_tree().root)
+	if (!Global.music_already_exists):
+		if (music.get_parent() == self):
+			music.reparent(get_tree().root)
+		Global.music_already_exists = true
 	
 	if (Global.need_tutorial):
 		advance_tutorial()
