@@ -14,6 +14,7 @@ config/name="Plants Vs Numbers"
 run/main_scene="uid://cw7rmwd1bkf38"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(0.9340804, 0.9340805, 0.93408036, 1)
+boot_splash/image="uid://8p8udqt4g1a3"
 config/icon="uid://fskmehqisrag"
 
 [autoload]
