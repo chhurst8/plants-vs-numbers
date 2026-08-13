@@ -37,8 +37,10 @@ func setup(starting_number: int, starting_position: Vector2i, _main: Main) -> vo
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
 	phys_position_move_time = 0
+	position = phys_position
 	
 	main.spawn_notif(NotifText.NotifTypes.ADD, starting_number, 0.65, phys_position + Vector2(randf_range(-30, 30), randf_range(-20, -10)))
+	visible = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

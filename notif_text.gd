@@ -37,6 +37,7 @@ func setup(_notif_type: NotifTypes, _notif_number: int, _notif_lifespan: float, 
 	number_display.text += str(notif_number)
 	
 	position = _phys_position
+	visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

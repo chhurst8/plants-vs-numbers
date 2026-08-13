@@ -4,6 +4,7 @@
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="2_6bviy"]
 
 [node name="NotifText" type="Node2D" unique_id=970483161 node_paths=PackedStringArray("number_display")]
+visible = false
 script = ExtResource("1_hns2u")
 number_display = NodePath("NumberDisplay")
 

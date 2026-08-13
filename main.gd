@@ -13,6 +13,8 @@ const COMBO_BLUE: Color = Color("3959ff")
 
 @export var screen_transition: ScreenTransition
 
+@export var wave_generator: WaveGenerator
+
 @export var global_turn_timer: Timer
 
 @export var clock_thing: TextureProgressBar
@@ -268,7 +270,7 @@ func _process(delta: float) -> void:
 								plant_at_tile_2.change_position(action_tile_1)
 								play_sfx(9)
 							else:
-								# there is no plant to combine with, so we try to split instead
+								# there is no plant to swap with, so we try to split instead
 								if (plant_at_tile_1.current_number > 1):
 									# the plant is big enough to split, so do it
 									var number_after_split = floori(plant_at_tile_1.current_number / 2.0)
@@ -342,7 +344,6 @@ func _process(delta: float) -> void:
 					var plant_at_tile_1: Plant = get_plant_at_tile(action_tile_1)
 					
 					if (plant_at_tile_1 != null):
-						ghost_plant.visible = true
 						ghost_plant_num.text = str(plant_at_tile_1.current_number)
 						# get ghost plant offset
 						var ghost_plant_offset = Vector2(0,0)
@@ -350,6 +351,7 @@ func _process(delta: float) -> void:
 						ghost_plant_offset = current_click.origin_phys - center_of_tile
 						#print(ghost_plant_offset)
 						ghost_plant.position = get_global_mouse_position() - ghost_plant_offset
+						ghost_plant.visible = true
 				
 	
 	#UPDATE HUD
@@ -465,14 +467,21 @@ func _on_global_turn_timer_timeout() -> void:
 			prev_combo_bar_value = (combo_amount - 8) * (100.0 / 2.0)
 		#prev_combo_bar_value = combo_bar.value
 		
-		if enemy_holder.get_child_count() == 0 && current_turn > 1:
+		var spawned_all = false
+		if (len(enemies_remaining_in_wave.keys()) < 2):
+			spawned_all = true
+		else:
+			if (current_turn > enemies_remaining_in_wave.keys().max()):
+				spawned_all = true
+		
+		if enemy_holder.get_child_count() == 0 && spawned_all && current_turn > 1:
 			print_debug("next wave")
 			current_turn = 0
 			next_wave()
 			#global_turn_timer.start()
 			#return
 		else:
-			print("spawning enemies")
+			#print("spawning enemies")
 			current_turn += 1
 			if (enemies_remaining_in_wave.has(current_turn)):
 				var wave = enemies_remaining_in_wave[current_turn]
@@ -496,53 +505,79 @@ func do_enemy_turn() -> void:
 func init_wave() -> void:
 	#rng.seed = current_wave
 	rng.randomize()
+	
+	if(current_wave == 0):
+		enemies_remaining_in_wave = {}
+		return
+	
+	var existing_board_state: Array[int] = get_existing_board_state()
+	print("existing board state: " + str(existing_board_state))
+	var enemies_from_generator = wave_generator.make_solution(current_wave, max_units, produced_units, existing_board_state)
+	
 	current_turn = 0
-	var boss = round(0.333333 * pow(current_wave, 2) + 3 * (current_wave) + 0.666667) #round((3.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.9, 1.1)) # round((2 * pow(1.5, 2)) * rng.randf_range(0.9, 1.1));
-	var boss_factors = factors(boss)
-	while len(boss_factors) < 4:
-		boss += 1
-		boss_factors = factors(boss)
-
-	print("boss of wave %s: %s" % [str(current_wave), str(boss)] )
-	var num_enemies = round((1.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.8, 1.2)) # round(3 * (2) * rng.randf_range(0.6, 1.4))
-	print("#enemies of wave %s: %s" % [str(current_wave), str(num_enemies)] )
-	var boss_placed = false
-	enemies_remaining_in_wave = {}
+	
 	var line = 0
-	while num_enemies > 0:
+	for enemy_line in enemies_from_generator:
 		line += 1
-		var enemies_in_line = min(round(min(pow(rng.randf(), 3), 1) * num_enemies), 5)
-		#if line == 1:
-		enemies_in_line = max(1, enemies_in_line)
 		enemies_remaining_in_wave[line] = []
-		num_enemies -= enemies_in_line
-		var occupied_spots = []
-		for i in enemies_in_line:
-
-			var is_boss = !boss_placed && (rng.randf() > 0.2 || num_enemies == 0)
-			var difficulty = rng.randf_range(0.2, 0.6)
-			var number = 0
-			var meta_inf = {}
-			if is_boss:
-				number = boss
-			elif difficulty > 0.5:
-				number = ceili(difficulty * boss)
+		var spot = 0
+		for number in enemy_line:
+			spot += 1
+			if (number == 0):
+				continue
+			var difficulty_index
+			if (wave_generator.wave_high_end == wave_generator.wave_low_end):
+				difficulty_index = 1
 			else:
-				var factor = boss_factors[rng.randi_range(0, len(boss_factors) - 2)]
-				var boss_multiple = boss / factor
-				meta_inf["boss_multiple"] = boss_multiple
-				meta_inf["difficulty"] = difficulty
-				meta_inf["factor"] = factor
-				number = ceili(boss_multiple * difficulty) * factor
-			# var number = boss if is_boss else round(difficulty * boss)
-			if is_boss:
-				boss_placed = true
-			var spot = rng.randi_range(0, 5 - 1)
-			while occupied_spots.has(spot):
-				spot = rng.randi_range(0, 5 - 1)
-			occupied_spots.append(spot)
-			var difficulty_index = 2 if is_boss else 1 if difficulty > 0.5 else 0 
-			enemies_remaining_in_wave[line].append({"difficulty": difficulty_index, "position": spot, "number": number, "meta": meta_inf})
+				difficulty_index = roundi((number - wave_generator.wave_low_end) / (wave_generator.wave_high_end - wave_generator.wave_low_end)) * 2
+			enemies_remaining_in_wave[line].append({ "difficulty": difficulty_index, "position": spot-1, "number": number })
+	
+	#var boss = round(0.333333 * pow(current_wave, 2) + 3 * (current_wave) + 0.666667) #round((3.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.9, 1.1)) # round((2 * pow(1.5, 2)) * rng.randf_range(0.9, 1.1));
+	#var boss_factors = factors(boss)
+	#while len(boss_factors) < 4:
+		#boss += 1
+		#boss_factors = factors(boss)
+#
+	#print("boss of wave %s: %s" % [str(current_wave), str(boss)] )
+	#var num_enemies = round((1.68354 + 1.74921 * log(current_wave)) * rng.randf_range(0.8, 1.2)) # round(3 * (2) * rng.randf_range(0.6, 1.4))
+	#print("#enemies of wave %s: %s" % [str(current_wave), str(num_enemies)] )
+	#var boss_placed = false
+	#enemies_remaining_in_wave = {}
+	#var line = 0
+	#while num_enemies > 0:
+		#line += 1
+		#var enemies_in_line = min(round(min(pow(rng.randf(), 3), 1) * num_enemies), 5)
+		##if line == 1:
+		#enemies_in_line = max(1, enemies_in_line)
+		#enemies_remaining_in_wave[line] = []
+		#num_enemies -= enemies_in_line
+		#var occupied_spots = []
+		#for i in enemies_in_line:
+#
+			#var is_boss = !boss_placed && (rng.randf() > 0.2 || num_enemies == 0)
+			#var difficulty = rng.randf_range(0.2, 0.6)
+			#var number = 0
+			#var meta_inf = {}
+			#if is_boss:
+				#number = boss
+			#elif difficulty > 0.5:
+				#number = ceili(difficulty * boss)
+			#else:
+				#var factor = boss_factors[rng.randi_range(0, len(boss_factors) - 2)]
+				#var boss_multiple = boss / factor
+				#meta_inf["boss_multiple"] = boss_multiple
+				#meta_inf["difficulty"] = difficulty
+				#meta_inf["factor"] = factor
+				#number = ceili(boss_multiple * difficulty) * factor
+			## var number = boss if is_boss else round(difficulty * boss)
+			#if is_boss:
+				#boss_placed = true
+			#var spot = rng.randi_range(0, 5 - 1)
+			#while occupied_spots.has(spot):
+				#spot = rng.randi_range(0, 5 - 1)
+			#occupied_spots.append(spot)
+			#var difficulty_index = 2 if is_boss else 1 if difficulty > 0.5 else 0 
+			#enemies_remaining_in_wave[line].append({"difficulty": difficulty_index, "position": spot, "number": number, "meta": meta_inf})
 	print("enemies of wave %s: %s" % [str(current_wave), str(enemies_remaining_in_wave)] )
 
 func factors(number: int) -> Array[int]:
@@ -583,7 +618,7 @@ func spawn_explosion(explosion_damage: int, explosion_position: Vector2i, explod
 			if (enemy.grid_position.x >= explosion_position.x - 1 and enemy.grid_position.x <= explosion_position.x + 1
 			and enemy.grid_position.y >= explosion_position.y - 1 and enemy.grid_position.y <= explosion_position.y + 1):
 				enemy.take_damage(explosion_damage)
-				print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
+				#print("explosion at " + str(explosion_position) + " damaged enemy at " + str(enemy.grid_position))
 	
 	stat_explosions += 1
 	
@@ -604,6 +639,12 @@ func get_plant_at_tile(grid_point: Vector2i) -> Plant:
 			return plant
 	return null
 
+func get_existing_board_state() -> Array[int]:
+	var result: Array[int] = [0, 0, 0, 0, 0]
+	for plant: Plant in plant_holder.get_children():
+		result[plant.grid_position.x] += plant.current_number
+	return result
+
 func enemy_death(dead_enemy: Enemy, is_exploding: bool = false) -> void:
 	var enemy_number = dead_enemy.starting_number
 	if (enemy_number > stat_strongest_enemy_killed): stat_strongest_enemy_killed = enemy_number
@@ -613,7 +654,7 @@ func enemy_death(dead_enemy: Enemy, is_exploding: bool = false) -> void:
 	# gain score
 	var score_gained: int = roundi(enemy_number * get_combo_multiplier())
 	if (is_exploding): score_gained = score_gained * 2
-	print("score gained: " + str(score_gained))
+	#print("score gained: " + str(score_gained))
 	score += score_gained
 	stat_total_score += score_gained
 	spawn_notif(NotifText.NotifTypes.ADD, score_gained, 0.35, hud_score_display.position + (hud_score_display.size/2) + Vector2(randf_range(-20, 20), randf_range(-10, 10)))
@@ -706,6 +747,8 @@ func _on_recall_button_pressed() -> void:
 	
 	# give back the units
 	produced_units += units_to_recall
+	if (produced_units >= 1 and current_increment_amount == 0):
+		current_increment_amount = 1
 
 
 
@@ -717,7 +760,7 @@ func next_wave():
 	if (produced_units >= 1 and current_increment_amount == 0):
 		current_increment_amount = 1
 	play_sfx(10)
-	print("next wave")
+	#print("next wave")
 	init_wave()
 
 

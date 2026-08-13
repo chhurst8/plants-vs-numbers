@@ -8,12 +8,13 @@
 [ext_resource type="Texture2D" uid="uid://cuwgayys5yuvr" path="res://Visuals/difficulty.svg" id="2_w1mvj"]
 [ext_resource type="Script" uid="uid://hdo1lnunpesj" path="res://wobble.gd" id="3_lxycn"]
 [ext_resource type="Texture2D" uid="uid://dkheodvqljk2d" path="res://Visuals/tutorial_2.svg" id="3_x0ehs"]
-[ext_resource type="Texture2D" uid="uid://cuhq7i4orkkyu" path="res://Visuals/tutorial_3.svg" id="4_x0ehs"]
+[ext_resource type="Texture2D" uid="uid://dg3up7616aqux" path="res://Visuals/tutorial_3.svg" id="4_x0ehs"]
 [ext_resource type="Texture2D" uid="uid://r60c8fy8epka" path="res://Visuals/mute.svg" id="5_86xni"]
-[ext_resource type="Texture2D" uid="uid://ch6xn4bf1ffou" path="res://Visuals/tutorial_5.svg" id="6_sa43c"]
+[ext_resource type="Texture2D" uid="uid://cuhq7i4orkkyu" path="res://Visuals/tutorial_4.svg" id="5_nnxq8"]
+[ext_resource type="Texture2D" uid="uid://ch6xn4bf1ffou" path="res://Visuals/tutorial_6.svg" id="6_sa43c"]
 [ext_resource type="Script" uid="uid://nr7y7cc6kq6h" path="res://music.gd" id="7_vqw7c"]
 [ext_resource type="AudioStream" uid="uid://ynqr0voo3ba6" path="res://Sounds/Music/music_0.1.mp3" id="8_qq0qw"]
-[ext_resource type="Texture2D" uid="uid://bcct5hd8vrf74" path="res://Visuals/tutorial_4.svg" id="9_wh0ls"]
+[ext_resource type="Texture2D" uid="uid://bcct5hd8vrf74" path="res://Visuals/tutorial_5.svg" id="9_wh0ls"]
 [ext_resource type="AudioStream" uid="uid://d1wy2s7m78dbq" path="res://Sounds/Effects/curtains_0.1.mp3" id="12_wh0ls"]
 [ext_resource type="AudioStream" uid="uid://bt2ad65qbvc7e" path="res://Sounds/Effects/bounce_0.2.mp3" id="13_sa43c"]
 
@@ -27,7 +28,7 @@ volume_slider = NodePath("UI/VolumeSlider")
 volume_slider_timer = NodePath("UI/VolumeSliderTimer")
 tutorial = NodePath("UI/Tutorial")
 tutorial_sprite = NodePath("UI/Tutorial/TutorialSprite")
-tutorial_slides = Array[Texture2D]([ExtResource("2_tdh31"), ExtResource("3_x0ehs"), ExtResource("4_x0ehs"), ExtResource("9_wh0ls"), ExtResource("6_sa43c"), ExtResource("6_sa43c")])
+tutorial_slides = Array[Texture2D]([ExtResource("2_tdh31"), ExtResource("3_x0ehs"), ExtResource("4_x0ehs"), ExtResource("5_nnxq8"), ExtResource("9_wh0ls"), ExtResource("6_sa43c"), ExtResource("6_sa43c")])
 records = NodePath("UI/Records")
 
 [node name="UI" type="Control" parent="." unique_id=1500900860]

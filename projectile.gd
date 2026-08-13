@@ -35,6 +35,7 @@ func setup(starting_number: int, starting_position: Vector2i, _main: Main) -> vo
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
 	position_move_time = 0
+	visible = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

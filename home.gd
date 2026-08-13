@@ -23,6 +23,14 @@ var tutorial_progress: int = 0
 func _ready() -> void:
 	if (get_tree().paused):
 		get_tree().paused = false
+	
+	
+	tutorial_progress = 0
+	tutorial.hide()
+	
+	
+	Global.load_scores()
+	Global.load_prefs()
 	if (Global.muted):
 		toggle_mute_sprite.texture = preload("res://Visuals/muted.svg")
 	else:
@@ -30,17 +38,11 @@ func _ready() -> void:
 	
 	buffered_volume_change = Global.unmuted_volume
 	volume_slider.value = Global.unmuted_volume
-	
-	tutorial_progress = 0
-	tutorial.hide()
-	
-	
-	Global.load_scores()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	tutorial_progress = clamp(tutorial_progress, 0, 6)
+	tutorial_progress = clamp(tutorial_progress, 0, 7)
 	if (tutorial_progress == 0):
 		tutorial.hide()
 	else:
@@ -64,12 +66,17 @@ func _on_play_button_pressed() -> void:
 func advance_tutorial() -> void:
 	tutorial.show()
 	tutorial_progress += 1
-	if (tutorial_progress == 6):
+	if (tutorial_progress == 6): $UI/Tutorial/ContinueButton.text = "Play"
+	else: $UI/Tutorial/ContinueButton.text = "Next"
+	
+	if (tutorial_progress == 7):
+		Global.save_prefs()
 		Global.need_tutorial = false
 		screen_transition.transition_to("main.tscn")
 
 func regress_tutorial() -> void:
 	tutorial_progress -= 1
+	$UI/Tutorial/ContinueButton.text = "Next"
 	if (tutorial_progress == 0):
 		tutorial.hide()
 

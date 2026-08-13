@@ -43,8 +43,10 @@ func setup(_starting_number: int, starting_position: Vector2i, _main: Main) -> v
 	phys_position = Main.grid_to_phys(grid_position)
 	prev_phys_position = Main.grid_to_phys(prev_grid_position)
 	anim_time = 0
+	position = phys_position
 	
 	current_animation = EnemyAnimations.MOVE
+	visible = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

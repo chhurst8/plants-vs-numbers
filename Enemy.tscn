@@ -4,6 +4,7 @@
 [ext_resource type="Theme" uid="uid://cdpebhimedkdu" path="res://Visuals/theme.tres" id="2_s7bn3"]
 
 [node name="Enemy" type="Node2D" unique_id=888636595 node_paths=PackedStringArray("number_display")]
+visible = false
 script = ExtResource("1_tt7e2")
 number_display = NodePath("NumberDisplay")
 

@@ -16,6 +16,7 @@ func setup(damage_amount: int, pos: Vector2) -> void:
 	position = pos
 	anim_time = 0
 	scale = Vector2(0.85, 0.85)
+	visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

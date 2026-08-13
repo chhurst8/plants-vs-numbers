@@ -39,7 +39,7 @@ func save_scores(_highest_score: int, _highest_wave: int):
 	highest_wave = _highest_wave
 	
 	var save_file = FileAccess.open("user://scores.json", FileAccess.WRITE)
-	var save_dict: Dictionary = {"highest_score": highest_score, "highest_wave": highest_wave}
+	var save_dict: Dictionary = {"highest_score": highest_score, "highest_wave": highest_wave }
 	var save_string = JSON.stringify(save_dict)
 	save_file.store_string(save_string)
 	save_file.close()
@@ -56,6 +56,26 @@ func load_scores():
 	if (save_dict.has("highest_wave")):
 		highest_wave = save_dict["highest_wave"]
 
+func save_prefs():
+	var save_file = FileAccess.open("user://prefs.json", FileAccess.WRITE)
+	var save_dict: Dictionary = {"muted": muted, "volume": unmuted_volume }
+	var save_string = JSON.stringify(save_dict)
+	save_file.store_string(save_string)
+	save_file.close()
+
+func load_prefs():
+	if not FileAccess.file_exists("user://prefs.json"):
+		return # Error! We don't have a save to load.
+	var save_file = FileAccess.open("user://prefs.json", FileAccess.READ)
+	
+	var save_dict: Dictionary = JSON.parse_string(save_file.get_as_text())
+	
+	if (save_dict.has("muted")):
+		muted = save_dict["muted"]
+		AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), muted)
+	if (save_dict.has("volume")):
+		unmuted_volume = save_dict["volume"]
+		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), unmuted_volume)
 
 func set_master_volume(new_volume: float) -> void:
 	unmuted_volume = new_volume
@@ -64,6 +84,8 @@ func set_master_volume(new_volume: float) -> void:
 func toggle_mute():
 	muted = !muted
 	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), muted)
+	
+	save_prefs()
 
 func set_music(menu: bool) -> void:
 	var children: Array[Node] = get_tree().root.get_children()

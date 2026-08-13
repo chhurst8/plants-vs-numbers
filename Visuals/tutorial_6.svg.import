@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjmmx4jsjurqp"
-path="res://.godot/imported/Difficulty Index.png-83153ab39531d82a100a1a9633fd7f38.ctex"
+uid="uid://ch6xn4bf1ffou"
+path="res://.godot/imported/tutorial_6.svg-e31e7039d77baa8fd18ebf44f8dc4df4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Builds/PostJam/Difficulty Index.png"
-dest_files=["res://.godot/imported/Difficulty Index.png-83153ab39531d82a100a1a9633fd7f38.ctex"]
+source_file="res://Visuals/tutorial_6.svg"
+dest_files=["res://.godot/imported/tutorial_6.svg-e31e7039d77baa8fd18ebf44f8dc4df4.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

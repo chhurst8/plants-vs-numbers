@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dds8kw4xom0vp" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://ctvgpes8uudt2" path="res://Visuals/bgtile.svg" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://xw541olut1qa" path="res://wave_generator.gd" id="2_htxhm"]
 [ext_resource type="Script" uid="uid://d3tatvuptigri" path="res://end_screen.gd" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://kdvgge8pdr6u" path="res://Visuals/clock.svg" id="3_272bh"]
 [ext_resource type="Texture2D" uid="uid://cjwajnpbx4cs4" path="res://Visuals/endscreenbg.svg" id="3_h2yge"]
@@ -32,9 +33,10 @@
 [ext_resource type="AudioStream" uid="uid://bt2ad65qbvc7e" path="res://Sounds/Effects/bounce_0.2.mp3" id="30_htxhm"]
 [ext_resource type="AudioStream" uid="uid://d1wy2s7m78dbq" path="res://Sounds/Effects/curtains_0.1.mp3" id="30_seu75"]
 
-[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("screen_transition", "global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "increment_label", "ghost_plant", "ghost_plant_num", "toggle_mute_sprite", "pause_resume_sprite", "pause_overlay", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder", "sfx_players")]
+[node name="Main" type="Node2D" unique_id=1073496573 node_paths=PackedStringArray("screen_transition", "wave_generator", "global_turn_timer", "clock_thing", "closest_enemy_indicator", "combo_letter", "combo_bar", "hud_wave_indicator", "hud_score_display", "factory_display", "factory_rate_display", "increment_label", "ghost_plant", "ghost_plant_num", "toggle_mute_sprite", "pause_resume_sprite", "pause_overlay", "end_screen", "plant_holder", "projectile_holder", "explosion_holder", "notif_holder", "enemy_holder", "sfx_players")]
 script = ExtResource("1_0xm2m")
 screen_transition = NodePath("ScreenTransition")
+wave_generator = NodePath("WaveGenerator")
 global_turn_timer = NodePath("GlobalTurnTimer")
 clock_thing = NodePath("HUD/ClockThing")
 closest_enemy_indicator = NodePath("HUD/ClockThing/ClosestEnemyIndicator")
@@ -57,6 +59,9 @@ explosion_holder = NodePath("ExplosionHolder")
 notif_holder = NodePath("NotifHolder")
 enemy_holder = NodePath("EnemyHolder")
 sfx_players = [NodePath("SFXHolder/ShootSFX"), NodePath("SFXHolder/EnemyHitSFX"), NodePath("SFXHolder/ExplosionSFX"), NodePath("SFXHolder/PlantCrushSFX"), NodePath("SFXHolder/IncrementSFX"), NodePath("SFXHolder/DecrementSFX"), NodePath("SFXHolder/CombineSFX"), NodePath("SFXHolder/SplitSFX"), NodePath("SFXHolder/PlantGrowSFX"), NodePath("SFXHolder/MoveAroundSFX"), NodePath("SFXHolder/WaveStartSFX"), NodePath("SFXHolder/LoseSFX")]
+
+[node name="WaveGenerator" type="Node2D" parent="." unique_id=519316990]
+script = ExtResource("2_htxhm")
 
 [node name="GlobalTurnTimer" type="Timer" parent="." unique_id=1153019698]
 

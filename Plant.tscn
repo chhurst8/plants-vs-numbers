@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://chr2fk2uqk672" path="res://Visuals/plant.svg" id="2_lx5bf"]
 
 [node name="Plant" type="Node2D" unique_id=2007644060 node_paths=PackedStringArray("number_display")]
+visible = false
 script = ExtResource("1_pgwxn")
 number_display = NodePath("NumberDisplay")
 
